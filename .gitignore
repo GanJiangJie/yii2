@@ -1,0 +1,5 @@
+.idea/
+/common/util/Log/log/
+/config/
+/runtime/
+/web/index.php
