@@ -1,6 +1,6 @@
 <?php
 
-namespace app\common\package\Topic;
+namespace app\common\package\mns;
 
 use AliyunMNS\Client;
 use AliyunMNS\Exception\MnsException;

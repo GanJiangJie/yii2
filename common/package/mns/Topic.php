@@ -1,6 +1,6 @@
 <?php
 
-namespace app\common\package\Topic;
+namespace app\common\package\mns;
 
 use AliyunMNS\Client;
 use AliyunMNS\Model\SubscriptionAttributes;
@@ -34,7 +34,7 @@ class Topic
     private $client;
 
     /**
-     * Topic constructor.
+     * mns constructor.
      */
     private function __construct()
     {

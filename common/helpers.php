@@ -69,22 +69,22 @@ if (!function_exists('redis')) {
 if (!function_exists('queue')) {
     /**
      * 队列单例
-     * @return \app\common\package\Topic\Queue
+     * @return \app\common\package\mns\Queue
      */
     function queue()
     {
-        return \app\common\package\Topic\Queue::instance();
+        return \app\common\package\mns\Queue::instance();
     }
 }
 
 if (!function_exists('topic')) {
     /**
      * 主题单例
-     * @return \app\common\package\Topic\Topic
+     * @return \app\common\package\mns\Topic
      */
     function topic()
     {
-        return \app\common\package\Topic\Topic::instance();
+        return \app\common\package\mns\Topic::instance();
     }
 }
 
