@@ -253,25 +253,25 @@ if (!function_exists('secondsFormat')) {
         }
         if (!$m) {
             if ($data['months'] > 0) {
-                $data['days'] = (int)bcadd($data['days'], bcmul($seconds_int, 86400));
+                $data['days'] = (int)bcdiv($seconds_int, 86400);
             }
             unset($data['months']);
         }
         if (!$d) {
             if ($data['days'] > 0) {
-                $data['hours'] = (int)bcmul($data['days'], 24);
+                $data['hours'] = (int)bcadd($data['hours'], bcmul($data['days'], 24));
             }
             unset($data['days']);
         }
         if (!$h) {
             if ($data['hours'] > 0) {
-                $data['minutes'] = (int)bcadd($data['minutes'], bcmul(60, $data['hours']));
+                $data['minutes'] = (int)bcadd($data['minutes'], bcmul($data['hours'], 60));
             }
             unset($data['hours']);
         }
         if (!$i) {
             if ($data['minutes'] > 0) {
-                $data['seconds'] = (int)bcadd($data['seconds'], bcmul(60, $data['hours']));
+                $data['seconds'] = (int)bcadd($data['seconds'], bcmul($data['minutes'], 60));
             }
             unset($data['minutes']);
         }
