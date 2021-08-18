@@ -9,6 +9,7 @@ use common\util\DataCheck\DataCheckBase;
 class MemberController extends WebController
 {
     /**
+     * @return array
      * @throws \yii\base\Exception
      */
     public function actionList()

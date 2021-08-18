@@ -9,6 +9,9 @@ class MemberService extends BaseService
     public $merchant_code;
     public $type;
 
+    /**
+     * @return array
+     */
     public function getList()
     {
         $members = Member::find()
