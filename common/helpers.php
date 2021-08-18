@@ -219,7 +219,7 @@ if (!function_exists('daysCount')) {
     }
 }
 
-if (!function_exists('secondsFormat')) {
+if (!function_exists('secondsDHIS')) {
     /**
      * 秒数格式化，将秒数转化为：日数、时数、分数、秒数
      * @param $seconds
@@ -229,7 +229,7 @@ if (!function_exists('secondsFormat')) {
      * @param bool $s
      * @return array
      */
-    function secondsFormat($seconds, $d = true, $h = true, $i = true, $s = true)
+    function secondsDHIS($seconds, $d = true, $h = true, $i = true, $s = true)
     {
         $seconds_int = intval($seconds);
         $data = [
