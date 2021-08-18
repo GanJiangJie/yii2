@@ -5,7 +5,6 @@ namespace app\common\util;
 use app\common\event\BaseEvent;
 use app\common\listen\BaseListen;
 use app\common\event\EventService;
-use Yii;
 
 class Event extends EventService
 {
@@ -82,7 +81,7 @@ class Event extends EventService
      */
     private static function async($listen_instance)
     {
-        $result = queue()->sendMessage(Yii::$app->params['queue']['listen'], serialize($listen_instance));
+        $result = queue()->sendMessage(config('mns.queue.listen'), serialize($listen_instance));
         if (!$result['status']) {
             return [
                 'status' => false,

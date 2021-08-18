@@ -15,7 +15,7 @@ if (!function_exists('dd')) {
 
 if (!function_exists('config')) {
     /**
-     * 获取config目录下得数据
+     * 获取config目录下的参数
      * @param string $key 例：'params.queue.listen'
      * @return string|array|null
      */
