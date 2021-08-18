@@ -221,61 +221,52 @@ if (!function_exists('daysCount')) {
 
 if (!function_exists('secondsFormat')) {
     /**
-     * 秒数格式化，将秒数转化为：年数、月数、日数、时数、分数、秒数
+     * 秒数格式化，将秒数转化为：日数、时数、分数、秒数
      * @param $seconds
-     * @param bool $y
-     * @param bool $m
      * @param bool $d
      * @param bool $h
      * @param bool $i
      * @param bool $s
      * @return array
      */
-    function secondsFormat($seconds, $y = true, $m = true, $d = true, $h = true, $i = true, $s = true)
+    function secondsFormat($seconds, $d = true, $h = true, $i = true, $s = true)
     {
-        $timestamp_now = time();
         $seconds_int = intval($seconds);
-        $timestamp_before = (int)bcsub($timestamp_now, $seconds_int);
-        $format = date_diff(date_create(date('Y-m-d H:i:s', $timestamp_now)), date_create(date('Y-m-d H:i:s', $timestamp_before)));
         $data = [
-            'years' => $format->y,
-            'months' => $format->m,
-            'days' => $format->d,
-            'hours' => $format->h,
-            'minutes' => $format->i,
-            'seconds' => $format->s
+            'days' => 0,
+            'hours' => 0,
+            'minutes' => 0,
+            'seconds' => 0
         ];
-        if (!$y) {
-            if ($data['years'] > 0) {
-                $data['months'] = (int)bcadd($data['months'], bcmul($data['years'], 12));
-            }
-            unset($data['years']);
-        }
-        if (!$m) {
-            if ($data['months'] > 0) {
+        if ($d) {
+            if ($seconds_int > 86400) {
                 $data['days'] = (int)bcdiv($seconds_int, 86400);
+                $seconds_int = bcmod($seconds_int, 86400);
             }
-            unset($data['months']);
-        }
-        if (!$d) {
-            if ($data['days'] > 0) {
-                $data['hours'] = (int)bcadd($data['hours'], bcmul($data['days'], 24));
-            }
+        } else {
             unset($data['days']);
         }
-        if (!$h) {
-            if ($data['hours'] > 0) {
-                $data['minutes'] = (int)bcadd($data['minutes'], bcmul($data['hours'], 60));
+        if ($h) {
+            if ($seconds_int > 3600) {
+                $data['hours'] = (int)bcdiv($seconds_int, 3600);
+                $seconds_int = bcmod($seconds_int, 3600);
             }
+        } else {
             unset($data['hours']);
         }
-        if (!$i) {
-            if ($data['minutes'] > 0) {
-                $data['seconds'] = (int)bcadd($data['seconds'], bcmul($data['minutes'], 60));
+        if ($i) {
+            if ($seconds_int > 60) {
+                $data['minutes'] = (int)bcdiv($seconds_int, 60);
+                $seconds_int = bcmod($seconds_int, 60);
             }
+        } else {
             unset($data['minutes']);
         }
-        if (!$s) {
+        if ($s) {
+            if ($seconds_int > 0) {
+                $data['seconds'] = (int)$seconds_int;
+            }
+        } else {
             unset($data['seconds']);
         }
         return $data;
