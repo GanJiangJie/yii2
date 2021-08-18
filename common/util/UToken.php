@@ -8,12 +8,15 @@ class UToken
 {
     use TokenTrait;
 
+    private $i = 'config.uToken';
+
     /**
      * MToken constructor.
      */
     private function __construct()
     {
-        $i = 'config.uToken';
-        @list($this->driver, $this->prefix, $this->name) = config([$i . '.driver', $i . '.prefix', $i . '.name']);
+        $this->driver = config($this->i . '.driver');
+        $this->prefix = config($this->i . '.prefix');
+        $this->name = config($this->i . '.name');
     }
 }

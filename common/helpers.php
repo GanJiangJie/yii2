@@ -16,30 +16,16 @@ if (!function_exists('dd')) {
 if (!function_exists('config')) {
     /**
      * 获取config目录下得数据
-     * @param string|array $keys 例：'params.queue.listen'
-     * @param bool $index
+     * @param string $key 例：'params.queue.listen'
      * @return string|array|null
      */
-    function config($keys, $index = false)
+    function config($key)
     {
         /**
          * @var \app\common\util\Config $config
          */
         $config = \app\common\util\Config::instance();
-        if (is_string($keys)) {
-            return $config->get($keys);
-        }
-        if (is_array($keys)) {
-            $arr = [];
-            foreach ($keys as $key) {
-                if ($index) {
-                    $arr[$key] = $config->get($key);
-                } else {
-                    $arr[] = $config->get($key);
-                }
-            }
-            return $arr;
-        }
+        return $config->get($key);
     }
 }
 

@@ -12,7 +12,7 @@ class Config
     /**
      * @var array $config
      */
-    private $config;
+    private $config = [];
 
     /**
      * @param string $key
@@ -23,11 +23,14 @@ class Config
         $key_array = explode('.', $key);
         $file_name = $key_array[0];
         unset($key_array[0]);
-        if (empty($this->config) || !isset($this->config[$key])) {
+        if (empty($this->config) || !isset($this->config[$file_name])) {
             $config_file = Yii::$app->basePath . '/config/' . $file_name . '.php';
             if (!is_file($config_file)) return null;
-            $this->config[$file_name] = (include($config_file . '')) ?: [];
+            $this->config[$file_name] = (include($config_file . ''));
         }
-        return arraySeriesIndex($this->config[$file_name], $key_array);
+        if (is_array($this->config[$file_name])) {
+            return arraySeriesIndex($this->config[$file_name], $key_array);
+        }
+        return empty($key_array) ? $this->config[$file_name] : null;
     }
 }
