@@ -17,38 +17,28 @@ if (!function_exists('config')) {
     /**
      * 获取config目录下得数据
      * @param string|array $keys 例：'params.queue.listen'
+     * @param bool $index
      * @return string|array|null
      */
-    function config($keys)
+    function config($keys, $index = false)
     {
+        /**
+         * @var \app\common\util\Config $config
+         */
+        $config = \app\common\util\Config::instance();
         if (is_string($keys)) {
-            $keys_array = explode('.', $keys);
-            $config_file = Yii::$app->basePath . '/config/' . $keys_array[0] . '.php';
-            if (!is_file($config_file)) return null;
-            $file_array = (include($config_file . '')) ?: [];
-            unset($keys_array[0]);
-            return arraySeriesIndex($file_array, $keys_array);
+            return $config->get($keys);
         }
         if (is_array($keys)) {
-            $files_array = [];
-            $result = [];
+            $arr = [];
             foreach ($keys as $key) {
-                $key_array = explode('.', $key);
-                $file = $key_array[0];
-                if (!isset($files_array[$file])) {
-                    $config_file = Yii::$app->basePath . '/config/' . $file . '.php';
-                    if (!is_file($config_file)) {
-                        $files_array[$file] = [];
-                        $result[] = null;
-                        continue;
-                    }
-                    $files_array[$file] = (include($config_file . '')) ?: [];
+                if ($index) {
+                    $arr[$key] = $config->get($key);
+                } else {
+                    $arr[] = $config->get($key);
                 }
-                unset($key_array[0]);
-                $result[] = arraySeriesIndex($files_array[$file], $key_array);
             }
-            unset($files_array);
-            return $result;
+            return $arr;
         }
     }
 }

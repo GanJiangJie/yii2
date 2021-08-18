@@ -10,6 +10,9 @@ class TestController extends ConsoleController
 {
     public function actionIndex()
     {
+        $str = '吼吼吼aaa哈哈哈bbb嘿嘿嘿O(∩_∩)O哈哈~';
+        $del = mb_strlen($str, 'utf-8') > 18 ? mb_substr($str, 0, 18, 'utf-8') : $str;
+        dd($del);
         /**
          * @var Member $member
          */

@@ -4,6 +4,7 @@ namespace app\common\traits;
 
 use app\common\util\Redis\RedisK;
 use app\common\util\Redis\RedisS;
+use yii\base\Exception;
 
 trait TokenTrait
 {
@@ -70,13 +71,19 @@ trait TokenTrait
      * 获取令牌信息
      * @param string $key
      * @return null|string|array
+     * @throws Exception
      */
     public function getToken($key = null)
     {
         if (empty($this->data)) {
             $token = request()->params($this->name);
-            if (empty($token)) return null;
+            if (empty($token)) {
+                throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_TOKEN], API_ERROR_CODE_INVALID_TOKEN);
+            }
             $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
+            if (empty($info_json)) {
+                throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_TOKEN], API_ERROR_CODE_INVALID_TOKEN);
+            }
             $this->data = json_decode($info_json, true) ?: [];
         }
         return is_null($key) ? $this->data : ($this->data[$key] ?? null);
