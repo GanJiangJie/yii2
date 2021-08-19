@@ -8,7 +8,8 @@ use app\common\listen\model\DefaultListen;
 class EventService
 {
     /**
-     * @var array $events 注册事件
+     * 注册事件
+     * @var array $events
      */
     protected static $events = [
         /*'app\common\event\model\DefaultEvent' => [

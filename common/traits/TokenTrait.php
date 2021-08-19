@@ -11,11 +11,6 @@ trait TokenTrait
     use InstanceTrait;
 
     /**
-     * @var array $data
-     */
-    private $data;
-
-    /**
      * @var string $driver
      */
     private $driver;
@@ -29,6 +24,11 @@ trait TokenTrait
      * @var string $name
      */
     private $name;
+
+    /**
+     * @var array $data
+     */
+    private $data;
 
     /**
      * 设置令牌
