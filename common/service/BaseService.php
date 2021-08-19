@@ -96,7 +96,7 @@ class BaseService
             'page' => (int)$this->page,
             'limit' => (int)$this->limit,
             'total' => (int)$this->total,
-            'last_page' => $this->last_page
+            'last_page' => (int)$this->last_page
         ];
     }
 }
