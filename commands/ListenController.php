@@ -24,12 +24,10 @@ class ListenController extends ConsoleController
                 $log->writeLog($e->getMessage(), 3);
                 continue;
             }
-
             $message_body = unserialize($re['response']['messageBody']);//监听对象
             $receipt_handle = $re['response']['receiptHandle'];
 
             $res = listenHandle($message_body);
-
             if (!$res['status']) {
                 $log->writeLog([
                     'class' => get_class($message_body),
