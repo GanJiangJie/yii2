@@ -27,15 +27,14 @@ class MemberService extends BaseService
             ])
             ->orderBy('id desc');
         self::queryPage($members);
-        $list = [];
         foreach ($members->each() as $member) {
-            $list[] = [
+            $this->list[] = [
                 'member_code' => $member['member_code'],
                 'member_name' => $member['member_name'],
                 'nick_name' => $member['nick_name'],
                 'account' => $member['account']
             ];
         }
-        return self::returnPage($list);
+        return self::returnPage();
     }
 }

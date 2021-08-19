@@ -23,6 +23,10 @@ class BaseService
      * @var integer $last_page
      */
     protected $last_page;
+    /**
+     * @var array $list
+     */
+    protected $list = [];
 
     /**
      * 参数挂载
@@ -86,13 +90,12 @@ class BaseService
 
     /**
      * 分页返回
-     * @param array $list
      * @return array
      */
-    protected function returnPage($list)
+    protected function returnPage()
     {
         return [
-            'list' => $list,
+            'list' => $this->list,
             'page' => (int)$this->page,
             'limit' => (int)$this->limit,
             'total' => (int)$this->total,
