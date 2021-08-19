@@ -35,7 +35,7 @@ trait TokenTrait
      * @param array $data
      * @return string
      */
-    public function setToken($data)
+    public function set($data)
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $token = self::token($data_json);
@@ -49,7 +49,7 @@ trait TokenTrait
      * @param $seconds
      * @return string
      */
-    public function setExToken($data, $seconds)
+    public function setEx($data, $seconds)
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $token = self::token($data_json);
@@ -73,7 +73,7 @@ trait TokenTrait
      * @return null|string|array
      * @throws Exception
      */
-    public function getToken($key = null)
+    public function get($key = null)
     {
         if (empty($this->data)) {
             $token = request()->params($this->name);
@@ -93,7 +93,7 @@ trait TokenTrait
      * 删除令牌
      * @return bool|string
      */
-    public function delToken()
+    public function del()
     {
         $token = request()->params($this->name);
         if (empty($token)) return false;

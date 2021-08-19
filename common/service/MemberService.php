@@ -3,11 +3,15 @@
 namespace app\common\service;
 
 use app\models\Member;
+use yii\base\Exception;
 
 class MemberService extends BaseService
 {
     public $merchant_code;
     public $type;
+    public $member_name;
+    public $account;
+    public $birthday;
 
     /**
      * @return array
@@ -36,5 +40,49 @@ class MemberService extends BaseService
             ];
         }
         return self::returnPage();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function add()
+    {
+        $exists = Member::find()
+            ->where('merchant_code = :merchant_code and account = :account', [
+                ':merchant_code' => $this->merchant_code,
+                ':account' => $this->account
+            ])
+            ->exists();
+        if ($exists) {
+            throw new Exception('会员已存在');
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function edit()
+    {
+        /**
+         * @var Member $member
+         */
+        $member = Member::find()
+            ->where('merchant_code = :merchant_code and account = :account', [
+                ':merchant_code' => $this->merchant_code,
+                ':account' => $this->account
+            ])
+            ->one();
+        if (empty($member)) {
+            throw new Exception('会员不存在', API_ERROR_CODE_NO_DATA);
+        }
+        if (!empty($this->member_name)) {
+            $member->member_name = $this->member_name;
+        }
+        if (!empty($this->birthday)) {
+            $member->birthday = $this->birthday;
+        }
+        if (!$member->save()) {
+            throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
+        }
     }
 }
