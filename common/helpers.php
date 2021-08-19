@@ -178,25 +178,25 @@ if (!function_exists('logPrint')) {
     }
 }
 
-if (!function_exists('hidePhone')) {
+if (!function_exists('phoneHide')) {
     /**
      * 手机号码：'13099417612' => '130****7612'
      * @param string $phone
      * @return null|string|string[]
      */
-    function hidePhone($phone)
+    function phoneHide($phone)
     {
         return preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $phone);
     }
 }
 
-if (!function_exists('hideEmail')) {
+if (!function_exists('emailHide')) {
     /**
      * 邮箱：'13099417612@163.com' => '1309940****@163.com'
      * @param string $email
      * @return null|string|string[]
      */
-    function hideEmail($email)
+    function emailHide($email)
     {
         return preg_replace('/([a-z0-9\-_\.]+)[a-z0-9\-_\.]{4}(@[a-z0-9]+\.[a-z0-9\-_\.]+)/', '$1****$2', $email);
     }
