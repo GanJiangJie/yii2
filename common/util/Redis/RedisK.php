@@ -57,7 +57,7 @@ class RedisK extends RedisBase
      * @param integer $time_stamp 时间戳
      * @return mixed
      */
-    public static function Expireat($key, $time_stamp)
+    public static function ExpireAt($key, $time_stamp)
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;

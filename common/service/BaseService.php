@@ -74,9 +74,9 @@ class BaseService
      */
     protected function queryPage(ActiveQuery &$model)
     {
-        $this->total = intval($model->count());
+        $this->total = $model->count();
         if ($this->total > 0 && $this->limit > 0) {
-            $this->last_page = intval(ceil($this->total / $this->limit));
+            $this->last_page = (int)(ceil($this->total / $this->limit));
             if ($this->page > $this->last_page) {
                 $this->page = $this->last_page;
             }
@@ -93,9 +93,9 @@ class BaseService
     {
         return [
             'list' => $list,
-            'page' => intval($this->page),
-            'limit' => intval($this->limit),
-            'total' => $this->total,
+            'page' => (int)$this->page,
+            'limit' => (int)$this->limit,
+            'total' => (int)$this->total,
             'last_page' => $this->last_page
         ];
     }

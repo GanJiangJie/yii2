@@ -15,8 +15,8 @@ class MemberController extends WebController
     public function actionList()
     {
         DataCheckBase::checkValidEmpty(request()->params(), ['token']);
-        $model = new MemberService(request()->params(), ['limit']);
-        $model->loadParams(mToken()->getToken(), ['merchant_code']);
+        $model = new MemberService();
+        $model->merchant_code = mToken()->getToken('merchant_code');
         $model->type = 2;
         $model->page = request()->params('page', 1);
         $model->limit = request()->params('limit', 0);
