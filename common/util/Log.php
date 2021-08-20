@@ -1,6 +1,6 @@
 <?php
 
-namespace common\util\Log;
+namespace common\util;
 
 class Log
 {
@@ -73,7 +73,7 @@ class Log
      */
     private function createLogFile()
     {
-        $path = __DIR__ . '/log/' . exec('whoami') . '/';
+        $path = \Yii::$app->basePath . '/logs/';
         if ($this->category) {
             $path .= $this->category . '/';
         }

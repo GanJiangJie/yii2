@@ -170,11 +170,11 @@ if (!function_exists('response')) {
 if (!function_exists('logPrint')) {
     /**
      * 日志打印
-     * @return \common\util\Log\Log
+     * @return \common\util\Log
      */
     function logPrint()
     {
-        return new \common\util\Log\Log();
+        return new \common\util\Log();
     }
 }
 
