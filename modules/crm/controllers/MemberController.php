@@ -15,7 +15,8 @@ class MemberController extends WebController
     public function actionList()
     {
         DataCheckBase::checkValidEmpty(request()->params(), ['token']);
-        $model = new MemberService(request()->params(), ['account', 'key_word']);
+        $model = new MemberService();
+        $model->assignAttributes(request()->params(), ['account', 'key_word']);
         $model->merchant_code = mToken()->get('merchant_code');
         $model->type = 2;
         $model->page = request()->params('page', 1);
@@ -33,10 +34,8 @@ class MemberController extends WebController
             'account',
             'birthday'
         ]);
-        $model = new MemberService(request()->params(), [
-            'account',
-            'birthday'
-        ]);
+        $model = new MemberService();
+        $model->assignAttributes(request()->params(), ['account', 'birthday']);
         $model->merchant_code = mToken()->get('merchant_code');
         $model->member_name = request()->params('name');
         $model->add();
@@ -47,7 +46,8 @@ class MemberController extends WebController
      */
     public function actionEdit()
     {
-        $model = new MemberService(request()->params(), ['member_code']);
+        $model = new MemberService();
+        $model->assignAttributes(request()->params(), ['member_code']);
         $model->edit();
     }
 }

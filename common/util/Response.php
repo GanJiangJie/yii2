@@ -19,7 +19,10 @@ class Response
      */
     public function __construct()
     {
-        $this->response = ['errCode' => API_ERROR_CODE_SUCCESS, 'errMsg' => $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_SUCCESS]];
+        $this->response = [
+            'errCode' => API_ERROR_CODE_SUCCESS,
+            'errMsg' => $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_SUCCESS]
+        ];
     }
 
     /**
@@ -47,7 +50,10 @@ class Response
      */
     public function err($errCode, $errMsg)
     {
-        $this->response = ['errCode' => $errCode, 'errMsg' => $errMsg];
+        $this->response = [
+            'errCode' => $errCode ?: API_ERROR_CODE_FAIL,
+            'errMsg' => $errMsg ?: $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_FAIL]
+        ];
         return $this;
     }
 

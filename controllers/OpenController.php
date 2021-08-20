@@ -16,6 +16,7 @@ class OpenController extends WebController
         //获取请求参数
         $params = request()->params();
         $response = response();
+        $log = logPrint()->category('api_log')->prefix('api_success_');
         try {
             //验证必填参数
             DataCheckBase::checkValidEmpty($params, ['app_id', 'method', 'sign_type', 'version', 'sign']);
@@ -33,10 +34,11 @@ class OpenController extends WebController
             $response->data($data);
         } catch (Exception $e) {
             //抛出异常处理
-            $response->err($e->getCode() ?: API_ERROR_CODE_FAIL, $e->getMessage() ?: $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_FAIL]);
+            $response->err($e->getCode(), $e->getMessage());
+            $log->prefix('api_fail_');
         } finally {
             //打印日志
-            logPrint()->category('api_log')->prefix('api_')->writeLog(['request' => $params, 'response' => $response->response()], 3);
+            $log->writeLog(['request' => $params, 'response' => $response->response()], 3);
             //输出响应
             $response->responseJsonExit();
         }
