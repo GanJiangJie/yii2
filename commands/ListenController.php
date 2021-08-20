@@ -13,7 +13,7 @@ class ListenController extends ConsoleController
     {
         $log = logPrint()->prefix('listen_')->prefix('async');
         while (true) {
-            $re = queue()->receiveMessage(config('mns.queue.listen'));
+            $re = queue()->receiveMessage(params('mns.queue.listen'));
             if (!$re['status']) {
                 Yii::$app->db->close();
                 continue;
@@ -43,7 +43,7 @@ class ListenController extends ConsoleController
                     'output2' => $res
                 ], 3);
             }
-            $result = queue()->deleteMessage(config('mns.queue.listen'), $receipt_handle);
+            $result = queue()->deleteMessage(params('mns.queue.listen'), $receipt_handle);
             if (!$result['status']) {
                 $log->writeLog([
                     'class' => get_class($message_body),

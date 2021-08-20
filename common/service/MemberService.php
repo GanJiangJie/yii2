@@ -14,24 +14,11 @@ class MemberService extends BaseService
     public $birthday;
 
     /**
-     * @var Member $member
-     */
-    private $member;
-
-    /**
-     * MemberService constructor.
-     */
-    public function __construct()
-    {
-        $this->member = new Member();
-    }
-
-    /**
      * @return array
      */
     public function getList()
     {
-        $members = $this->member::find()
+        $members = Member::find()
             ->select([
                 'member_code',
                 'member_name',
@@ -60,7 +47,7 @@ class MemberService extends BaseService
      */
     public function add()
     {
-        $exists = $this->member::find()
+        $exists = Member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account
@@ -69,10 +56,11 @@ class MemberService extends BaseService
         if ($exists) {
             throw new Exception('会员已存在');
         }
-        $this->member->member_code = self::createCode12($this->member, 'member_code');
-        $this->member->merchant_code = $this->merchant_code;
-        if (!$this->member->save()) {
-            throw new Exception(json_encode($this->member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
+        $member = new Member();
+        $member->member_code = self::createCode12($member, 'member_code');
+        $member->merchant_code = $this->merchant_code;
+        if (!$member->save()) {
+            throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
         }
     }
 
@@ -84,7 +72,7 @@ class MemberService extends BaseService
         /**
          * @var Member $member
          */
-        $member = $this->member::find()
+        $member = Member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account

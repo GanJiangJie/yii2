@@ -81,7 +81,7 @@ class Event extends EventService
      */
     private static function async($listen_instance)
     {
-        $result = queue()->sendMessage(config('mns.queue.listen'), serialize($listen_instance));
+        $result = queue()->sendMessage(params('mns.queue.listen'), serialize($listen_instance));
         if (!$result['status']) {
             return [
                 'status' => false,

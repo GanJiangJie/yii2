@@ -1,6 +1,6 @@
 <?php
 
-namespace app\common\util;
+namespace app\common\util\single;
 
 use app\common\traits\InstanceTrait;
 use Yii;

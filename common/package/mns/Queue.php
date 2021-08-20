@@ -2,46 +2,13 @@
 
 namespace app\common\package\mns;
 
-use AliyunMNS\Client;
 use AliyunMNS\Exception\MnsException;
 use AliyunMNS\Requests\SendMessageRequest;
-use app\common\traits\InstanceTrait;
+use app\common\traits\MnsTrait;
 
 class Queue
 {
-    use InstanceTrait;
-
-    /**
-     * @var $accessId
-     */
-    private $accessId;
-
-    /**
-     * @var $accessKey
-     */
-    private $accessKey;
-
-    /**
-     * @var $endPoint
-     */
-    private $endPoint;
-
-    /**
-     * @var Client $client
-     */
-    private $client;
-
-    /**
-     * Queue constructor.
-     */
-    private function __construct()
-    {
-        $ini_array = parse_ini_file(__DIR__ . '/config.ini');
-        $this->endPoint = $ini_array['endpoint'];
-        $this->accessId = $ini_array['accessid'];
-        $this->accessKey = $ini_array['accesskey'];
-        $this->client = new Client($this->endPoint, $this->accessId, $this->accessKey);
-    }
+    use MnsTrait;
 
     /**
      * 发送消息

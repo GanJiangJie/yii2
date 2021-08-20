@@ -4,7 +4,6 @@ namespace common\util\DataCheck;
 
 use app\common\util\Redis\RedisS;
 use yii\base\Exception;
-use Yii;
 
 class DataCheck extends DataCheckBase
 {
@@ -39,12 +38,12 @@ class DataCheck extends DataCheckBase
      */
     public static function sign($params, $method)
     {
-        $params['app_id'] = Yii::$app->params['open']['app_id'];
-        $params['sign_type'] = Yii::$app->params['open']['sign_type'];
-        $params['version'] = Yii::$app->params['open']['version'];
+        $params['app_id'] = params('open.app_id');
+        $params['sign_type'] = params('open.sign_type');
+        $params['version'] = params('open.version');
         $params['method'] = $method;
         ksort($params);
-        $string = urldecode(http_build_query($params)) . '&key=' . Yii::$app->params['open']['app_key'];
+        $string = urldecode(http_build_query($params)) . '&key=' . params('open.app_key');
         $params['sign'] = md5($string);
         return $params;
     }

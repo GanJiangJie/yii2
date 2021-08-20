@@ -22,10 +22,24 @@ if (!function_exists('config')) {
     function config($key)
     {
         /**
-         * @var \app\common\util\Config $config
+         * @var \app\common\util\single\Config $config
          */
-        $config = \app\common\util\Config::instance();
+        $config = \app\common\util\single\Config::instance();
         return $config->get($key);
+    }
+}
+
+if (!function_exists('params')) {
+    /**
+     * @param string $key
+     * @return array|null|string
+     */
+    function params($key)
+    {
+        $key_array = explode('.', $key);
+        if (!isset(Yii::$app->params[$key_array[0]])) return null;
+        if (is_array(Yii::$app->params[$key_array[0]])) return arraySeriesIndex(Yii::$app->params, $key_array);
+        return Yii::$app->params[$key_array[0]];
     }
 }
 
@@ -38,12 +52,11 @@ if (!function_exists('arraySeriesIndex')) {
      */
     function arraySeriesIndex($array_subject, $array_index)
     {
-        $subject_item = $array_subject;
         foreach ($array_index as $item) {
-            if (!is_array($subject_item)) return null;
-            $subject_item = $subject_item[$item] ?? null;
+            if (!is_array($array_subject)) return null;
+            $array_subject = $array_subject[$item] ?? null;
         }
-        return $subject_item;
+        return $array_subject;
     }
 }
 
@@ -127,43 +140,43 @@ if (!function_exists('listenHandle')) {
 if (!function_exists('request')) {
     /**
      * 请求对象
-     * @return \app\common\util\Request
+     * @return \app\common\util\single\Request
      */
     function request()
     {
-        return \app\common\util\Request::instance();
+        return \app\common\util\single\Request::instance();
     }
 }
 
 if (!function_exists('mToken')) {
     /**
      * 商户登录令牌
-     * @return \app\common\util\MToken
+     * @return \app\common\util\single\MToken
      */
     function mToken()
     {
-        return \app\common\util\MToken::instance();
+        return \app\common\util\single\MToken::instance();
     }
 }
 
 if (!function_exists('uToken')) {
     /**
      * 用户登录令牌
-     * @return \app\common\util\UToken
+     * @return \app\common\util\single\UToken
      */
     function uToken()
     {
-        return \app\common\util\UToken::instance();
+        return \app\common\util\single\UToken::instance();
     }
 }
 
 if (!function_exists('response')) {
     /**
-     * @return \app\common\util\Response
+     * @return \app\common\util\single\Response
      */
     function response()
     {
-        return \app\common\util\Response::instance();
+        return \app\common\util\single\Response::instance();
     }
 }
 

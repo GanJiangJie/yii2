@@ -2,7 +2,6 @@
 
 namespace common\util\DataCheck;
 
-use Yii;
 use yii\base\Exception;
 
 class DataCheckBase
@@ -33,7 +32,7 @@ class DataCheckBase
      */
     public static function checkSignType($sign_type)
     {
-        if ($sign_type != Yii::$app->params['open']['sign_type']) {
+        if ($sign_type != params('open.sign_type')) {
             throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN_TYPE], API_ERROR_CODE_INVALID_SIGN_TYPE);
         }
     }
@@ -45,7 +44,7 @@ class DataCheckBase
      */
     public static function checkVersion($version)
     {
-        if ($version != Yii::$app->params['open']['version']) {
+        if ($version != params('open.version')) {
             throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_VERSION], API_ERROR_CODE_INVALID_VERSION);
         }
     }

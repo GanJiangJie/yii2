@@ -19,7 +19,7 @@ class Route
     public static function method($method)
     {
         //route目录绝对路径
-        $path_dir = \Yii::$app->basePath . '/routes';
+        $path_dir = BASE_PATH . '/routes';
         //路由文件路径
         $route_paths = [];
         //路由文件路径归纳

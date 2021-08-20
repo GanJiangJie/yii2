@@ -1,9 +1,8 @@
 <?php
 
-namespace app\common\util;
+namespace app\common\util\single;
 
 use app\common\traits\SingleTrait;
-use Yii;
 
 class Config
 {
@@ -24,13 +23,11 @@ class Config
         $file_name = $key_array[0];
         unset($key_array[0]);
         if (empty($this->config) || !isset($this->config[$file_name])) {
-            $config_file = Yii::$app->basePath . '/config/' . $file_name . '.php';
+            $config_file = BASE_PATH . '/config/' . $file_name . '.php';
             if (!is_file($config_file)) return null;
             $this->config[$file_name] = (include($config_file . ''));
         }
-        if (is_array($this->config[$file_name])) {
-            return arraySeriesIndex($this->config[$file_name], $key_array);
-        }
+        if (is_array($this->config[$file_name])) return arraySeriesIndex($this->config[$file_name], $key_array);
         return empty($key_array) ? $this->config[$file_name] : null;
     }
 }
