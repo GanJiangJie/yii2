@@ -48,7 +48,7 @@ class Response
      * @param string $errMsg
      * @return $this
      */
-    public function err($errCode, $errMsg)
+    public function error($errCode, $errMsg)
     {
         $this->response = [
             'errCode' => $errCode ?: API_ERROR_CODE_FAIL,
