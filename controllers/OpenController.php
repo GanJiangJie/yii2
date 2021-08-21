@@ -33,7 +33,7 @@ class OpenController extends WebController
             $response->data($data);
         } catch (Exception $e) {
             //抛出异常处理
-            $response->error($e->getCode(), $e->getMessage());
+            $response->error($e->getMessage(), $e->getCode());
             $log->prefix('api_fail_');
         } finally {
             //打印日志

@@ -44,11 +44,11 @@ class Response
     }
 
     /**
-     * @param string $errCode
-     * @param string $errMsg
+     * @param $errMsg
+     * @param $errCode
      * @return $this
      */
-    public function error($errCode, $errMsg)
+    public function error($errMsg = null, $errCode = null)
     {
         $this->response = [
             'errCode' => $errCode ?: API_ERROR_CODE_FAIL,
@@ -57,7 +57,8 @@ class Response
         return $this;
     }
 
-    public function responseJsonExit()
+    public
+    function responseJsonExit()
     {
         header('Content-type:text/html;charset=utf-8');
         echo Json::encode($this->response);
