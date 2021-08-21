@@ -2,6 +2,7 @@
 
 namespace app\common\service;
 
+use app\common\event\model\MemberRegisterEvent;
 use app\models\Member;
 use yii\base\Exception;
 
@@ -45,7 +46,7 @@ class MemberService extends BaseService
     /**
      * @throws Exception
      */
-    public function add()
+    public function register()
     {
         $exists = Member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
@@ -62,6 +63,9 @@ class MemberService extends BaseService
         if (!$member->save()) {
             throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
         }
+
+        //会员注册事件
+        event(new MemberRegisterEvent($member->toArray()));
     }
 
     /**

@@ -27,7 +27,7 @@ class MemberController extends WebController
     /**
      * @throws \yii\base\Exception
      */
-    public function actionAdd()
+    public function actionRegister()
     {
         DataCheckBase::checkValidEmpty(request()->params(), [
             'name',
@@ -38,7 +38,7 @@ class MemberController extends WebController
         $model->assignAttributes(request()->params(), ['account', 'birthday']);
         $model->merchant_code = mToken()->get('merchant_code');
         $model->member_name = request()->params('name');
-        $model->add();
+        $model->register();
     }
 
     /**
