@@ -29,6 +29,16 @@ if (!function_exists('config')) {
     }
 }
 
+if (!function_exists('app')) {
+    /**
+     * @return \yii\console\Application|\yii\web\Application
+     */
+    function app()
+    {
+        return Yii::$app;
+    }
+}
+
 if (!function_exists('params')) {
     /**
      * @param string $key
@@ -57,16 +67,6 @@ if (!function_exists('arraySeriesIndex')) {
             $array_subject = $array_subject[$item] ?? null;
         }
         return $array_subject;
-    }
-}
-
-if (!function_exists('app')) {
-    /**
-     * @return \yii\console\Application|\yii\web\Application
-     */
-    function app()
-    {
-        return Yii::$app;
     }
 }
 
