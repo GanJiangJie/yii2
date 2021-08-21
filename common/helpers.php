@@ -37,9 +37,9 @@ if (!function_exists('params')) {
     function params($key)
     {
         $key_array = explode('.', $key);
-        if (!isset(Yii::$app->params[$key_array[0]])) return null;
-        if (is_array(Yii::$app->params[$key_array[0]])) return arraySeriesIndex(Yii::$app->params, $key_array);
-        return Yii::$app->params[$key_array[0]];
+        if (!isset(app()->params[$key_array[0]])) return null;
+        if (is_array(app()->params[$key_array[0]])) return arraySeriesIndex(app()->params, $key_array);
+        return app()->params[$key_array[0]];
     }
 }
 
@@ -57,6 +57,16 @@ if (!function_exists('arraySeriesIndex')) {
             $array_subject = $array_subject[$item] ?? null;
         }
         return $array_subject;
+    }
+}
+
+if (!function_exists('app')) {
+    /**
+     * @return \yii\console\Application|\yii\web\Application
+     */
+    function app()
+    {
+        return Yii::$app;
     }
 }
 
@@ -135,11 +145,14 @@ if (!function_exists('listenHandle')) {
     /**
      * 监听处理
      * @param \app\common\listen\BaseListen $listen_instance
-     * @return array
+     * @throws \yii\base\Exception
      */
     function listenHandle($listen_instance)
     {
-        return \app\common\util\Event::handle($listen_instance);
+        $result = \app\common\util\Event::handle($listen_instance);
+        if (!$result['status']) {
+            throw new \yii\base\Exception($result['msg']);
+        }
     }
 }
 

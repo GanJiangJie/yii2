@@ -3,7 +3,6 @@
 namespace app\common\util\single;
 
 use app\common\traits\InstanceTrait;
-use Yii;
 
 class Request
 {
@@ -31,13 +30,13 @@ class Request
      */
     private function getParams()
     {
-        if (Yii::$app->request->isGet) {
-            return Yii::$app->request->get();
+        if (app()->request->isGet) {
+            return app()->request->get();
         }
-        if (Yii::$app->request->isPost) {
+        if (app()->request->isPost) {
             return array_map(function ($value) {
                 return urldecode($value);
-            }, Yii::$app->request->post());
+            }, app()->request->post());
         }
         return [];
     }

@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use Yii;
 use yii\base\Exception;
 use app\common\util\Route;
 use app\components\WebController;
@@ -29,7 +28,7 @@ class OpenController extends WebController
             //方法获取路由
             $route = Route::method($params['method']);
             //跳转路由
-            $data = Yii::$app->runAction($route);
+            $data = app()->runAction($route);
             //响应结果处理
             $response->data($data);
         } catch (Exception $e) {

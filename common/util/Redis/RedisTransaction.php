@@ -2,8 +2,6 @@
 
 namespace app\common\util\Redis;
 
-use Yii;
-
 /**
  * Class RedisTransaction
  * @package app\common\util\Redis
@@ -18,7 +16,7 @@ class RedisTransaction extends RedisBase
     public static function Multi()
     {
         $redis = self::$redis;
-        return Yii::$app->$redis->multi();
+        return app()->$redis->multi();
     }
 
     /**
@@ -28,7 +26,7 @@ class RedisTransaction extends RedisBase
     public static function Exec()
     {
         $redis = self::$redis;
-        return Yii::$app->$redis->exec();
+        return app()->$redis->exec();
     }
 
     /**
@@ -38,7 +36,7 @@ class RedisTransaction extends RedisBase
     public static function Discard()
     {
         $redis = self::$redis;
-        return Yii::$app->$redis->discard();
+        return app()->$redis->discard();
     }
 
     /**
@@ -48,17 +46,18 @@ class RedisTransaction extends RedisBase
     public static function Unwatch()
     {
         $redis = self::$redis;
-        return Yii::$app->$redis->unwatch();
+        return app()->$redis->unwatch();
     }
 
     /**
      * Redis Watch 命令用于监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断
+     * @param $key
      * @return mixed
      */
     public static function Watch($key)
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->watch($key);
+        return app()->$redis->watch($key);
     }
 }

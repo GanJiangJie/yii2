@@ -2,8 +2,6 @@
 
 namespace app\common\util\Redis;
 
-use Yii;
-
 class RedisBase
 {
     const PREFIX = '';
@@ -14,7 +12,7 @@ class RedisBase
     {
         $redis = self::$redis;
         $params = self::format_array($params);
-        return Yii::$app->$redis->executeCommand($command, $params);
+        return app()->$redis->executeCommand($command, $params);
     }
 
     /**

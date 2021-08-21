@@ -2,8 +2,6 @@
 
 namespace app\common\util\Redis;
 
-use Yii;
-
 class RedisS extends RedisBase
 {
     /**
@@ -15,7 +13,7 @@ class RedisS extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->get($key);
+        return app()->$redis->get($key);
     }
 
     /**
@@ -28,7 +26,7 @@ class RedisS extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->set($key, $value);
+        return app()->$redis->set($key, $value);
     }
 
     /**
@@ -42,7 +40,7 @@ class RedisS extends RedisBase
         foreach ($keys as $k => &$v) {
             $v = parent::PREFIX . $v;
         }
-        $values = Yii::$app->$redis->executeCommand('MGet', $keys);
+        $values = app()->$redis->executeCommand('MGet', $keys);
         $result = array();
         foreach ($values as $k => $v) {
             if (!empty($v)) {
@@ -63,7 +61,7 @@ class RedisS extends RedisBase
     {
         $redis = self::$redis;
         $params = parent::format_array($params);
-        return Yii::$app->$redis->executeCommand('MSet', $params);
+        return app()->$redis->executeCommand('MSet', $params);
     }
 
     /**
@@ -77,11 +75,11 @@ class RedisS extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->setex($key, $time, $value);
+        return app()->$redis->setex($key, $time, $value);
     }
 
     /**
-     * Redis Incr 命令将 key 中储存的数字值增一。
+     * Redis InCr 命令将 key 中储存的数字值增一。
      * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作。
      * 如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。
      * 本操作的值限制在 64 位(bit)有符号数字表示之内。
@@ -92,11 +90,11 @@ class RedisS extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->incr($key);
+        return app()->$redis->incr($key);
     }
 
     /**
-     * Redis Incrby 命令将 key 中储存的数字加上指定的增量值。
+     * Redis InCrBy 命令将 key 中储存的数字加上指定的增量值。
      * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCRBY 命令。
      * 如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。
      * 本操作的值限制在 64 位(bit)有符号数字表示之内。
@@ -108,11 +106,11 @@ class RedisS extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->incrby($key, $amount);
+        return app()->$redis->incrby($key, $amount);
     }
 
     /**
-     * Redis Decr 命令将 key 中储存的数字值减一。
+     * Redis DeCr 命令将 key 中储存的数字值减一。
      * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECR 操作。
      * 如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。
      * 本操作的值限制在 64 位(bit)有符号数字表示之内。
@@ -123,11 +121,11 @@ class RedisS extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->decr($key);
+        return app()->$redis->decr($key);
     }
 
     /**
-     * Redis Decrby 命令将 key 所储存的值减去指定的减量值。
+     * Redis DeCrBy 命令将 key 所储存的值减去指定的减量值。
      * 如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 DECRBY 操作。
      * 如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。
      * 本操作的值限制在 64 位(bit)有符号数字表示之内。
@@ -139,6 +137,6 @@ class RedisS extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->decrby($key, $amount);
+        return app()->$redis->decrby($key, $amount);
     }
 }

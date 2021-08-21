@@ -2,14 +2,12 @@
 
 namespace app\common\util\Redis;
 
-use Yii;
-
 /**
  * redis sorted set 有序集合命令
- * Class RedisSset
+ * Class RedisSSet
  * @package app\common\util\Redis
  */
-class RedisSset extends RedisBase
+class RedisSSet extends RedisBase
 {
     /**
      * 向有序集合添加一个或多个成员，或者更新已有成员
@@ -17,12 +15,12 @@ class RedisSset extends RedisBase
      * @param $params
      * @return mixed
      */
-    public static function Zadd($set, $params)
+    public static function ZAdd($set, $params)
     {
         $redis = self::$redis;
         $set = parent::PREFIX . $set;
         array_unshift($params, $set);
-        return Yii::$app->$redis->executeCommand('ZADD', $params);
+        return app()->$redis->executeCommand('ZADD', $params);
     }
 
     /**
@@ -30,11 +28,11 @@ class RedisSset extends RedisBase
      * @param $set
      * @return mixed
      */
-    public static function Zcard($set)
+    public static function ZCard($set)
     {
         $redis = self::$redis;
         $set = parent::PREFIX . $set;
-        return Yii::$app->$redis->zcard($set);
+        return app()->$redis->zcard($set);
     }
 
     /**
@@ -44,15 +42,15 @@ class RedisSset extends RedisBase
      * @param integer $max 分数上线
      * @return mixed
      */
-    public static function Zcount($set, $min, $max)
+    public static function ZCount($set, $min, $max)
     {
         $redis = self::$redis;
         $set = parent::PREFIX . $set;
-        return Yii::$app->$redis->zcount($set, $min, $max);
+        return app()->$redis->zcount($set, $min, $max);
     }
 
     /**
-     * Redis Zrangebyscore 返回有序集合中指定分数区间的成员列表。有序集成员按分数值递增(从小到大)次序排列。
+     * Redis ZRangeByScore 返回有序集合中指定分数区间的成员列表。有序集成员按分数值递增(从小到大)次序排列。
      * 具有相同分数值的成员按字典序来排列(该属性是有序集提供的，不需要额外的计算)。
      * 默认情况下，区间的取值使用闭区间 (小于等于或大于等于)，你也可以通过给参数前增加 ( 符号来使用可选的开区间 (小于或大于)。
      * @param $set
@@ -60,24 +58,24 @@ class RedisSset extends RedisBase
      * @param $max
      * @return mixed
      */
-    public static function Zrangebyscore($set, $min, $max)
+    public static function ZRangeByScore($set, $min, $max)
     {
         $redis = self::$redis;
         $set = parent::PREFIX . $set;
-        return Yii::$app->$redis->zrangebyscore($set, $min, $max);
+        return app()->$redis->zrangebyscore($set, $min, $max);
     }
 
     /**
-     * Redis Zrem 命令用于移除有序集中的一个或多个成员，不存在的成员将被忽略。
+     * Redis ZRem 命令用于移除有序集中的一个或多个成员，不存在的成员将被忽略。
      * 当 key 存在但不是有序集类型时，返回一个错误。
      * @param $set
      * @param $member
      * @return mixed
      */
-    public static function Zrem($set, $member)
+    public static function ZRem($set, $member)
     {
         $redis = self::$redis;
         $set = parent::PREFIX . $set;
-        return Yii::$app->$redis->zrem($set, $member);
+        return app()->$redis->zrem($set, $member);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace app\common\util\Redis;
 
-use Yii;
-
 /**
  * redis set 键命令
  * Class RedisK
@@ -20,7 +18,7 @@ class RedisK extends RedisBase
     {
         $redis = self::$redis;
         $key_name = parent::PREFIX . $key_name;
-        return Yii::$app->$redis->del($key_name);
+        return app()->$redis->del($key_name);
     }
 
     /**
@@ -32,7 +30,7 @@ class RedisK extends RedisBase
     {
         $redis = self::$redis;
         $key_name = parent::PREFIX . $key_name;
-        if (Yii::$app->$redis->exists($key_name) == 1) {
+        if (app()->$redis->exists($key_name) == 1) {
             return true;
         }
         return false;
@@ -48,7 +46,7 @@ class RedisK extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->expire($key, $time);
+        return app()->$redis->expire($key, $time);
     }
 
     /**
@@ -61,7 +59,7 @@ class RedisK extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->expireat($key, $time_stamp);
+        return app()->$redis->expireat($key, $time_stamp);
     }
 
     /**
@@ -73,7 +71,7 @@ class RedisK extends RedisBase
     {
         $redis = self::$redis;
         $pattern = parent::PREFIX . $pattern;
-        return Yii::$app->$redis->keys($pattern);
+        return app()->$redis->keys($pattern);
     }
 
     /**
@@ -85,7 +83,7 @@ class RedisK extends RedisBase
     {
         $redis = self::$redis;
         $key_name = parent::PREFIX . $key_name;
-        return Yii::$app->$redis->persist($key_name);
+        return app()->$redis->persist($key_name);
     }
 
     /**
@@ -97,7 +95,7 @@ class RedisK extends RedisBase
     {
         $redis = self::$redis;
         $key_name = parent::PREFIX . $key_name;
-        return Yii::$app->$redis->ttl($key_name);
+        return app()->$redis->ttl($key_name);
     }
 
     /**
@@ -110,6 +108,6 @@ class RedisK extends RedisBase
     {
         $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return Yii::$app->$redis->type($key);
+        return app()->$redis->type($key);
     }
 }
