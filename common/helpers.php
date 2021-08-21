@@ -105,11 +105,14 @@ if (!function_exists('event')) {
     /**
      * 事件挂起
      * @param \app\common\event\BaseEvent $event_instance
-     * @return array
+     * @throws \yii\base\Exception
      */
     function event($event_instance)
     {
-        return \app\common\util\Event::hangup($event_instance);
+        $result = \app\common\util\Event::hangup($event_instance);
+        if (!$result['status']) {
+            throw new \yii\base\Exception($result['msg']);
+        }
     }
 }
 
@@ -117,11 +120,14 @@ if (!function_exists('listen')) {
     /**
      * 监听挂起
      * @param \app\common\listen\BaseListen $listen_instance
-     * @return array
+     * @throws \yii\base\Exception
      */
     function listen($listen_instance)
     {
-        return \app\common\util\Event::listen($listen_instance);
+        $result = \app\common\util\Event::listen($listen_instance);
+        if (!$result['status']) {
+            throw new \yii\base\Exception($result['msg']);
+        }
     }
 }
 
