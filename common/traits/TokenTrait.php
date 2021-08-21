@@ -78,7 +78,7 @@ trait TokenTrait
         if (empty($this->data)) {
             $token = request()->params($this->name);
             if (empty($token)) {
-                throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_TOKEN], API_ERROR_CODE_INVALID_TOKEN);
+                throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_TOKEN], API_ERROR_CODE_LACK_TOKEN);
             }
             $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
             if (empty($info_json)) {

@@ -3,7 +3,7 @@
 namespace app\commands;
 
 use app\components\ConsoleController;
-use yii\base\Exception;
+use yii\db\Exception;
 use Yii;
 
 class ListenController extends ConsoleController

@@ -14,9 +14,6 @@ class DataCheck extends DataCheckBase
      */
     public static function checkSign($params)
     {
-        if (empty($params['sign'])) {
-            throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_SIGN], API_ERROR_CODE_LACK_SIGN);
-        }
         $app_key = redis(RedisS::class, 'Get', [$params['app_id']]);
         if (empty($app_key)) {
             throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_APP_ID], API_ERROR_CODE_INVALID_APP_ID);
