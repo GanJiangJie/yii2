@@ -57,8 +57,7 @@ class Response
         return $this;
     }
 
-    public
-    function responseJsonExit()
+    public function responseJsonExit()
     {
         header('Content-type:text/html;charset=utf-8');
         echo Json::encode($this->response);
