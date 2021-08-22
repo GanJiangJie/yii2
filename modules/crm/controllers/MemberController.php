@@ -4,7 +4,7 @@ namespace app\modules\crm\controllers;
 
 use app\common\service\MemberService;
 use app\components\WebController;
-use common\util\DataCheck\DataCheckBase;
+use common\util\DataCheck\Validator;
 
 class MemberController extends WebController
 {
@@ -14,7 +14,7 @@ class MemberController extends WebController
      */
     public function actionList()
     {
-        DataCheckBase::checkValidEmpty(request()->params(), ['token']);
+        Validator::checkValidEmpty(request()->params(), ['token']);
         $model = new MemberService();
         $model->assignAttributes(request()->params(), ['account', 'key_word']);
         $model->merchant_code = mToken()->get('merchant_code');
@@ -29,7 +29,7 @@ class MemberController extends WebController
      */
     public function actionRegister()
     {
-        DataCheckBase::checkValidEmpty(request()->params(), [
+        Validator::checkValidEmpty(request()->params(), [
             'name',
             'account',
             'birthday'

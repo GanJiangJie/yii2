@@ -22,9 +22,9 @@ if (!function_exists('config')) {
     function config($key)
     {
         /**
-         * @var \app\common\util\single\Config $config
+         * @var \app\common\util\Single\Config $config
          */
-        $config = \app\common\util\single\Config::instance();
+        $config = \app\common\util\Single\Config::instance();
         return $config->get($key);
     }
 }
@@ -159,43 +159,43 @@ if (!function_exists('listenHandle')) {
 if (!function_exists('request')) {
     /**
      * 请求对象
-     * @return \app\common\util\single\Request
+     * @return \app\common\util\Single\Request
      */
     function request()
     {
-        return \app\common\util\single\Request::instance();
+        return \app\common\util\Single\Request::instance();
     }
 }
 
 if (!function_exists('mToken')) {
     /**
      * 商户登录令牌
-     * @return \app\common\util\single\MToken
+     * @return \app\common\util\Single\MToken
      */
     function mToken()
     {
-        return \app\common\util\single\MToken::instance();
+        return \app\common\util\Single\MToken::instance();
     }
 }
 
 if (!function_exists('uToken')) {
     /**
      * 用户登录令牌
-     * @return \app\common\util\single\UToken
+     * @return \app\common\util\Single\UToken
      */
     function uToken()
     {
-        return \app\common\util\single\UToken::instance();
+        return \app\common\util\Single\UToken::instance();
     }
 }
 
 if (!function_exists('response')) {
     /**
-     * @return \app\common\util\single\Response
+     * @return \app\common\util\Single\Response
      */
     function response()
     {
-        return \app\common\util\single\Response::instance();
+        return \app\common\util\Single\Response::instance();
     }
 }
 

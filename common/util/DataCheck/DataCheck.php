@@ -5,8 +5,32 @@ namespace common\util\DataCheck;
 use app\common\util\Redis\RedisS;
 use yii\base\Exception;
 
-class DataCheck extends DataCheckBase
+class DataCheck
 {
+    /**
+     * 校验版本号
+     * @param string $version
+     * @throws Exception
+     */
+    public static function checkVersion($version)
+    {
+        if ($version != params('open.version')) {
+            throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_VERSION], API_ERROR_CODE_INVALID_VERSION);
+        }
+    }
+
+    /**
+     * 校验签名类型
+     * @param string $sign_type
+     * @throws Exception
+     */
+    public static function checkSignType($sign_type)
+    {
+        if ($sign_type != params('open.sign_type')) {
+            throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN_TYPE], API_ERROR_CODE_INVALID_SIGN_TYPE);
+        }
+    }
+
     /**
      * 验签
      * @param array $params

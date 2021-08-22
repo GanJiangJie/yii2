@@ -5,13 +5,23 @@ namespace app\commands;
 use app\common\event\model\DefaultEvent;
 use app\components\ConsoleController;
 use app\models\Member;
+use common\util\DataCheck\Validator;
+use yii\base\Exception;
 
 class TestController extends ConsoleController
 {
     public function actionIndex()
     {
+        try {
+            Validator::make(['a' => 3, 'b' => 123456], ['b' => 'numeral|min:3|max:5']);
+        } catch (Exception $exception) {
+            dd($exception->getMessage());
+        }
+        dd(123);
+
+
         dd(app()->params);
-        dd(params('mns.queue.listen'),BASE_PATH);
+        dd(params('mns.queue.listen'), BASE_PATH);
         $str = '吼吼吼aaa哈哈哈bbb嘿嘿嘿O(∩_∩)O哈哈~';
         $del = mb_strlen($str, 'utf-8') > 18 ? mb_substr($str, 0, 18, 'utf-8') : $str;
         dd($del);

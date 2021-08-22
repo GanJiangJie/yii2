@@ -1,6 +1,6 @@
 <?php
 
-namespace app\common\util\single;
+namespace app\common\util\Single;
 
 use app\common\traits\TokenTrait;
 
