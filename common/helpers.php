@@ -115,6 +115,7 @@ if (!function_exists('event')) {
     /**
      * 事件挂起
      * @param \app\common\event\BaseEvent $event_instance
+     * @return array
      * @throws \yii\base\Exception
      */
     function event($event_instance)
@@ -123,6 +124,7 @@ if (!function_exists('event')) {
         if (!$result['status']) {
             throw new \yii\base\Exception($result['msg']);
         }
+        return $result;
     }
 }
 
@@ -130,6 +132,7 @@ if (!function_exists('listen')) {
     /**
      * 监听挂起
      * @param \app\common\listen\BaseListen $listen_instance
+     * @return array
      * @throws \yii\base\Exception
      */
     function listen($listen_instance)
@@ -138,6 +141,7 @@ if (!function_exists('listen')) {
         if (!$result['status']) {
             throw new \yii\base\Exception($result['msg']);
         }
+        return $result;
     }
 }
 
@@ -145,6 +149,7 @@ if (!function_exists('listenHandle')) {
     /**
      * 监听处理
      * @param \app\common\listen\BaseListen $listen_instance
+     * @return array
      * @throws \yii\base\Exception
      */
     function listenHandle($listen_instance)
@@ -153,6 +158,7 @@ if (!function_exists('listenHandle')) {
         if (!$result['status']) {
             throw new \yii\base\Exception($result['msg']);
         }
+        return $result;
     }
 }
 

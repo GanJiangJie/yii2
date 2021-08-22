@@ -10,6 +10,9 @@ use yii\base\Exception;
 
 class TestController extends ConsoleController
 {
+    /**
+     * @throws Exception
+     */
     public function actionIndex()
     {
         try {

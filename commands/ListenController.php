@@ -26,10 +26,6 @@ class ListenController extends ConsoleController
                 app()->db->open();
 
                 $res = listenHandle($message_body);
-                if (!$res['status']) {
-                    throw new Exception($res['msg']);
-                    continue;
-                }
                 if (isset($res['msg'])) {
                     $log->writeLog([
                         'class' => $listen_class,
@@ -39,11 +35,7 @@ class ListenController extends ConsoleController
                 }
                 $result = queue()->deleteMessage(params('mns.queue.listen'), $receipt_handle);
                 if (!$result['status']) {
-                    $log->writeLog([
-                        'class' => get_class($message_body),
-                        'input' => $message_body,
-                        'output' => $result
-                    ], 3);
+                    throw new Exception($result['response']['error_msg']);
                 }
             } catch (Exception $e) {
                 $log->writeLog([
