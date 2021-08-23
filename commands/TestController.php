@@ -10,13 +10,10 @@ use yii\base\Exception;
 
 class TestController extends ConsoleController
 {
-    /**
-     * @throws Exception
-     */
     public function actionIndex()
     {
         try {
-            Validator::make(['a' => 3, 'b' => 123456], ['b' => 'numeral|min:3|max:5']);
+            Validator::make(['a' => 3, 'b' => 123456789], ['b' => 'numeral|min:3|max:5']);
         } catch (Exception $exception) {
             dd($exception->getMessage());
         }
