@@ -33,10 +33,9 @@ trait MnsTrait
      */
     private function __construct()
     {
-        $ini_array = parse_ini_file(BASE_PATH . '/common/package/mns/config.ini');
-        $this->endPoint = $ini_array['endPoint'];
-        $this->accessId = $ini_array['accessId'];
-        $this->accessKey = $ini_array['accessKey'];
+        $this->endPoint = params('mns.ini.endPoint');
+        $this->accessId = params('mns.ini.accessId');
+        $this->accessKey = params('mns.ini.accessKey');
         $this->client = new Client($this->endPoint, $this->accessId, $this->accessKey);
     }
 }
