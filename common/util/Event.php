@@ -15,9 +15,15 @@ class Event extends EventService
      */
     public static function hangup($event_instance)
     {
-        //获取全部注册事件
+        /**
+         * 获取全部注册事件
+         * @var array $events
+         */
         $events = self::$events;
-        //获取传入事件实例类名
+        /**
+         * 获取事件实例类名
+         * @var string $event_class
+         */
         $event_class = get_class($event_instance);
         if (!isset($events[$event_class])) {
             return [

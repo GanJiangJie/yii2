@@ -28,16 +28,15 @@ trait MnsTrait
      */
     private $client;
 
-    private $mns = 'mns.config.';
-
     /**
      * Queue constructor.
      */
     private function __construct()
     {
-        $this->endPoint = params($this->mns . 'endPoint');
-        $this->accessId = params($this->mns . 'accessId');
-        $this->accessKey = params($this->mns . 'accessKey');
+        $ini_array = parse_ini_file(BASE_PATH . '/common/package/mns/config.ini');
+        $this->endPoint = $ini_array['endPoint'];
+        $this->accessId = $ini_array['accessId'];
+        $this->accessKey = $ini_array['accessKey'];
         $this->client = new Client($this->endPoint, $this->accessId, $this->accessKey);
     }
 }
