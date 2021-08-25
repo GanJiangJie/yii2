@@ -35,8 +35,8 @@ class Route
     }
 
     /**
-     * @param $route_paths
-     * @param $path
+     * @param array $route_paths
+     * @param string $path
      */
     public static function readFileOne(&$route_paths, $path)
     {
@@ -56,8 +56,8 @@ class Route
     }
 
     /**
-     * @param $route_paths
-     * @param $path
+     * @param array $route_paths
+     * @param string $path
      */
     private static function readFileTwo(&$route_paths, $path)
     {
