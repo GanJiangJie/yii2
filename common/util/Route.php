@@ -38,7 +38,7 @@ class Route
      * @param $route_paths
      * @param $path
      */
-    private static function readFileOne(&$route_paths, $path)
+    public static function readFileOne(&$route_paths, $path)
     {
         $content = scandir($path);
         foreach ($content as $v) {

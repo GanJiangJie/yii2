@@ -216,6 +216,20 @@ if (!function_exists('logPrint')) {
     }
 }
 
+if (!function_exists('loopFolderGetFiles')) {
+    /**
+     * 获取文件夹下全部文件
+     * @param string $path 文件夹的路径: BASE_PATH . '/common'
+     * @return array
+     */
+    function loopFolderGetFiles($path)
+    {
+        $files = [];
+        \app\common\util\Route::readFileOne($files, $path);
+        return $files;
+    }
+}
+
 if (!function_exists('phoneHide')) {
     /**
      * 手机号码：'13099417612' => '130****7612'
