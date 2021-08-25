@@ -1,4 +1,5 @@
 .idea/
+/commands/TestController.php
 /config/
 /runtime/
 /web/index.php

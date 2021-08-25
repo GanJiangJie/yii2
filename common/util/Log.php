@@ -73,7 +73,7 @@ class Log
      */
     private function createLogFile()
     {
-        $path = BASE_PATH . '/logs/';
+        $path = BASE_PATH . '/runtime/logs/'.exec('whoami').'/';
         if ($this->category) {
             $path .= $this->category . '/';
         }

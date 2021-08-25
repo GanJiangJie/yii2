@@ -12,6 +12,7 @@ class TestController extends ConsoleController
 {
     public function actionIndex()
     {
+        logPrint()->writeLog(['aaa'],3);dd();
         dd(queue(),topic());
         try {
             Validator::make(['a' => 3, 'b' => 123456789], ['b' => 'numeral|min:3|max:5']);
