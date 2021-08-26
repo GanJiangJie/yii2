@@ -39,6 +39,17 @@ if (!function_exists('app')) {
     }
 }
 
+if (!function_exists('db')) {
+    /**
+     * @param string $db
+     * @return \yii\db\Connection
+     */
+    function db($db = 'db')
+    {
+        return app()->$db;
+    }
+}
+
 if (!function_exists('params')) {
     /**
      * @param string $key
@@ -216,17 +227,30 @@ if (!function_exists('logPrint')) {
     }
 }
 
-if (!function_exists('loopFolderGetFiles')) {
+if (!function_exists('getFolderFiles')) {
     /**
      * 获取文件夹下全部文件
      * @param string $path 文件夹的路径: BASE_PATH . '/common'
+     * @param bool $flag true返回文件路径, false返回文件名称
      * @return array
      */
-    function loopFolderGetFiles($path)
+    function getFolderFiles($path, $flag = false)
     {
         $files = [];
-        \app\common\util\Route::readFileOne($files, $path);
+        \app\common\util\FolderFile::readFileOne($files, $path, $flag);
         return $files;
+    }
+}
+
+if (!function_exists('delFolderFiles')) {
+    /**
+     * 删除目录、文件
+     * @param string $path
+     * @return bool
+     */
+    function delFolderFiles($path)
+    {
+        return \app\common\util\FolderFile::deleteDirFile($path);
     }
 }
 

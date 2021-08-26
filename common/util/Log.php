@@ -13,6 +13,7 @@ class Log
     private $prefix = '';//文件前缀
     private $filename = 'log';//文件名称
     private $suffix = '.log';//文件后缀
+    private $level;
 
     /**
      * @param string $category
@@ -45,7 +46,7 @@ class Log
     }
 
     /**
-     * @param $suffix
+     * @param string $suffix
      * @return $this
      */
     public function suffix($suffix)
@@ -55,15 +56,25 @@ class Log
     }
 
     /**
-     * @param $content
-     * @param $level string
+     * @param int $level
+     * @return $this
      */
-    public function writeLog($content, $level)
+    public function level($level)
+    {
+        $this->level = $level;
+        return $this;
+    }
+
+    /**
+     * @param $content
+     * @param int $level
+     */
+    public function writeLog($content, $level = self::LEVEL_INFO)
     {
         //创建日志文件
-        $log_file = $this->createLogFile();
+        $log_file = self::createLogFile();
         //组合日志内容
-        $message = $this->contentFormat($content, $level);
+        $message = self::contentFormat($content, $this->level ?? $level);
         //写入日志
         file_put_contents($log_file, $message . "\r\n", FILE_APPEND);
     }
@@ -73,7 +84,7 @@ class Log
      */
     private function createLogFile()
     {
-        $path = BASE_PATH . '/runtime/logs/'.exec('whoami').'/';
+        $path = BASE_PATH . '/runtime/logs/' . exec('whoami') . '/';
         if ($this->category) {
             $path .= $this->category . '/';
         }
@@ -99,16 +110,16 @@ class Log
     {
         $message = ['time' => date('Y-m-d H:i:s')];
         switch ($level) {
-            case 1:
+            case self::LEVEL_ERROR:
                 $message['level'] = 'error';
                 break;
-            case 2:
+            case self::LEVEL_WARNING:
                 $message['level'] = 'warning';
                 break;
-            case 3:
+            case self::LEVEL_INFO:
                 $message['level'] = 'info';
                 break;
-            case 4:
+            case self::LEVEL_TRACE:
                 $message['level'] = 'trace';
                 break;
         }

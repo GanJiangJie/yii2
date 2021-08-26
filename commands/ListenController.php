@@ -36,7 +36,7 @@ class ListenController extends ConsoleController
                         'listen_instance' => $listen_instance,
                         'listen_class' => $listen_class,
                         'handle_result' => $res
-                    ], 3);
+                    ]);
                 }
                 $result = queue()->deleteMessage(params('mns.queue.listen'), $receipt_handle);
                 if (!$result['status']) {
@@ -57,7 +57,7 @@ class ListenController extends ConsoleController
                     'listen_instance' => $listen_instance,
                     'listen_class' => $listen_class,
                     'handle_error' => $e->getMessage()
-                ], 3);
+                ], 2);
             }
         }
     }

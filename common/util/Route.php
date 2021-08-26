@@ -23,7 +23,7 @@ class Route
         //路由文件路径
         $route_paths = [];
         //路由文件路径归纳
-        self::readFileOne($route_paths, $path_dir);
+        FolderFile::readFileOne($route_paths, $path_dir, true);
         //method方法对应路由
         foreach ($route_paths as $route_path) {
             $routes = (include($route_path . '')) ?: [];
@@ -32,47 +32,5 @@ class Route
             }
         }
         throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_METHOD], API_ERROR_CODE_INVALID_METHOD);
-    }
-
-    /**
-     * @param array $route_paths
-     * @param string $path
-     */
-    public static function readFileOne(&$route_paths, $path)
-    {
-        $content = scandir($path);
-        foreach ($content as $v) {
-            if ($v == '.' || $v == '..') {
-                continue;
-            }
-            if (is_file($path . '/' . $v)) {
-                $route_paths[] = $path . '/' . $v;
-                continue;
-            }
-            if (is_dir($path . '/' . $v)) {
-                self::readFileTwo($route_paths, $path . '/' . $v);
-            }
-        }
-    }
-
-    /**
-     * @param array $route_paths
-     * @param string $path
-     */
-    private static function readFileTwo(&$route_paths, $path)
-    {
-        $content = scandir($path);
-        foreach ($content as $v) {
-            if ($v == '.' || $v == '..') {
-                continue;
-            }
-            if (is_file($path . '/' . $v)) {
-                $route_paths[] = $path . '/' . $v;
-                continue;
-            }
-            if (is_dir($path . '/' . $v)) {
-                self::readFileOne($route_paths, $path . '/' . $v);
-            }
-        }
     }
 }
