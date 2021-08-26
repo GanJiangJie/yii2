@@ -25,7 +25,7 @@ class NotifyController extends WebController
         $message_body = $message['messageBody'];
         $receipt_handle = $message['receiptHandle'];
 
-        $log = logPrint()->prefix('listen_')->prefix('async');
+        $log = logPrint()->prefix('listen_')->filename('async');
 
         $listen_instance = unserialize($message_body);
         $listen_class = get_class($listen_instance);
