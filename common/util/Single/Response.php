@@ -26,14 +26,6 @@ class Response
     }
 
     /**
-     * @return array
-     */
-    public function response()
-    {
-        return $this->response;
-    }
-
-    /**
      * @param $data
      * @return $this
      */
@@ -55,6 +47,14 @@ class Response
             'errMsg' => $errMsg ?: $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_FAIL]
         ];
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function response()
+    {
+        return $this->response;
     }
 
     public function responseJsonExit()

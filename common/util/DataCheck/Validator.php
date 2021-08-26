@@ -12,6 +12,16 @@ class Validator
     private static $params;
 
     /**
+     * @var array $messages
+     */
+    private static $messages;
+
+    /**
+     * @var string $message
+     */
+    private static $message;
+
+    /**
      * 校验数组必填字段是否为空
      * @param $params
      * @param $check_params
@@ -35,11 +45,13 @@ class Validator
      * 验证参数
      * @param array $params
      * @param array $rules
+     * @param array $messages
      * @throws Exception
      */
-    public static function make($params, $rules)
+    public static function make($params, $rules, $messages = [])
     {
         self::$params = $params;
+        self::$messages = $messages;
         foreach ($rules as $key => $rule) {
             $rule_array = explode('|', $rule);
             foreach ($rule_array as $rule_item) {
@@ -64,7 +76,8 @@ class Validator
     private static function required($key)
     {
         if (empty(self::$params[$key])) {
-            throw new Exception('Parameter ' . $key . ' cannot be empty');
+            self::$message = 'Parameter ' . $key . ' cannot be empty';
+            throw new Exception(self::$messages[$key . '.required'] ?? self::$message);
         }
     }
 
@@ -84,7 +97,8 @@ class Validator
     private static function numeral($key)
     {
         if (!is_numeric(self::$params[$key])) {
-            throw new Exception('Parameter ' . $key . ' must be numeric');
+            self::$message = 'Parameter ' . $key . ' must be numeric';
+            throw new Exception(self::$messages[$key . '.numeral'] ?? self::$message);
         }
     }
 
@@ -97,7 +111,8 @@ class Validator
     private static function min($key, $value)
     {
         if (mb_strlen(self::$params[$key], 'utf-8') < $value) {
-            throw new Exception('The length of parameter ' . $key . ' cannot be less than ' . $value);
+            self::$message = 'The length of parameter ' . $key . ' cannot be less than ' . $value;
+            throw new Exception(self::$messages[$key . '.min'] ?? self::$message);
         }
     }
 
@@ -110,7 +125,8 @@ class Validator
     private static function max($key, $value)
     {
         if (mb_strlen(self::$params[$key], 'utf-8') > $value) {
-            throw new Exception('The length of parameter ' . $key . ' cannot be longer than ' . $value);
+            self::$message = 'The length of parameter ' . $key . ' cannot be longer than ' . $value;
+            throw new Exception(self::$messages[$key . '.max'] ?? self::$message);
         }
     }
 }
