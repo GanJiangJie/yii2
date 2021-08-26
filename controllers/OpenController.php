@@ -15,7 +15,7 @@ class OpenController extends WebController
         //获取请求参数
         $params = request()->params();
         $response = response();
-        $log = logPrint()->category('api_log')->prefix('api_success_');
+        $log = logPrint()->category('api_log')->prefix('api_');
         try {
             //验证必填参数
             Validator::checkValidEmpty($params, ['app_id', 'method', 'sign_type', 'version', 'sign']);
