@@ -227,30 +227,28 @@ if (!function_exists('logPrint')) {
     }
 }
 
-if (!function_exists('getFolderFiles')) {
+if (!function_exists('getDirFile')) {
     /**
      * 获取文件夹下全部文件
      * @param string $path 文件夹的路径: BASE_PATH . '/common'
      * @param bool $flag true返回文件路径, false返回文件名称
      * @return array
      */
-    function getFolderFiles($path, $flag = false)
+    function getDirFile($path, $flag = false)
     {
-        $files = [];
-        \app\common\util\FolderFile::readFileOne($files, $path, $flag);
-        return $files;
+        return \app\common\util\FolderFile::getDirFile($path, $flag);
     }
 }
 
-if (!function_exists('delFolderFiles')) {
+if (!function_exists('delDirFile')) {
     /**
      * 删除目录、文件
      * @param string $path
      * @return bool
      */
-    function delFolderFiles($path)
+    function delDirFile($path)
     {
-        return \app\common\util\FolderFile::deleteDirFile($path);
+        return \app\common\util\FolderFile::delDirFile($path);
     }
 }
 

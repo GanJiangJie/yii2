@@ -18,13 +18,9 @@ class Route
      */
     public static function method($method)
     {
-        //route目录绝对路径
-        $path_dir = BASE_PATH . '/routes';
-        //路由文件路径
-        $route_paths = [];
         //路由文件路径归纳
-        FolderFile::readFileOne($route_paths, $path_dir, true);
-        //method方法对应路由
+        $route_paths = FolderFile::getDirFile(BASE_PATH . '/routes', true);
+        //获取方法对应路由
         foreach ($route_paths as $route_path) {
             $routes = (include($route_path . '')) ?: [];
             if (isset($routes[$method])) {
