@@ -22,6 +22,23 @@ class Validator
     private static $message;
 
     /**
+     * 判断数据是否json格式
+     * @param string $data
+     * @param bool $decode true解码
+     * @param bool $toArray true数组
+     * @return bool
+     */
+    public static function isJson(&$data, $decode = false, $toArray = false)
+    {
+        $dataDecode = json_decode($data, $toArray);
+        if (is_object($dataDecode) || is_array($dataDecode)) {
+            if ($decode) $data = $dataDecode;
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 校验数组必填字段是否为空
      * @param $params
      * @param $check_params

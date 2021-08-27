@@ -29,6 +29,19 @@ class BaseService
     protected $list = [];
 
     /**
+     * 参数挂载
+     * BaseService constructor.
+     * @param array $params
+     * @param array $keys
+     */
+    public function __construct($params = [], $keys = [])
+    {
+        foreach ($keys as $key) {
+            $this->$key = $params[$key] ?? null;
+        }
+    }
+
+    /**
      * 挂载参数
      * @param array $params
      * @param array $keys
@@ -44,16 +57,17 @@ class BaseService
      * 生成随机且不重复12位编号
      * @param ActiveRecord $model
      * @param string $attribute
+     * @param int $length
      * @return string
      */
-    public static function createCode12(ActiveRecord $model, $attribute = '')
+    public static function createCode(ActiveRecord $model, $attribute = '', $length = 12)
     {
         do {
-            $code = '' . mt_rand(100000000000, 999999999999);
+            $start = (int)str_pad('1', $length, '0');
+            $end = (int)str_pad('9', $length, '9');
+            $code = '' . mt_rand($start, $end);
             $exists = $model::find()
-                ->where($attribute . ' = :' . $attribute, [
-                    ':' . $attribute => $code
-                ])
+                ->where($attribute . ' = :' . $attribute, [':' . $attribute => $code])
                 ->exists();
         } while ($exists);
         return $code;

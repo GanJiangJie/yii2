@@ -58,7 +58,7 @@ class MemberService extends BaseService
             throw new Exception('会员已存在');
         }
         $member = new Member();
-        $member->member_code = self::createCode12($member, 'member_code');
+        $member->member_code = self::createCode($member, 'member_code');
         $member->merchant_code = $this->merchant_code;
         if (!$member->save()) {
             throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
