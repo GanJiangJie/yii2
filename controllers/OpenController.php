@@ -39,7 +39,7 @@ class OpenController extends WebController
             //打印日志
             $log->writeLog(['request' => $params, 'response' => $response->getResponse()]);
             //输出响应
-            $response->responseJson();
+            return $response->responseJson();
         }
     }
 }
