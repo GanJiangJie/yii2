@@ -24,15 +24,12 @@ class Validator
     /**
      * 判断数据是否json格式
      * @param string $data
-     * @param bool $decode true解码
-     * @param bool $toArray true数组
      * @return bool
      */
-    public static function isJson(&$data, $decode = false, $toArray = false)
+    public static function isJson(&$data)
     {
-        $dataDecode = json_decode($data, $toArray);
-        if (is_object($dataDecode) || is_array($dataDecode)) {
-            if ($decode) $data = $dataDecode;
+        $data = json_decode($data, true);
+        if (is_array($data) || is_object($data)) {
             return true;
         }
         return false;

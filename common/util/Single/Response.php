@@ -52,15 +52,14 @@ class Response
     /**
      * @return array
      */
-    public function response()
+    public function getResponse()
     {
         return $this->response;
     }
 
-    public function responseJsonExit()
+    public function responseJson()
     {
         header('Content-type:text/html;charset=utf-8');
-        echo Json::encode($this->response);
-        exit();
+        return Json::encode($this->response);
     }
 }

@@ -16,17 +16,17 @@ class ListenController extends ConsoleController
         while (true) {
             $re = queue()->receiveMessage(params('mns.queue.listen'));
             if (!$re['status']) {
-                app()->db->close();
+                if (db()->isActive) db()->close();
                 continue;
             }
 
             $message_body = $re['response']['messageBody'];
             $receipt_handle = $re['response']['receiptHandle'];
 
-            $listen_instance = unserialize($message_body);
-            $listen_class = get_class($listen_instance);
+            /*$listen_instance = unserialize($message_body);
+            $listen_class = get_class($listen_instance);*/
             try {
-                app()->db->open();
+                if (!db()->isActive) db()->open();
 
                 //1直接执行
                 /*$res = listenHandle($listen_instance);
@@ -54,8 +54,8 @@ class ListenController extends ConsoleController
             } catch (Exception $e) {
                 $log->writeLog([
                     'message_body' => $message_body,
-                    'listen_instance' => $listen_instance,
-                    'listen_class' => $listen_class,
+                    /*'listen_instance' => $listen_instance,
+                    'listen_class' => $listen_class,*/
                     'handle_error' => $e->getMessage()
                 ], 2);
             }

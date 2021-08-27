@@ -30,8 +30,6 @@ class NotifyController extends WebController
         $listen_instance = unserialize($message_body);
         $listen_class = get_class($listen_instance);
         try {
-            app()->db->open();
-
             $res = listenHandle($listen_instance);
             if (isset($res['msg'])) {
                 $log->writeLog([
