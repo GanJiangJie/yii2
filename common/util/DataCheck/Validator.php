@@ -17,11 +17,6 @@ class Validator
     private static $messages;
 
     /**
-     * @var string $message
-     */
-    private static $message;
-
-    /**
      * 判断数据是否json格式
      * @param string $data
      * @return bool
