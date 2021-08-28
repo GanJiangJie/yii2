@@ -10,7 +10,7 @@ use common\util\DataCheck\Validator;
 
 class OpenController extends WebController
 {
-    public function actionIndex()
+    public function actionIndex(): string
     {
         //获取请求参数
         $params = request()->params();

@@ -26,33 +26,27 @@ class Validator
      * @param string $data
      * @return bool
      */
-    public static function isJson(&$data)
+    public static function isJson(string &$data): bool
     {
         $data = json_decode($data, true);
-        if (is_array($data) || is_object($data)) {
-            return true;
-        }
+        if (is_array($data) || is_object($data)) return true;
         return false;
     }
 
     /**
      * 校验数组必填字段是否为空
-     * @param $params
-     * @param $check_params
+     * @param array $params
+     * @param array $check_params
      * @throws Exception
      */
-    public static function checkValidEmpty($params, $check_params)
+    public static function checkValidEmpty(array $params, array $check_params)
     {
         $result = [];
         foreach ($check_params as $v) {
-            if (empty($params[$v])) {
-                $result[] = $v;
-            }
+            empty($params[$v]) and $result[] = $v;
         }
-        if (!empty($result)) {
-            $message = $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result);
-            throw new Exception($message, API_ERROR_CODE_LACK_PARAMS);
-        }
+        empty($result) or
+        throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result), API_ERROR_CODE_LACK_PARAMS);
     }
 
     /**
@@ -62,7 +56,7 @@ class Validator
      * @param array $messages
      * @throws Exception
      */
-    public static function make($params, $rules, $messages = [])
+    public static function make(array $params, array $rules, array $messages = [])
     {
         self::$params = $params;
         self::$messages = $messages;
@@ -70,13 +64,9 @@ class Validator
             $rule_array = explode('|', $rule);
             foreach ($rule_array as $rule_item) {
                 @list($item, $value) = explode(':', $rule_item);
-                if (!method_exists(self::class, $item)) {
-                    throw new Exception('Validator rule ' . $item . ' is undefined');
-                }
+                method_exists(self::class, $item) or throwBaseException('Validator rule ' . $item . ' is undefined');
                 $params = [$key];
-                if (!is_null($value)) {
-                    $params[] = $value;
-                }
+                !is_null($value) and $params[] = $value;
                 call_user_func_array([self::class, $item], $params);
             }
         }
@@ -89,10 +79,8 @@ class Validator
      */
     private static function required($key)
     {
-        if (empty(self::$params[$key])) {
-            self::$message = 'Parameter ' . $key . ' cannot be empty';
-            throw new Exception(self::$messages[$key . '.required'] ?? self::$message);
-        }
+        empty(self::$params[$key]) and
+        throwBaseException(self::$messages[$key . '.required'] ?? 'Parameter ' . $key . ' cannot be empty');
     }
 
     /**
@@ -110,10 +98,8 @@ class Validator
      */
     private static function numeral($key)
     {
-        if (!is_numeric(self::$params[$key])) {
-            self::$message = 'Parameter ' . $key . ' must be numeric';
-            throw new Exception(self::$messages[$key . '.numeral'] ?? self::$message);
-        }
+        is_numeric(self::$params[$key]) or
+        throwBaseException(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric');
     }
 
     /**
@@ -124,10 +110,8 @@ class Validator
      */
     private static function min($key, $value)
     {
-        if (mb_strlen(self::$params[$key], 'utf-8') < $value) {
-            self::$message = 'The length of parameter ' . $key . ' cannot be less than ' . $value;
-            throw new Exception(self::$messages[$key . '.min'] ?? self::$message);
-        }
+        mb_strlen(self::$params[$key], 'utf-8') < $value and
+        throwBaseException(self::$messages[$key . '.min'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value);
     }
 
     /**
@@ -138,9 +122,7 @@ class Validator
      */
     private static function max($key, $value)
     {
-        if (mb_strlen(self::$params[$key], 'utf-8') > $value) {
-            self::$message = 'The length of parameter ' . $key . ' cannot be longer than ' . $value;
-            throw new Exception(self::$messages[$key . '.max'] ?? self::$message);
-        }
+        mb_strlen(self::$params[$key], 'utf-8') > $value and
+        throwBaseException(self::$messages[$key . '.max'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value);
     }
 }

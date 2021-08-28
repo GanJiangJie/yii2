@@ -17,9 +17,9 @@ class DefaultListen extends BaseListen
     public $async = true;
 
     /**
-     * @return array|mixed
+     * @return array
      */
-    public function handle()
+    public function handle(): array
     {
         //异步多表操作建议使用事务
 

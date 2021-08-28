@@ -6,19 +6,17 @@ class Curl
 {
     /**
      * post请求
-     * @param $url
+     * @param string $url
      * @param int $timeout
      * @param array $post
      * @param array $header
      * @return mixed|string
      */
-    public static function post($url, $timeout = 10, $post = [], $header = [])
+    public static function post(string $url, int $timeout = 10, array $post = [], array $header = [])
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER, false);
-        if (!empty($header)) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        }
+        empty($header) or curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
@@ -28,45 +26,33 @@ class Curl
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         }
         $content = curl_exec($ch);
-        $curl_error = '';
-        if ($content == false) {
-            $curl_error = curl_error($ch);
-        }
+        $curl_error = $content ? '' : curl_error($ch);
         curl_close($ch);
-        if ($content == false) {
-            return 'curl error:' . $curl_error;
-        }
+        if (!$content) return 'curl error:' . $curl_error;
         return $content;
     }
 
     /**
      * get请求
-     * @param $url
+     * @param string $url
      * @param int $timeout
      * @param array $header
      * @return mixed|string
      */
-    public static function get($url, $timeout = 10, $header = [])
+    public static function get(string $url, int $timeout = 10, array $header = [])
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER, false);
-        if (!empty($header)) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        }
+        empty($header) or curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         $content = curl_exec($ch);
-        $curl_error = '';
-        if ($content == false) {
-            $curl_error = curl_error($ch);
-        }
+        $curl_error = $content ? '' : curl_error($ch);
         curl_close($ch);
-        if ($content == false) {
-            return 'curl error:' . $curl_error;
-        }
+        if (!$content) return 'curl error:' . $curl_error;
         return $content;
     }
 
@@ -82,9 +68,7 @@ class Curl
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER, false);
-        if (!empty($header)) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        }
+        empty($header) or curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);

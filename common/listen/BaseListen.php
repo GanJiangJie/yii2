@@ -33,7 +33,7 @@ abstract class BaseListen
 
     /**
      * 执行方法
-     * @return mixed
+     * @return array
      */
-    abstract public function handle();
+    abstract public function handle(): array;
 }

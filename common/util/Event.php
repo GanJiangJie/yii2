@@ -13,7 +13,7 @@ class Event extends EventService
      * @param BaseEvent $event_instance
      * @return array
      */
-    public static function hangup($event_instance)
+    public static function hangup($event_instance): array
     {
         /**
          * 获取全部注册事件
@@ -53,16 +53,12 @@ class Event extends EventService
             //异步监听实例
             if ($listen_instance->async) {
                 $result = self::async($listen_instance);
-                if (!$result['status']) {
-                    return $result;
-                }
+                if (!$result['status']) return $result;
                 continue;
             }
             //执行监听方法
             $result = $listen_instance->handle();
-            if (isset($result['status']) && !$result['status']) {
-                return $result;
-            }
+            if (isset($result['status']) && !$result['status']) return $result;
         }
         return ['status' => true];
     }
@@ -72,11 +68,9 @@ class Event extends EventService
      * @param BaseListen $listen_instance
      * @return array
      */
-    public static function listen($listen_instance)
+    public static function listen($listen_instance): array
     {
-        if ($listen_instance->async) {
-            return self::async($listen_instance);
-        }
+        if ($listen_instance->async) return self::async($listen_instance);
         return self::handle($listen_instance);
     }
 
@@ -85,7 +79,7 @@ class Event extends EventService
      * @param BaseListen $listen_instance
      * @return array
      */
-    private static function async($listen_instance)
+    private static function async($listen_instance): array
     {
         $result = queue()->sendMessage(params('mns.queue.listen'), serialize($listen_instance));
         if (!$result['status']) {
@@ -102,12 +96,10 @@ class Event extends EventService
      * @param BaseListen $listen_instance
      * @return array
      */
-    public static function handle($listen_instance)
+    public static function handle($listen_instance): array
     {
         $result = $listen_instance->handle();
-        if (isset($result['status'])) {
-            return $result;
-        }
+        if (isset($result['status'])) return $result;
         return ['status' => true];
     }
 }

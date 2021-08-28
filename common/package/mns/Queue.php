@@ -16,7 +16,7 @@ class Queue
      * @param string $message
      * @return array
      */
-    public function sendMessage($queue_name, $message)
+    public function sendMessage(string $queue_name, string $message): array
     {
         $queue = $this->client->getQueueRef($queue_name);
         $request = new SendMessageRequest($message);
@@ -45,7 +45,7 @@ class Queue
      * @param string $queue_name
      * @return array
      */
-    public function receiveMessage($queue_name)
+    public function receiveMessage(string $queue_name): array
     {
         $queue = $this->client->getQueueRef($queue_name);
         try {
@@ -76,7 +76,7 @@ class Queue
      * @param string $receipt_handle
      * @return array
      */
-    public function deleteMessage($queue_name, $receipt_handle)
+    public function deleteMessage(string $queue_name, string $receipt_handle): array
     {
         $queue = $this->client->getQueueRef($queue_name);
         try {

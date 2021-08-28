@@ -13,7 +13,11 @@ class EmailListen extends BaseListen
 {
     public $async = true;
 
-    public function handle()
+    /**
+     * @return array
+     */
+    public function handle(): array
     {
+        return [];
     }
 }

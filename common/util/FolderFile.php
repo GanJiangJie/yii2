@@ -10,7 +10,7 @@ class FolderFile
      * @param bool $flag true返回文件路径, false返回文件名称
      * @return array
      */
-    public static function getDirFile($path, $flag = false)
+    public static function getDirFile(string $path, bool $flag = false): array
     {
         $files = [];
         self::readFileOne($files, $path, $flag);
@@ -19,45 +19,37 @@ class FolderFile
 
     /**
      * @param array $route_paths
-     * @param bool $flag
      * @param string $path
+     * @param bool $flag
      */
-    private static function readFileOne(&$route_paths, $path, $flag)
+    private static function readFileOne(array &$route_paths, string $path, bool $flag)
     {
         $content = scandir($path);
         foreach ($content as $v) {
-            if ($v == '.' || $v == '..') {
-                continue;
-            }
+            if ($v == '.' || $v == '..') continue;
             if (is_file($path . '/' . $v)) {
                 $route_paths[] = $flag ? $path . '/' . $v : $v;
                 continue;
             }
-            if (is_dir($path . '/' . $v)) {
-                self::readFileTwo($route_paths, $path . '/' . $v, $flag);
-            }
+            is_dir($path . '/' . $v) and self::readFileTwo($route_paths, $path . '/' . $v, $flag);
         }
     }
 
     /**
      * @param array $route_paths
-     * @param bool $flag
      * @param string $path
+     * @param bool $flag
      */
-    private static function readFileTwo(&$route_paths, $path, $flag)
+    private static function readFileTwo(array &$route_paths, string $path, bool $flag)
     {
         $content = scandir($path);
         foreach ($content as $v) {
-            if ($v == '.' || $v == '..') {
-                continue;
-            }
+            if ($v == '.' || $v == '..') continue;
             if (is_file($path . '/' . $v)) {
                 $route_paths[] = $flag ? $path . '/' . $v : $v;
                 continue;
             }
-            if (is_dir($path . '/' . $v)) {
-                self::readFileOne($route_paths, $path . '/' . $v, $flag);
-            }
+            is_dir($path . '/' . $v) and self::readFileOne($route_paths, $path . '/' . $v, $flag);
         }
     }
 
@@ -66,34 +58,30 @@ class FolderFile
      * @param string $dir_name
      * @return bool
      */
-    public static function delDirFile($dir_name)
+    public static function delDirFile(string $dir_name)
     {
         if (is_file($dir_name)) {
             $result = unlink($dir_name);
             return $result;
         }
-        if (is_dir($dir_name)) {
-            self::dealFileOne($dir_name);
-        }
+        is_dir($dir_name) and self::dealFileOne($dir_name);
         return true;
     }
 
     /**
      * @param string $path
      */
-    private static function dealFileOne($path)
+    private static function dealFileOne(string $path)
     {
         $content = scandir($path);
         foreach ($content as $v) {
-            if ($v == '.' || $v == '..') {
-                continue;
-            }
-            if (is_dir($path . '/' . $v)) {
-                self::DealFileTwo($path . '/' . $v);
-            }
+            if ($v == '.' || $v == '..') continue;
             if (is_file($path . '/' . $v)) {
                 unlink($path . '/' . $v);
+                continue;
             }
+            is_dir($path . '/' . $v) and self::DealFileTwo($path . '/' . $v);
+
         }
         rmdir($path);
     }
@@ -101,19 +89,16 @@ class FolderFile
     /**
      * @param string $path
      */
-    private static function DealFileTwo($path)
+    private static function DealFileTwo(string $path)
     {
         $content = scandir($path);
         foreach ($content as $v) {
-            if ($v == '.' || $v == '..') {
-                continue;
-            }
-            if (is_dir($path . '/' . $v)) {
-                self::dealFileOne($path . '/' . $v);
-            }
+            if ($v == '.' || $v == '..') continue;
             if (is_file($path . '/' . $v)) {
                 unlink($path . '/' . $v);
+                continue;
             }
+            is_dir($path . '/' . $v) and self::dealFileOne($path . '/' . $v);
         }
         rmdir($path);
     }

@@ -13,13 +13,25 @@ if (!function_exists('dd')) {
     }
 }
 
+if (!function_exists('throwBaseException')) {
+    /**
+     * @param string $errMsg
+     * @param int $errCode
+     * @throws \yii\base\Exception
+     */
+    function throwBaseException(string $errMsg, int $errCode = API_ERROR_CODE_FAIL)
+    {
+        throw new \yii\base\Exception($errMsg, $errCode);
+    }
+}
+
 if (!function_exists('config')) {
     /**
      * 获取config目录下的参数
      * @param string $key 例：'params.queue.listen'
-     * @return string|array|null
+     * @return mixed
      */
-    function config($key)
+    function config(string $key)
     {
         /**
          * @var \app\common\util\Single\Config $config
@@ -44,7 +56,7 @@ if (!function_exists('db')) {
      * @param string $db
      * @return \yii\db\Connection
      */
-    function db($db = 'db')
+    function db(string $db = 'db')
     {
         return app()->$db;
     }
@@ -53,9 +65,9 @@ if (!function_exists('db')) {
 if (!function_exists('params')) {
     /**
      * @param string $key
-     * @return array|null|string
+     * @return mixed
      */
-    function params($key)
+    function params(string $key)
     {
         $key_array = explode('.', $key);
         if (!isset(app()->params[$key_array[0]])) return null;
@@ -69,9 +81,9 @@ if (!function_exists('arraySeriesIndex')) {
      * 数组$array_index全部元素作为数组$array_subject多级索引
      * @param array $array_subject
      * @param array $array_index
-     * @return string|array
+     * @return mixed
      */
-    function arraySeriesIndex($array_subject, $array_index)
+    function arraySeriesIndex(array $array_subject, array $array_index)
     {
         foreach ($array_index as $item) {
             if (!is_array($array_subject)) return null;
@@ -88,9 +100,9 @@ if (!function_exists('redis')) {
      * @param string $method
      * @param array $params
      * @param string $redis
-     * @return string
+     * @return mixed
      */
-    function redis($class, $method, $params, $redis = 'redis')
+    function redis(string $class, string $method, array $params, string $redis = 'redis')
     {
         if (!method_exists($class, $method)) return null;
         \app\common\util\Redis\RedisBase::$redis = $redis;
@@ -129,12 +141,10 @@ if (!function_exists('event')) {
      * @return array
      * @throws \yii\base\Exception
      */
-    function event($event_instance)
+    function event($event_instance): array
     {
         $result = \app\common\util\Event::hangup($event_instance);
-        if (!$result['status']) {
-            throw new \yii\base\Exception($result['msg']);
-        }
+        $result['status'] or throwBaseException($result['msg']);
         return $result;
     }
 }
@@ -146,12 +156,10 @@ if (!function_exists('listen')) {
      * @return array
      * @throws \yii\base\Exception
      */
-    function listen($listen_instance)
+    function listen($listen_instance): array
     {
         $result = \app\common\util\Event::listen($listen_instance);
-        if (!$result['status']) {
-            throw new \yii\base\Exception($result['msg']);
-        }
+        $result['status'] or throwBaseException($result['msg']);
         return $result;
     }
 }
@@ -163,12 +171,10 @@ if (!function_exists('listenHandle')) {
      * @return array
      * @throws \yii\base\Exception
      */
-    function listenHandle($listen_instance)
+    function listenHandle($listen_instance): array
     {
         $result = \app\common\util\Event::handle($listen_instance);
-        if (!$result['status']) {
-            throw new \yii\base\Exception($result['msg']);
-        }
+        $result['status'] or throwBaseException($result['msg']);
         return $result;
     }
 }
@@ -234,7 +240,7 @@ if (!function_exists('getDirFile')) {
      * @param bool $flag true返回文件路径, false返回文件名称
      * @return array
      */
-    function getDirFile($path, $flag = false)
+    function getDirFile(string $path, bool $flag = false): array
     {
         return \app\common\util\FolderFile::getDirFile($path, $flag);
     }
@@ -246,7 +252,7 @@ if (!function_exists('delDirFile')) {
      * @param string $path
      * @return bool
      */
-    function delDirFile($path)
+    function delDirFile(string $path)
     {
         return \app\common\util\FolderFile::delDirFile($path);
     }

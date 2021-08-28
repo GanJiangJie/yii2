@@ -28,7 +28,7 @@ class Request
     /**
      * @return array
      */
-    private function getParams()
+    private function getParams(): array
     {
         if (app()->request->isGet) {
             return app()->request->get();
@@ -44,10 +44,10 @@ class Request
     /**
      * 获取请求头的信息
      * @param string $key
-     * @param string $default
+     * @param string|int $default
      * @return null|string|array
      */
-    public function header($key = null, $default = null)
+    public function header(string $key = null, $default = null)
     {
         return is_null($key) ? $this->request['headers'] : ($this->request['headers'][$key] ?? $default);
     }
@@ -55,10 +55,10 @@ class Request
     /**
      * 获取请求参数
      * @param string $key
-     * @param string $default
+     * @param string|int $default
      * @return null|string|array
      */
-    public function params($key = null, $default = null)
+    public function params(string $key = null, $default = null)
     {
         return is_null($key) ? $this->request['params'] : ($this->request['params'][$key] ?? $default);
     }
@@ -68,7 +68,7 @@ class Request
      * @param string $key
      * @return null|array
      */
-    public function files($key = null)
+    public function files(string $key = null)
     {
         return is_null($key) ? $this->request['files'] : ($this->request['files'][$key] ?? null);
     }

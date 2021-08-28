@@ -14,9 +14,8 @@ class DataCheck
      */
     public static function checkVersion($version)
     {
-        if ($version != params('open.version')) {
-            throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_VERSION], API_ERROR_CODE_INVALID_VERSION);
-        }
+        $version == params('open.version') or
+        throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_VERSION], API_ERROR_CODE_INVALID_VERSION);
     }
 
     /**
@@ -26,9 +25,8 @@ class DataCheck
      */
     public static function checkSignType($sign_type)
     {
-        if ($sign_type != params('open.sign_type')) {
-            throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN_TYPE], API_ERROR_CODE_INVALID_SIGN_TYPE);
-        }
+        $sign_type == params('open.sign_type') or
+        throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN_TYPE], API_ERROR_CODE_INVALID_SIGN_TYPE);
     }
 
     /**
@@ -39,16 +37,15 @@ class DataCheck
     public static function checkSign($params)
     {
         $app_key = redis(RedisS::class, 'Get', [$params['app_id']]);
-        if (empty($app_key)) {
-            throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_APP_ID], API_ERROR_CODE_INVALID_APP_ID);
-        }
+        empty($app_key) and
+        throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_APP_ID], API_ERROR_CODE_INVALID_APP_ID);
         $sign = $params['sign'];
         unset($params['sign']);
         ksort($params);
         $string = urldecode(http_build_query($params)) . '&key=' . $app_key;
-        if (!hash_equals($sign, md5($string))) {
-            throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN], API_ERROR_CODE_INVALID_SIGN);
-        }
+        hash_equals($sign, md5($string)) or
+        throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN], API_ERROR_CODE_INVALID_SIGN);
+
     }
 
     /**
@@ -57,7 +54,7 @@ class DataCheck
      * @param string $method 方法名称
      * @return array
      */
-    public static function sign($params, $method)
+    public static function sign($params, $method): array
     {
         $params['app_id'] = params('open.app_id');
         $params['sign_type'] = params('open.sign_type');

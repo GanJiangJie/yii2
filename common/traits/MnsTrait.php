@@ -9,17 +9,17 @@ trait MnsTrait
     use InstanceTrait;
 
     /**
-     * @var $accessId
+     * @var string $accessId
      */
     private $accessId;
 
     /**
-     * @var $accessKey
+     * @var string $accessKey
      */
     private $accessKey;
 
     /**
-     * @var $endPoint
+     * @var string $endPoint
      */
     private $endPoint;
 

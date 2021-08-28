@@ -17,9 +17,9 @@ class Log
 
     /**
      * @param string $category
-     * @return $this
+     * @return Log
      */
-    public function category($category)
+    public function category($category): self
     {
         $this->category = trim($category, '/');
         return $this;
@@ -27,9 +27,9 @@ class Log
 
     /**
      * @param string $prefix
-     * @return $this
+     * @return Log
      */
-    public function prefix($prefix)
+    public function prefix($prefix): self
     {
         $this->prefix = $prefix;
         return $this;
@@ -37,9 +37,9 @@ class Log
 
     /**
      * @param string $filename
-     * @return $this
+     * @return Log
      */
-    public function filename($filename)
+    public function filename($filename): self
     {
         $this->filename = $filename;
         return $this;
@@ -47,9 +47,9 @@ class Log
 
     /**
      * @param string $suffix
-     * @return $this
+     * @return Log
      */
-    public function suffix($suffix)
+    public function suffix($suffix): self
     {
         $this->suffix = $suffix;
         return $this;
@@ -57,19 +57,19 @@ class Log
 
     /**
      * @param int $level
-     * @return $this
+     * @return Log
      */
-    public function level($level)
+    public function level($level): self
     {
         $this->level = $level;
         return $this;
     }
 
     /**
-     * @param $content
+     * @param string|array $content
      * @param int $level
      */
-    public function writeLog($content, $level = self::LEVEL_INFO)
+    public function writeLog($content, int $level = self::LEVEL_INFO)
     {
         //创建日志文件
         $log_file = self::createLogFile();
@@ -81,32 +81,27 @@ class Log
 
     /**
      * 创建日志文件
+     * @return string
      */
-    private function createLogFile()
+    private function createLogFile(): string
     {
         $path = BASE_PATH . '/runtime/logs/' . exec('whoami') . '/';
-        if ($this->category) {
-            $path .= $this->category . '/';
-        }
+        $this->category and $path .= $this->category . '/';
         $filename = $this->prefix . $this->filename . '_' . date('Y-m-d') . $this->suffix;
         //创建日志目录
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
+        file_exists($path) or mkdir($path, 0777, true);
         //创建日志文件
-        if (!file_exists($path . $filename)) {
-            fopen($path . $filename, 'a');
-        }
+        file_exists($path . $filename) or fopen($path . $filename, 'a');
         return $path . $filename;
     }
 
     /**
      * 格式化日志内容
-     * @param $content
-     * @param $level
+     * @param string $content
+     * @param int $level
      * @return string
      */
-    private function contentFormat($content, $level)
+    private function contentFormat($content, int $level): string
     {
         $message = ['time' => date('Y-m-d H:i:s')];
         switch ($level) {
@@ -127,6 +122,9 @@ class Log
         return json_encode($message, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
+    /**
+     * @param string $content
+     */
     public static function ERROR($content)
     {
         //创建日志文件
@@ -136,6 +134,9 @@ class Log
         file_put_contents($log_file, $message . "\r\n", FILE_APPEND);
     }
 
+    /**
+     * @param string $content
+     */
     public static function WARNING($content)
     {
         //创建日志文件
@@ -145,6 +146,9 @@ class Log
         file_put_contents($log_file, $message . "\r\n", FILE_APPEND);
     }
 
+    /**
+     * @param string $content
+     */
     public static function INFO($content)
     {
         //创建日志文件
@@ -154,6 +158,9 @@ class Log
         file_put_contents($log_file, $message . "\r\n", FILE_APPEND);
     }
 
+    /**
+     * @param string $content
+     */
     public static function TRACE($content)
     {
         //创建日志文件

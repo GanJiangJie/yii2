@@ -8,19 +8,19 @@ use yii\db\ActiveRecord;
 class BaseService
 {
     /**
-     * @var integer $page
+     * @var int $page
      */
     public $page;
     /**
-     * @var integer $limit
+     * @var int $limit
      */
     public $limit;
     /**
-     * @var integer $total
+     * @var int $total
      */
     protected $total;
     /**
-     * @var integer $last_page
+     * @var int $last_page
      */
     protected $last_page;
     /**
@@ -34,7 +34,7 @@ class BaseService
      * @param array $params
      * @param array $keys
      */
-    public function __construct($params = [], $keys = [])
+    public function __construct(array $params = [], array $keys = [])
     {
         foreach ($keys as $key) {
             $this->$key = $params[$key] ?? null;
@@ -46,7 +46,7 @@ class BaseService
      * @param array $params
      * @param array $keys
      */
-    public function assignAttributes($params = [], $keys = [])
+    public function assignAttributes(array $params = [], array $keys = [])
     {
         foreach ($keys as $key) {
             $this->$key = $params[$key] ?? null;
@@ -60,16 +60,19 @@ class BaseService
      * @param int $length
      * @return string
      */
-    public static function createCode(ActiveRecord $model, $attribute = '', $length = 12)
+    public static function createCode(ActiveRecord $model, string $attribute, int $length = 12): string
     {
+        $start = (int)str_pad('1', $length, '0');
+        $end = (int)str_pad('9', $length, '9');
         do {
-            $start = (int)str_pad('1', $length, '0');
-            $end = (int)str_pad('9', $length, '9');
             $code = '' . mt_rand($start, $end);
-            $exists = $model::find()
-                ->where($attribute . ' = :' . $attribute, [':' . $attribute => $code])
-                ->exists();
-        } while ($exists);
+        } while (
+            $model::find()
+                ->where($attribute . ' = :' . $attribute, [
+                    ':' . $attribute => $code
+                ])
+                ->exists()
+        );
         return $code;
     }
 
@@ -82,9 +85,7 @@ class BaseService
         $this->total = $model->count();
         if ($this->total > 0 && $this->limit > 0) {
             $this->last_page = (int)(ceil($this->total / $this->limit));
-            if ($this->page > $this->last_page) {
-                $this->page = $this->last_page;
-            }
+            $this->page > $this->last_page and $this->page = $this->last_page;
             $model->offset(($this->page - 1) * $this->limit)->limit($this->limit);
         }
     }
@@ -93,7 +94,7 @@ class BaseService
      * 分页返回
      * @return array
      */
-    protected function returnPage()
+    protected function returnPage(): array
     {
         return [
             'list' => $this->list,

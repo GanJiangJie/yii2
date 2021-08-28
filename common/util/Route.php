@@ -12,21 +12,19 @@ use yii\base\Exception;
 class Route
 {
     /**
-     * @param string $method 接口方法名称
-     * @return bool|string
+     * @param $method
+     * @return string
      * @throws Exception
      */
-    public static function method($method)
+    public static function method($method): string
     {
         //路由文件路径归纳
         $route_paths = FolderFile::getDirFile(BASE_PATH . '/routes', true);
         //获取方法对应路由
         foreach ($route_paths as $route_path) {
             $routes = (include($route_path . '')) ?: [];
-            if (isset($routes[$method])) {
-                return $routes[$method];
-            }
+            if (isset($routes[$method])) return $routes[$method];
         }
-        throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_METHOD], API_ERROR_CODE_INVALID_METHOD);
+        throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_METHOD], API_ERROR_CODE_INVALID_METHOD);
     }
 }

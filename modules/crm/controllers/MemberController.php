@@ -12,7 +12,7 @@ class MemberController extends WebController
      * @return array
      * @throws \yii\base\Exception
      */
-    public function actionList()
+    public function actionList(): array
     {
         Validator::checkValidEmpty(request()->params(), ['token']);
         $model = new MemberService();

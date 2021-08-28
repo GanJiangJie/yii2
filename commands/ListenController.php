@@ -16,7 +16,7 @@ class ListenController extends ConsoleController
         while (true) {
             $re = queue()->receiveMessage(params('mns.queue.listen'));
             if (!$re['status']) {
-                if (db()->isActive) db()->close();
+                db()->isActive and db()->close();
                 continue;
             }
 
@@ -26,31 +26,25 @@ class ListenController extends ConsoleController
             /*$listen_instance = unserialize($message_body);
             $listen_class = get_class($listen_instance);*/
             try {
-                if (!db()->isActive) db()->open();
+                db()->isActive or db()->open();
 
                 //1直接执行
                 /*$res = listenHandle($listen_instance);
-                if (isset($res['msg'])) {
-                    $log->writeLog([
-                        'message_body' => $message_body,
-                        'listen_instance' => $listen_instance,
-                        'listen_class' => $listen_class,
-                        'handle_result' => $res
-                    ]);
-                }
+                isset($res['msg']) and $log->writeLog([
+                    'message_body' => $message_body,
+                    'listen_instance' => $listen_instance,
+                    'listen_class' => $listen_class,
+                    'handle_result' => $res
+                ]);
                 $result = queue()->deleteMessage(params('mns.queue.listen'), $receipt_handle);
-                if (!$result['status']) {
-                    throw new Exception($result['response']['error_msg']);
-                }*/
+                $result['status'] or throwBaseException($result['response']['error_msg']);*/
 
                 //2发布主题
                 $res = topic()->PublishMessage(params('mns.topic.listen'), json_encode([[
                     'receiptHandle' => $receipt_handle,
                     'messageBody' => $message_body
                 ]], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-                if (!$res['status']) {
-                    throw new Exception($res['msg']);
-                }
+                $res['status'] or throwBaseException($res['msg']);
             } catch (Exception $e) {
                 $log->writeLog([
                     'message_body' => $message_body,

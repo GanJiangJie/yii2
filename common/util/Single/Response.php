@@ -26,21 +26,21 @@ class Response
     }
 
     /**
-     * @param $data
-     * @return $this
+     * @param array $data
+     * @return Response
      */
-    public function data($data)
+    public function data(array $data): self
     {
-        if (!is_null($data)) $this->response['data'] = $data;
+        $this->response['data'] = $data;
         return $this;
     }
 
     /**
-     * @param $errMsg
-     * @param $errCode
+     * @param string $errMsg
+     * @param int $errCode
      * @return $this
      */
-    public function error($errMsg = null, $errCode = null)
+    public function error(string $errMsg = null, int $errCode = null): self
     {
         $this->response = [
             'errCode' => $errCode ?: API_ERROR_CODE_FAIL,
@@ -52,12 +52,15 @@ class Response
     /**
      * @return array
      */
-    public function getResponse()
+    public function getResponse(): array
     {
         return $this->response;
     }
 
-    public function responseJson()
+    /**
+     * @return string
+     */
+    public function responseJson(): string
     {
         header('Content-type:text/html;charset=utf-8');
         return Json::encode($this->response);

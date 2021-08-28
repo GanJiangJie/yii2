@@ -14,10 +14,10 @@ class Topic
 
     /**
      * 创建主题
-     * @param $topicName
+     * @param string $topicName
      * @return array
      */
-    public function createTopic($topicName)
+    public function createTopic(string $topicName): array
     {
         $request = new CreateTopicRequest($topicName);
         try {
@@ -36,12 +36,12 @@ class Topic
 
     /**
      * 订阅主题
-     * @param $topicName
-     * @param $subscriptionName
-     * @param $endPoint
+     * @param string $topicName
+     * @param string $subscriptionName
+     * @param string $endPoint
      * @return array
      */
-    public function Subscribe($topicName, $subscriptionName, $endPoint)
+    public function Subscribe(string $topicName, string $subscriptionName, string $endPoint): array
     {
         $topic = $this->client->getTopicRef($topicName);
         $attributes = new SubscriptionAttributes($subscriptionName, $endPoint, NULL, 'JSON');
@@ -61,11 +61,11 @@ class Topic
 
     /**
      * 发布消息
-     * @param $topicName
-     * @param $messageBody
+     * @param string $topicName
+     * @param string $messageBody
      * @return array
      */
-    public function PublishMessage($topicName, $messageBody)
+    public function PublishMessage(string $topicName, string $messageBody): array
     {
         $topic = $this->client->getTopicRef($topicName);
         $request = new PublishMessageRequest($messageBody);

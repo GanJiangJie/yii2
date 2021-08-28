@@ -17,7 +17,7 @@ class MemberService extends BaseService
     /**
      * @return array
      */
-    public function getList()
+    public function getList(): array
     {
         $members = Member::find()
             ->select([
@@ -48,21 +48,17 @@ class MemberService extends BaseService
      */
     public function register()
     {
-        $exists = Member::find()
+        Member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account
             ])
-            ->exists();
-        if ($exists) {
-            throw new Exception('会员已存在');
-        }
+            ->exists() and throwBaseException('会员已存在');
+
         $member = new Member();
         $member->member_code = self::createCode($member, 'member_code');
         $member->merchant_code = $this->merchant_code;
-        if (!$member->save()) {
-            throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
-        }
+        $member->save() or throwBaseException(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
 
         //会员注册事件
         event(new MemberRegisterEvent($member->toArray()));
@@ -82,17 +78,11 @@ class MemberService extends BaseService
                 ':account' => $this->account
             ])
             ->one();
-        if (empty($member)) {
-            throw new Exception('会员不存在', API_ERROR_CODE_NO_DATA);
-        }
-        if (!empty($this->member_name)) {
-            $member->member_name = $this->member_name;
-        }
-        if (!empty($this->birthday)) {
-            $member->birthday = $this->birthday;
-        }
-        if (!$member->save()) {
-            throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
-        }
+        empty($member) or throwBaseException('会员不存在', API_ERROR_CODE_NO_DATA);
+
+        !empty($this->member_name) and $member->member_name = $this->member_name;
+        !empty($this->birthday) and $member->birthday = $this->birthday;
+
+        $member->save() or throwBaseException(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
     }
 }

@@ -30,19 +30,17 @@ class NotifyController extends WebController
         $listen_instance = unserialize($message_body);
         $listen_class = get_class($listen_instance);
         try {
+            db()->isActive or db()->open();
+
             $res = listenHandle($listen_instance);
-            if (isset($res['msg'])) {
-                $log->writeLog([
-                    'message_body' => $message_body,
-                    'listen_instance' => $listen_instance,
-                    'listen_class' => $listen_class,
-                    'handle_result' => $res
-                ]);
-            }
+            isset($res['msg']) and $log->writeLog([
+                'message_body' => $message_body,
+                'listen_instance' => $listen_instance,
+                'listen_class' => $listen_class,
+                'handle_result' => $res
+            ]);
             $result = queue()->deleteMessage(params('mns.queue.listen'), $receipt_handle);
-            if (!$result['status']) {
-                throw new Exception($result['response']['error_msg']);
-            }
+            $result['status'] or throwBaseException($result['response']['error_msg']);
         } catch (Exception $e) {
             $log->writeLog([
                 'message_body' => $message_body,

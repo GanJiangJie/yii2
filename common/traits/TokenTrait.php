@@ -35,7 +35,7 @@ trait TokenTrait
      * @param array $data
      * @return string
      */
-    public function set($data)
+    public function set(array $data): string
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $token = self::token($data_json);
@@ -45,11 +45,11 @@ trait TokenTrait
 
     /**
      * 设置令牌，设置期限
-     * @param $data
-     * @param $seconds
+     * @param array $data
+     * @param int $seconds
      * @return string
      */
-    public function setEx($data, $seconds)
+    public function setEx(array $data, int $seconds): string
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $token = self::token($data_json);
@@ -62,7 +62,7 @@ trait TokenTrait
      * @param $data_json
      * @return string
      */
-    private function token($data_json)
+    private function token(string $data_json): string
     {
         return md5($data_json . time() . mt_rand(100, 999));
     }
@@ -73,17 +73,15 @@ trait TokenTrait
      * @return null|string|array
      * @throws Exception
      */
-    public function get($key = null)
+    public function get(string $key = null)
     {
         if (empty($this->data)) {
             $token = request()->params($this->name);
-            if (empty($token)) {
-                throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_TOKEN], API_ERROR_CODE_LACK_TOKEN);
-            }
+            empty($token) and
+            throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_TOKEN], API_ERROR_CODE_LACK_TOKEN);
             $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
-            if (empty($info_json)) {
-                throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_TOKEN], API_ERROR_CODE_INVALID_TOKEN);
-            }
+            empty($info_json) and
+            throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_TOKEN], API_ERROR_CODE_INVALID_TOKEN);
             $this->data = json_decode($info_json, true) ?: [];
         }
         return is_null($key) ? $this->data : ($this->data[$key] ?? null);
