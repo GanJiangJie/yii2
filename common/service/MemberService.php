@@ -15,11 +15,24 @@ class MemberService extends BaseService
     public $birthday;
 
     /**
+     * @var Member $member
+     */
+    private $member;
+
+    /**
+     * MemberService constructor.
+     */
+    public function __construct()
+    {
+        $this->member = new Member();
+    }
+
+    /**
      * @return array
      */
     public function getList(): array
     {
-        $members = Member::find()
+        $members = $this->member::find()
             ->select([
                 'member_code',
                 'member_name',
@@ -48,20 +61,19 @@ class MemberService extends BaseService
      */
     public function register()
     {
-        Member::find()
+        $this->member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account
             ])
             ->exists() and throwBaseException('会员已存在');
 
-        $member = new Member();
-        $member->member_code = self::createCode($member, 'member_code');
-        $member->merchant_code = $this->merchant_code;
-        $member->save() or throwBaseException(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
+        $this->member->member_code = self::createCode($this->member, 'member_code');
+        $this->member->merchant_code = $this->merchant_code;
+        $this->member->save() or throwBaseException(json_encode($this->member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
 
         //会员注册事件
-        event(new MemberRegisterEvent($member->toArray()));
+        event(new MemberRegisterEvent($this->member->toArray()));
     }
 
     /**
@@ -72,13 +84,13 @@ class MemberService extends BaseService
         /**
          * @var Member $member
          */
-        $member = Member::find()
+        $member = $this->member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account
             ])
             ->one();
-        empty($member) or throwBaseException('会员不存在', API_ERROR_CODE_NO_DATA);
+        empty($member) and throwBaseException('会员不存在', API_ERROR_CODE_NO_DATA);
 
         !empty($this->member_name) and $member->member_name = $this->member_name;
         !empty($this->birthday) and $member->birthday = $this->birthday;

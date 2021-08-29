@@ -29,19 +29,6 @@ class BaseService
     protected $list = [];
 
     /**
-     * 参数挂载
-     * BaseService constructor.
-     * @param array $params
-     * @param array $keys
-     */
-    public function __construct(array $params = [], array $keys = [])
-    {
-        foreach ($keys as $key) {
-            $this->$key = $params[$key] ?? null;
-        }
-    }
-
-    /**
      * 挂载参数
      * @param array $params
      * @param array $keys

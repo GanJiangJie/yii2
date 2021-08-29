@@ -5,12 +5,13 @@ namespace app\modules\crm\controllers;
 use app\common\service\MemberService;
 use app\components\WebController;
 use common\util\DataCheck\Validator;
+use yii\base\Exception;
 
 class MemberController extends WebController
 {
     /**
      * @return array
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function actionList(): array
     {
@@ -25,7 +26,7 @@ class MemberController extends WebController
     }
 
     /**
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function actionRegister()
     {
@@ -42,7 +43,7 @@ class MemberController extends WebController
     }
 
     /**
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function actionEdit()
     {
