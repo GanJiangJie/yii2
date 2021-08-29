@@ -44,7 +44,13 @@ class MemberService extends BaseService
                 ':type' => $this->type
             ])
             ->orderBy('id desc');
+
+        $this->account and $members->where('account = :account', [
+            ':account' => $this->account
+        ]);
+
         self::queryPage($members);
+
         foreach ($members->each() as $member) {
             $this->list[] = [
                 'member_code' => $member['member_code'],
@@ -53,6 +59,7 @@ class MemberService extends BaseService
                 'account' => $member['account']
             ];
         }
+
         return self::returnPage();
     }
 
@@ -89,11 +96,10 @@ class MemberService extends BaseService
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account
             ])
-            ->one();
-        empty($member) and throwBaseException('会员不存在', API_ERROR_CODE_NO_DATA);
+            ->one() or throwBaseException('会员不存在', API_ERROR_CODE_NO_DATA);
 
-        !empty($this->member_name) and $member->member_name = $this->member_name;
-        !empty($this->birthday) and $member->birthday = $this->birthday;
+        $this->member_name and $member->member_name = $this->member_name;
+        $this->birthday and $member->birthday = $this->birthday;
 
         $member->save() or throwBaseException(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
     }

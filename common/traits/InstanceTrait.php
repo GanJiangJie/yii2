@@ -12,7 +12,7 @@ trait InstanceTrait
 
     public static function instance()
     {
-        !(self::$instance instanceof self) and self::$instance = new self();
+        self::$instance instanceof self or self::$instance = new self();
         return self::$instance;
     }
 }

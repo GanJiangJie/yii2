@@ -61,7 +61,7 @@ class Validator
                 @list($item, $value) = explode(':', $rule_item);
                 method_exists(self::class, $item) or throwBaseException('Validator rule ' . $item . ' is undefined');
                 $params = [$key];
-                !is_null($value) and $params[] = $value;
+                is_null($value) or $params[] = $value;
                 call_user_func_array([self::class, $item], $params);
             }
         }

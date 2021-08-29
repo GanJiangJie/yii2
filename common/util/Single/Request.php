@@ -30,14 +30,10 @@ class Request
      */
     private function getParams(): array
     {
-        if (app()->request->isGet) {
-            return app()->request->get();
-        }
-        if (app()->request->isPost) {
-            return array_map(function ($value) {
-                return urldecode($value);
-            }, app()->request->post());
-        }
+        if (app()->request->isGet) return app()->request->get();
+        if (app()->request->isPost) return array_map(function ($value) {
+            return urldecode($value);
+        }, app()->request->post());
         return [];
     }
 

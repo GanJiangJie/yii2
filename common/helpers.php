@@ -56,7 +56,7 @@ if (!function_exists('db')) {
      * @param string $db
      * @return \yii\db\Connection
      */
-    function db(string $db = 'db')
+    function db(string $db = 'db'): \yii\db\Connection
     {
         return app()->$db;
     }
@@ -117,7 +117,7 @@ if (!function_exists('queue')) {
      * 队列单例
      * @return \app\common\package\mns\Queue
      */
-    function queue()
+    function queue(): \app\common\package\mns\Queue
     {
         return \app\common\package\mns\Queue::instance();
     }
@@ -128,7 +128,7 @@ if (!function_exists('topic')) {
      * 主题单例
      * @return \app\common\package\mns\Topic
      */
-    function topic()
+    function topic(): \app\common\package\mns\Topic
     {
         return \app\common\package\mns\Topic::instance();
     }
@@ -184,7 +184,7 @@ if (!function_exists('request')) {
      * 请求对象
      * @return \app\common\util\Single\Request
      */
-    function request()
+    function request(): \app\common\util\Single\Request
     {
         return \app\common\util\Single\Request::instance();
     }
@@ -195,7 +195,7 @@ if (!function_exists('mToken')) {
      * 商户登录令牌
      * @return \app\common\util\Single\MToken
      */
-    function mToken()
+    function mToken(): \app\common\util\Single\MToken
     {
         return \app\common\util\Single\MToken::instance();
     }
@@ -206,7 +206,7 @@ if (!function_exists('uToken')) {
      * 用户登录令牌
      * @return \app\common\util\Single\UToken
      */
-    function uToken()
+    function uToken(): \app\common\util\Single\UToken
     {
         return \app\common\util\Single\UToken::instance();
     }
@@ -216,7 +216,7 @@ if (!function_exists('response')) {
     /**
      * @return \app\common\util\Single\Response
      */
-    function response()
+    function response(): \app\common\util\Single\Response
     {
         return \app\common\util\Single\Response::instance();
     }
@@ -227,7 +227,7 @@ if (!function_exists('logPrint')) {
      * 日志打印
      * @return \common\util\Log
      */
-    function logPrint()
+    function logPrint(): \common\util\Log
     {
         return new \common\util\Log();
     }
@@ -289,7 +289,7 @@ if (!function_exists('daysCount')) {
      * @param string $end_time 'Y-m-d'
      * @return int
      */
-    function daysCount($start_time, $end_time)
+    function daysCount($start_time, $end_time): int
     {
         $a_dt = getdate(strtotime($start_time));
         $b_dt = getdate(strtotime($end_time));
@@ -309,7 +309,7 @@ if (!function_exists('secondsDHIS')) {
      * @param bool $s
      * @return array
      */
-    function secondsDHIS($seconds, $d = true, $h = true, $i = true, $s = true)
+    function secondsDHIS($seconds, $d = true, $h = true, $i = true, $s = true): array
     {
         $seconds_int = intval($seconds);
         $data = [
