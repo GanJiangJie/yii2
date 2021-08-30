@@ -85,7 +85,7 @@ trait TokenTrait
             throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
             $this->data = json_decode($info_json, true) ?: [];
         }
-        return is_null($key) ? $this->data : ($this->data[$key] ?? null);
+        return $key ? ($this->data[$key] ?? null) : $this->data;
     }
 
     /**

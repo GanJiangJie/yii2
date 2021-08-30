@@ -45,7 +45,7 @@ class Request
      */
     public function header(string $key = null, $default = null)
     {
-        return is_null($key) ? $this->request['headers'] : ($this->request['headers'][$key] ?? $default);
+        return $key ? ($this->request['headers'][$key] ?? $default) : $this->request['headers'];
     }
 
     /**
@@ -56,7 +56,7 @@ class Request
      */
     public function params(string $key = null, $default = null)
     {
-        return is_null($key) ? $this->request['params'] : ($this->request['params'][$key] ?? $default);
+        return $key ? ($this->request['params'][$key] ?? $default) : $this->request['params'];
     }
 
     /**
@@ -66,6 +66,6 @@ class Request
      */
     public function files(string $key = null)
     {
-        return is_null($key) ? $this->request['files'] : ($this->request['files'][$key] ?? null);
+        return $key ? ($this->request['files'][$key] ?? null) : $this->request['files'];
     }
 }
