@@ -2,6 +2,7 @@
 
 namespace app\common\util;
 
+use app\common\constant\C;
 use yii\base\Exception;
 
 /**
@@ -25,6 +26,6 @@ class Route
             $routes = (include($route_path . '')) ?: [];
             if (isset($routes[$method])) return $routes[$method];
         }
-        throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_METHOD], API_ERROR_CODE_INVALID_METHOD);
+        throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_METHOD], C::API_ERROR_CODE_INVALID_METHOD);
     }
 }

@@ -15,7 +15,6 @@ class ComposerStaticInit44b475ed4e793e860fe4573b7ae6b726
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '180092cfc969a12e06f2132a203a3184' => __DIR__ . '/..' . '/codeception/verify/src/Codeception/function.php',
         'e7462807d11898c57a35978be8a26a8f' => __DIR__ . '/../../common/helpers.php',
-        '74d5a36c8d1085b39ed7ac8c80ae459d' => __DIR__ . '/../../common/constant/constant.php',
     );
 
     public static $prefixLengthsPsr4 = array (

@@ -2,6 +2,7 @@
 
 namespace common\util\DataCheck;
 
+use app\common\constant\C;
 use yii\base\Exception;
 
 class Validator
@@ -41,7 +42,7 @@ class Validator
             empty($params[$v]) and $result[] = $v;
         }
         empty($result) or
-        throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result), API_ERROR_CODE_LACK_PARAMS);
+        throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result), C::API_ERROR_CODE_LACK_PARAMS);
     }
 
     /**

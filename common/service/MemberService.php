@@ -2,6 +2,7 @@
 
 namespace app\common\service;
 
+use app\common\constant\C;
 use app\common\event\model\MemberRegisterEvent;
 use app\models\Member;
 use yii\base\Exception;
@@ -77,7 +78,7 @@ class MemberService extends BaseService
 
         $this->member->member_code = self::createCode($this->member, 'member_code');
         $this->member->merchant_code = $this->merchant_code;
-        $this->member->save() or throwBaseException(json_encode($this->member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
+        $this->member->save() or throwBaseException(json_encode($this->member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
 
         //会员注册事件
         event(new MemberRegisterEvent($this->member->toArray()));
@@ -96,11 +97,11 @@ class MemberService extends BaseService
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account
             ])
-            ->one() or throwBaseException('会员不存在', API_ERROR_CODE_NO_DATA);
+            ->one() or throwBaseException('会员不存在', C::API_ERROR_CODE_NO_DATA);
 
         $this->member_name and $member->member_name = $this->member_name;
         $this->birthday and $member->birthday = $this->birthday;
 
-        $member->save() or throwBaseException(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
+        $member->save() or throwBaseException(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
     }
 }

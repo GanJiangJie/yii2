@@ -2,6 +2,7 @@
 
 namespace app\common\util\Single;
 
+use app\common\constant\C;
 use app\common\traits\InstanceTrait;
 use yii\helpers\Json;
 
@@ -20,8 +21,8 @@ class Response
     public function __construct()
     {
         $this->response = [
-            'errCode' => API_ERROR_CODE_SUCCESS,
-            'errMsg' => $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_SUCCESS]
+            'errCode' => C::API_ERROR_CODE_SUCCESS,
+            'errMsg' => C::__API_ERROR_CODE[C::API_ERROR_CODE_SUCCESS]
         ];
     }
 
@@ -43,8 +44,8 @@ class Response
     public function error(string $errMsg = null, int $errCode = null): self
     {
         $this->response = [
-            'errCode' => $errCode ?: API_ERROR_CODE_FAIL,
-            'errMsg' => $errMsg ?: $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_FAIL]
+            'errCode' => $errCode ?: C::API_ERROR_CODE_FAIL,
+            'errMsg' => $errMsg ?: C::__API_ERROR_CODE[C::API_ERROR_CODE_FAIL]
         ];
         return $this;
     }

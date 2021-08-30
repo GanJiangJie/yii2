@@ -2,6 +2,7 @@
 
 namespace app\common\traits;
 
+use app\common\constant\C;
 use app\common\util\Redis\RedisK;
 use app\common\util\Redis\RedisS;
 use yii\base\Exception;
@@ -78,10 +79,10 @@ trait TokenTrait
         if (empty($this->data)) {
             $token = request()->params($this->name);
             empty($token) and
-            throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_TOKEN], API_ERROR_CODE_LACK_TOKEN);
+            throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
             $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
             empty($info_json) and
-            throwBaseException($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_TOKEN], API_ERROR_CODE_INVALID_TOKEN);
+            throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
             $this->data = json_decode($info_json, true) ?: [];
         }
         return is_null($key) ? $this->data : ($this->data[$key] ?? null);
