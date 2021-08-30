@@ -19,7 +19,7 @@ if (!function_exists('throwBaseException')) {
      * @param int $errCode
      * @throws \yii\base\Exception
      */
-    function throwBaseException(string $errMsg, int $errCode = \app\common\constant\Constant::API_ERROR_CODE_FAIL)
+    function throwBaseException(string $errMsg, int $errCode = 0)
     {
         throw new \yii\base\Exception($errMsg, $errCode);
     }

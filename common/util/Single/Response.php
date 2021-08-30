@@ -41,7 +41,7 @@ class Response
      * @param int $errCode
      * @return $this
      */
-    public function error(string $errMsg = null, int $errCode = null): self
+    public function error(string $errMsg = '', int $errCode = 0): self
     {
         $this->response = [
             'errCode' => $errCode ?: C::API_ERROR_CODE_FAIL,
