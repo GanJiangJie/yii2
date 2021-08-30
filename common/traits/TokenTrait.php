@@ -2,7 +2,7 @@
 
 namespace app\common\traits;
 
-use app\common\constant\C;
+use app\common\constant\Constant as C;
 use app\common\util\Redis\RedisK;
 use app\common\util\Redis\RedisS;
 use yii\base\Exception;

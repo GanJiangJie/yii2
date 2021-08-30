@@ -2,7 +2,7 @@
 
 namespace app\common\util\Single;
 
-use app\common\constant\C;
+use app\common\constant\Constant as C;
 use app\common\traits\InstanceTrait;
 use yii\helpers\Json;
 

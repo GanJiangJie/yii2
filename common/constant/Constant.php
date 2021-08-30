@@ -2,7 +2,7 @@
 
 namespace app\common\constant;
 
-class C
+class Constant
 {
     //基础常量
     const API_ERROR_CODE_SUCCESS = 10000;

@@ -2,7 +2,7 @@
 
 namespace app\common\service;
 
-use app\common\constant\C;
+use app\common\constant\Constant as C;
 use app\common\event\model\MemberRegisterEvent;
 use app\models\Member;
 use yii\base\Exception;

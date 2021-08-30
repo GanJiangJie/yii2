@@ -2,7 +2,7 @@
 
 namespace common\util\DataCheck;
 
-use app\common\constant\C;
+use app\common\constant\Constant as C;
 use yii\base\Exception;
 
 class Validator
