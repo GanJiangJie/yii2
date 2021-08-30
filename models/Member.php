@@ -61,6 +61,9 @@ use Yii;
  */
 class Member extends \yii\db\ActiveRecord
 {
+    const TYPE_USER = 1;
+    const TYPE_MEMBER = 2;
+
     /**
      * @inheritdoc
      */
