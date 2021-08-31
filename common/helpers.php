@@ -13,15 +13,15 @@ if (!function_exists('dd')) {
     }
 }
 
-if (!function_exists('throwBaseException')) {
+if (!function_exists('throwE')) {
     /**
-     * @param string $errMsg
-     * @param int $errCode
+     * @param string $message
+     * @param int $code
      * @throws \yii\base\Exception
      */
-    function throwBaseException(string $errMsg, int $errCode = 0)
+    function throwE(string $message, int $code = 0)
     {
-        throw new \yii\base\Exception($errMsg, $errCode);
+        throw new \yii\base\Exception($message, $code);
     }
 }
 
@@ -144,7 +144,7 @@ if (!function_exists('event')) {
     function event($event_instance): array
     {
         $result = \app\common\util\Event::hangup($event_instance);
-        $result['status'] or throwBaseException($result['msg']);
+        $result['status'] or throwE($result['msg']);
         return $result;
     }
 }
@@ -159,7 +159,7 @@ if (!function_exists('listen')) {
     function listen($listen_instance): array
     {
         $result = \app\common\util\Event::listen($listen_instance);
-        $result['status'] or throwBaseException($result['msg']);
+        $result['status'] or throwE($result['msg']);
         return $result;
     }
 }
@@ -174,7 +174,7 @@ if (!function_exists('listenHandle')) {
     function listenHandle($listen_instance): array
     {
         $result = \app\common\util\Event::handle($listen_instance);
-        $result['status'] or throwBaseException($result['msg']);
+        $result['status'] or throwE($result['msg']);
         return $result;
     }
 }
@@ -219,6 +219,31 @@ if (!function_exists('response')) {
     function response(): \app\common\util\Single\Response
     {
         return \app\common\util\Single\Response::instance();
+    }
+}
+
+if (!function_exists('createCode')) {
+    /**
+     * 生成随机且不重复12位编号
+     * @param \yii\db\ActiveRecord $model
+     * @param string $attribute
+     * @param int $length
+     * @return string
+     */
+    function createCode(\yii\db\ActiveRecord $model, string $attribute, int $length = 12): string
+    {
+        $start = (int)str_pad('1', $length, '0');
+        $end = (int)str_pad('9', $length, '9');
+        do {
+            $code = (string)mt_rand($start, $end);
+        } while (
+            $model::find()
+                ->where($attribute . ' = :' . $attribute, [
+                    ':' . $attribute => $code
+                ])
+                ->exists()
+        );
+        return $code;
     }
 }
 
@@ -296,6 +321,18 @@ if (!function_exists('daysCount')) {
         $a_new = mktime($a_dt['hours'], $a_dt['minutes'], $a_dt['seconds'], $a_dt['mon'], $a_dt['mday'], $a_dt['year']);
         $b_new = mktime($b_dt['hours'], $b_dt['minutes'], $b_dt['seconds'], $b_dt['mon'], $b_dt['mday'], $b_dt['year']);
         return (int)round(($b_new - $a_new) / 86400);
+    }
+}
+
+if (!function_exists('birthdayToAge')) {
+    /**
+     * 根据生日计算年龄
+     * @param string $birthday 'Y-m-d'
+     * @return int
+     */
+    function birthdayToAge(string $birthday): int
+    {
+        return date_diff(date_create(date('Y-m-d')), date_create($birthday))->y;
     }
 }
 

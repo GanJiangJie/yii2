@@ -40,7 +40,7 @@ class NotifyController extends WebController
                 'handle_result' => $res
             ]);
             $result = queue()->deleteMessage(params('mns.queue.listen'), $receipt_handle);
-            $result['status'] or throwBaseException($result['response']['error_msg']);
+            $result['status'] or throwE($result['response']['error_msg']);
         } catch (Exception $e) {
             $log->writeLog([
                 'message_body' => $message_body,

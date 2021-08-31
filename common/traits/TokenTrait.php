@@ -3,6 +3,7 @@
 namespace app\common\traits;
 
 use app\common\constant\Constant as C;
+use common\util\DataCheck\Validator;
 use app\common\util\Redis\RedisK;
 use app\common\util\Redis\RedisS;
 use yii\base\Exception;
@@ -59,16 +60,6 @@ trait TokenTrait
     }
 
     /**
-     * 生成令牌
-     * @param $data_json
-     * @return string
-     */
-    private function token(string $data_json): string
-    {
-        return md5($data_json . time() . mt_rand(100, 999));
-    }
-
-    /**
      * 获取令牌信息
      * @param string $key
      * @return null|string|array
@@ -76,15 +67,7 @@ trait TokenTrait
      */
     public function get(string $key = null)
     {
-        if (empty($this->data)) {
-            $token = request()->param($this->name);
-            empty($token) and
-            throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
-            $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
-            empty($info_json) and
-            throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
-            $this->data = json_decode($info_json, true) ?: [];
-        }
+        if (empty($this->data)) self::storage();
         return is_null($key) ? $this->data : ($this->data[$key] ?? null);
     }
 
@@ -97,5 +80,29 @@ trait TokenTrait
         $token = request()->param($this->name);
         if (empty($token)) return false;
         return redis(RedisK::class, 'Del', [$this->prefix . $token], $this->driver);
+    }
+
+    /**
+     * 生成令牌
+     * @param $data_json
+     * @return string
+     */
+    private function token(string $data_json): string
+    {
+        return md5($data_json . time() . mt_rand(100, 999));
+    }
+
+    /**
+     * 暂存信息
+     * @throws Exception
+     */
+    private function storage()
+    {
+        $token = request()->param($this->name);
+        empty($token) and throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
+        $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
+        empty($info_json) || !Validator::isJson($info_json) and
+        throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
+        $this->data = $info_json;
     }
 }

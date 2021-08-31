@@ -3,7 +3,6 @@
 namespace app\common\service;
 
 use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
 
 class BaseService
 {
@@ -41,29 +40,6 @@ class BaseService
     }
 
     /**
-     * 生成随机且不重复12位编号
-     * @param ActiveRecord $model
-     * @param string $attribute
-     * @param int $length
-     * @return string
-     */
-    public static function createCode(ActiveRecord $model, string $attribute, int $length = 12): string
-    {
-        $start = (int)str_pad('1', $length, '0');
-        $end = (int)str_pad('9', $length, '9');
-        do {
-            $code = '' . mt_rand($start, $end);
-        } while (
-            $model::find()
-                ->where($attribute . ' = :' . $attribute, [
-                    ':' . $attribute => $code
-                ])
-                ->exists()
-        );
-        return $code;
-    }
-
-    /**
      * 查询分页
      * @param ActiveQuery $model
      */
@@ -81,7 +57,7 @@ class BaseService
      * 分页返回
      * @return array
      */
-    protected function returnPage(): array
+    protected function makePage(): array
     {
         return [
             'list' => $this->list,

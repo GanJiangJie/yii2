@@ -2,8 +2,8 @@
 
 namespace app\common\service;
 
-use app\common\constant\Constant as C;
 use app\common\event\model\MemberRegisterEvent;
+use app\common\constant\Constant as C;
 use app\models\Member;
 use yii\base\Exception;
 
@@ -38,7 +38,9 @@ class MemberService extends BaseService
                 'member_code',
                 'member_name',
                 'nick_name',
-                'account'
+                'account',
+                'birthday',
+                'create_time',
             ])
             ->where('merchant_code = :merchant_code and type = :type', [
                 ':merchant_code' => $this->merchant_code,
@@ -57,11 +59,14 @@ class MemberService extends BaseService
                 'member_code' => $member['member_code'],
                 'member_name' => $member['member_name'],
                 'nick_name' => $member['nick_name'],
-                'account' => $member['account']
+                'account' => $member['account'],
+                'birthday' => $member['birthday'],
+                'age' => $member['birthday'] ? birthdayToAge($member['birthday']) : null,
+                'create_time' => $member['create_time']
             ];
         }
 
-        return self::returnPage();
+        return self::makePage();
     }
 
     /**
@@ -74,11 +79,11 @@ class MemberService extends BaseService
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account
             ])
-            ->exists() and throwBaseException('会员已存在');
+            ->exists() and throwE('会员已存在');
 
-        $this->member->member_code = self::createCode($this->member, 'member_code');
+        $this->member->member_code = createCode($this->member, 'member_code');
         $this->member->merchant_code = $this->merchant_code;
-        $this->member->save() or throwBaseException(json_encode($this->member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
+        $this->member->save() or throwE(json_encode($this->member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
 
         //会员注册事件
         event(new MemberRegisterEvent($this->member->toArray()));
@@ -97,11 +102,11 @@ class MemberService extends BaseService
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account
             ])
-            ->one() or throwBaseException('会员不存在', C::API_ERROR_CODE_NO_DATA);
+            ->one() or throwE('会员不存在', C::API_ERROR_CODE_NO_DATA);
 
         $this->member_name and $member->member_name = $this->member_name;
         $this->birthday and $member->birthday = $this->birthday;
 
-        $member->save() or throwBaseException(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
+        $member->save() or throwE(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
     }
 }

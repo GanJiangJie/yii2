@@ -44,7 +44,7 @@ class ListenController extends ConsoleController
                     'receiptHandle' => $receipt_handle,
                     'messageBody' => $message_body
                 ]], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-                $res['status'] or throwBaseException($res['msg']);
+                $res['status'] or throwE($res['msg']);
             } catch (Exception $e) {
                 $log->writeLog([
                     'message_body' => $message_body,

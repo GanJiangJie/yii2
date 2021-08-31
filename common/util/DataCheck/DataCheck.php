@@ -16,7 +16,7 @@ class DataCheck
     public static function checkVersion($version)
     {
         $version == params('open.version') or
-        throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_VERSION], C::API_ERROR_CODE_INVALID_VERSION);
+        throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_VERSION], C::API_ERROR_CODE_INVALID_VERSION);
     }
 
     /**
@@ -27,7 +27,7 @@ class DataCheck
     public static function checkSignType($sign_type)
     {
         $sign_type == params('open.sign_type') or
-        throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_SIGN_TYPE], C::API_ERROR_CODE_INVALID_SIGN_TYPE);
+        throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_SIGN_TYPE], C::API_ERROR_CODE_INVALID_SIGN_TYPE);
     }
 
     /**
@@ -39,13 +39,13 @@ class DataCheck
     {
         $app_key = redis(RedisS::class, 'Get', [$params['app_id']]);
         empty($app_key) and
-        throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_APP_ID], C::API_ERROR_CODE_INVALID_APP_ID);
+        throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_APP_ID], C::API_ERROR_CODE_INVALID_APP_ID);
         $sign = $params['sign'];
         unset($params['sign']);
         ksort($params);
         $string = urldecode(http_build_query($params)) . '&key=' . $app_key;
         hash_equals($sign, md5($string)) or
-        throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_SIGN], C::API_ERROR_CODE_INVALID_SIGN);
+        throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_SIGN], C::API_ERROR_CODE_INVALID_SIGN);
 
     }
 
