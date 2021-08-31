@@ -3,9 +3,9 @@
 namespace app\modules\crm\controllers;
 
 use app\common\service\MemberService;
-use app\components\WebController;
-use app\models\Member;
 use common\util\DataCheck\Validator;
+use app\components\WebController;
+use app\common\constant\MemberC as MC;
 use yii\base\Exception;
 
 class MemberController extends WebController
@@ -20,7 +20,7 @@ class MemberController extends WebController
         $model = new MemberService();
         $model->assignAttributes(request()->params(), ['account', 'key_word']);
         $model->merchant_code = mToken()->get('merchant_code');
-        $model->type = request()->params('type', Member::TYPE_MEMBER);
+        $model->type = request()->params('type', MC::TYPE_MEMBER);
         $model->page = request()->params('page', 1);
         $model->limit = request()->params('limit', 0);
         return $model->getList();
