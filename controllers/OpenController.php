@@ -13,7 +13,7 @@ class OpenController extends WebController
     public function actionIndex(): string
     {
         //获取请求参数
-        $params = request()->params();
+        $params = request()->param();
         $response = response();
         $log = logPrint()->category('api_log')->prefix('api_');
         try {

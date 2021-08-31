@@ -19,9 +19,9 @@ class Request
     private function __construct()
     {
         $this->request = [
-            'headers' => getallheaders(),
-            'params' => self::getParams(),
-            'files' => $_FILES
+            'header' => getallheaders(),
+            'param' => self::getParams(),
+            'file' => $_FILES
         ];
     }
 
@@ -45,7 +45,7 @@ class Request
      */
     public function header(string $key = null, $default = null)
     {
-        return $key ? ($this->request['headers'][$key] ?? $default) : $this->request['headers'];
+        return is_null($key) ? $this->request['header'] : ($this->request['header'][$key] ?? $default);
     }
 
     /**
@@ -54,9 +54,9 @@ class Request
      * @param string|int $default
      * @return null|string|array
      */
-    public function params(string $key = null, $default = null)
+    public function param(string $key = null, $default = null)
     {
-        return $key ? ($this->request['params'][$key] ?? $default) : $this->request['params'];
+        return is_null($key) ? $this->request['param'] : ($this->request['param'][$key] ?? $default);
     }
 
     /**
@@ -64,8 +64,8 @@ class Request
      * @param string $key
      * @return null|array
      */
-    public function files(string $key = null)
+    public function file(string $key = null)
     {
-        return $key ? ($this->request['files'][$key] ?? null) : $this->request['files'];
+        return is_null($key) ? $this->request['file'] : ($this->request['file'][$key] ?? null);
     }
 }

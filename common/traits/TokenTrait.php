@@ -77,7 +77,7 @@ trait TokenTrait
     public function get(string $key = null)
     {
         if (empty($this->data)) {
-            $token = request()->params($this->name);
+            $token = request()->param($this->name);
             empty($token) and
             throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
             $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
@@ -85,7 +85,7 @@ trait TokenTrait
             throwBaseException(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
             $this->data = json_decode($info_json, true) ?: [];
         }
-        return $key ? ($this->data[$key] ?? null) : $this->data;
+        return is_null($key) ? $this->data : ($this->data[$key] ?? null);
     }
 
     /**
@@ -94,7 +94,7 @@ trait TokenTrait
      */
     public function del()
     {
-        $token = request()->params($this->name);
+        $token = request()->param($this->name);
         if (empty($token)) return false;
         return redis(RedisK::class, 'Del', [$this->prefix . $token], $this->driver);
     }
