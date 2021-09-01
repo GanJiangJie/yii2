@@ -21,6 +21,8 @@ if (!function_exists('throwE')) {
      */
     function throwE(string $message, int $code = 0)
     {
+        @list($back, $trace) = debug_backtrace();
+        exception()->backtrace($back, $trace);
         throw new \yii\base\Exception($message, $code);
     }
 }
@@ -222,6 +224,15 @@ if (!function_exists('response')) {
     }
 }
 
+if (!function_exists('exception')) {
+    /**
+     * @return \app\common\util\Single\Exception
+     */
+    function exception(): \app\common\util\Single\Exception
+    {
+        return \app\common\util\Single\Exception::instance();
+    }
+}
 if (!function_exists('createCode')) {
     /**
      * 生成随机且不重复12位编号
