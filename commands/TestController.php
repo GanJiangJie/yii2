@@ -12,6 +12,7 @@ class TestController extends ConsoleController
 {
     public function actionIndex()
     {
+        dd(printf("%b\n",10));
         dd(C::API_ERROR_CODE_SUCCESS, MC::TYPE_MEMBER);
     }
 }

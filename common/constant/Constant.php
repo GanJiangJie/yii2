@@ -36,6 +36,7 @@ class Constant
         self::API_ERROR_CODE_NO_DATA => '未查询到数据',
     ];
 
+    //是否常量
     const YES = 1;
     const NO = 0;
 }
