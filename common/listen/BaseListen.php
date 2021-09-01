@@ -33,7 +33,7 @@ abstract class BaseListen
 
     /**
      * 执行方法
-     * @return array
+     * @return array ['status' => true]|['status' => true, 'msg' => '']|['status' => false, 'msg' => '']
      */
     abstract public function handle(): array;
 }
