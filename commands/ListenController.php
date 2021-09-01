@@ -12,7 +12,7 @@ class ListenController extends ConsoleController
      */
     public function actionAsync()
     {
-        $log = logPrint()->prefix('listen_')->prefix('async');
+        logPrint()->prefix('listen_')->prefix('async');
         while (true) {
             $re = queue()->receiveMessage(params('mns.queue.listen'));
             if (!$re['status']) {
@@ -46,7 +46,7 @@ class ListenController extends ConsoleController
                 ]], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
                 $res['status'] or throwE($res['msg']);
             } catch (Exception $e) {
-                $log->writeLog([
+                logPrint()->writeLog([
                     'message_body' => $message_body,
                     /*'listen_instance' => $listen_instance,
                     'listen_class' => $listen_class,*/

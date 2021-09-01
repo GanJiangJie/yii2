@@ -254,7 +254,7 @@ if (!function_exists('logPrint')) {
      */
     function logPrint(): \common\util\Log
     {
-        return new \common\util\Log();
+        return \common\util\Log::instance();
     }
 }
 

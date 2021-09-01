@@ -12,34 +12,32 @@ class OpenController extends WebController
 {
     public function actionIndex(): string
     {
-        //获取请求参数
-        $params = request()->param();
-        $response = response();
-        $log = logPrint()->category('api_log')->prefix('api_');
+        logPrint()->category('api_log')->prefix('api_');
         try {
             //验证必填参数
-            Validator::checkValidEmpty($params, ['app_id', 'method', 'sign_type', 'version', 'sign']);
+            Validator::checkValidEmpty(request()->param(), ['app_id', 'method', 'sign_type', 'version', 'sign']);
             //验证签名类型
-            DataCheck::checkSignType($params['sign_type']);
+            DataCheck::checkSignType(request()->param('sign_type'));
             //验证版本
-            DataCheck::checkVersion($params['version']);
+            DataCheck::checkVersion(request()->param('version'));
             //验证签名
-            DataCheck::checkSign($params);
+            DataCheck::checkSign(request()->param());
             //方法获取路由
-            $route = Route::method($params['method']);
+            //$route = Route::method(request()->param('method'));
             //跳转路由
-            $data = app()->runAction($route);
+            //$data = app()->runAction($route);
             //响应结果处理
-            $response->data($data);
+            //response()->data($data);
+            response()->data(app()->runAction(Route::method(request()->param('method'))));
         } catch (Exception $exception) {
             //抛出异常处理
-            $response->error($exception->getMessage(), $exception->getCode());
-            $log->level(2);
+            response()->error($exception->getMessage(), $exception->getCode());
+            logPrint()->level(2);
         } finally {
             //打印日志
-            $log->writeLog(['request' => $params, 'response' => $response->getResponse()]);
+            logPrint()->writeLog(['request' => request()->param(), 'response' => response()->getResponse()]);
             //输出响应
-            return $response->responseJson();
+            return response()->responseJson();
         }
     }
 }

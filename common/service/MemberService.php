@@ -16,24 +16,11 @@ class MemberService extends BaseService
     public $birthday;
 
     /**
-     * @var Member $member
-     */
-    private $member;
-
-    /**
-     * MemberService constructor.
-     */
-    public function __construct()
-    {
-        $this->member = new Member();
-    }
-
-    /**
      * @return array
      */
     public function getList(): array
     {
-        $members = $this->member::find()
+        $members = Member::find()
             ->select([
                 'member_code',
                 'member_name',
@@ -74,19 +61,20 @@ class MemberService extends BaseService
      */
     public function register()
     {
-        $this->member::find()
+        Member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account
             ])
             ->exists() and throwE('会员已存在');
 
-        $this->member->member_code = createCode($this->member, 'member_code');
-        $this->member->merchant_code = $this->merchant_code;
-        $this->member->save() or throwE(json_encode($this->member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
+        $member = new Member();
+        $member->member_code = createCode($member, 'member_code');
+        $member->merchant_code = $this->merchant_code;
+        $member->save() or throwE(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
 
         //会员注册事件
-        event(new MemberRegisterEvent($this->member->toArray()));
+        event(new MemberRegisterEvent($member->toArray()));
     }
 
     /**
@@ -97,7 +85,7 @@ class MemberService extends BaseService
         /**
          * @var Member $member
          */
-        $member = $this->member::find()
+        $member = Member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
                 ':merchant_code' => $this->merchant_code,
                 ':account' => $this->account

@@ -32,7 +32,7 @@ class BaseService
      * @param array $params
      * @param array $keys
      */
-    public function assignAttributes(array $params = [], array $keys = [])
+    public function assignAttrs(array $params = [], array $keys = [])
     {
         foreach ($keys as $key) {
             $this->$key = $params[$key] ?? null;

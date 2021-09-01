@@ -2,8 +2,12 @@
 
 namespace common\util;
 
+use app\common\traits\SingleTrait;
+
 class Log
 {
+    use SingleTrait;
+
     const LEVEL_ERROR = 1;//记录一个致命错误消息
     const LEVEL_WARNING = 2;//记录一个警告消息
     const LEVEL_INFO = 3;//记录一些有用信息的消息

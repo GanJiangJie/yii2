@@ -25,7 +25,7 @@ class NotifyController extends WebController
         $message_body = $message['messageBody'];
         $receipt_handle = $message['receiptHandle'];
 
-        $log = logPrint()->prefix('listen_')->filename('async');
+        logPrint()->prefix('listen_')->filename('async');
 
         $listen_instance = unserialize($message_body);
         $listen_class = get_class($listen_instance);
@@ -33,7 +33,7 @@ class NotifyController extends WebController
             db()->isActive or db()->open();
 
             $res = listenHandle($listen_instance);
-            isset($res['msg']) and $log->writeLog([
+            isset($res['msg']) and logPrint()->writeLog([
                 'message_body' => $message_body,
                 'listen_instance' => $listen_instance,
                 'listen_class' => $listen_class,
@@ -42,7 +42,7 @@ class NotifyController extends WebController
             $result = queue()->deleteMessage(params('mns.queue.listen'), $receipt_handle);
             $result['status'] or throwE($result['response']['error_msg']);
         } catch (Exception $e) {
-            $log->writeLog([
+            logPrint()->writeLog([
                 'message_body' => $message_body,
                 'listen_instance' => $listen_instance,
                 'listen_class' => $listen_class,
