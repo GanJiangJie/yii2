@@ -48,7 +48,7 @@ class MemberService extends BaseService
                 'nick_name' => $member['nick_name'],
                 'account' => $member['account'],
                 'birthday' => $member['birthday'],
-                'age' => $member['birthday'] ? birthdayToAge($member['birthday']) : null,
+                'age' => $member['birthday'] ? birthdayToAge($member['birthday']) : '',
                 'create_time' => $member['create_time']
             ];
         }
