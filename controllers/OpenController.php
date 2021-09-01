@@ -32,7 +32,7 @@ class OpenController extends WebController
         } catch (Exception $exception) {
             //抛出异常处理
             response()->error($exception->getMessage(), $exception->getCode());
-            logPrint()->level(2);
+            logPrint()->level(2)->backtrace(exception());
         } finally {
             //打印日志
             logPrint()->writeLog(['request' => request()->params(), 'response' => response()->getResponse()]);

@@ -18,12 +18,13 @@ class Log
     private $filename = 'log';//文件名称
     private $suffix = '.log';//文件后缀
     private $level;
+    private $trace;
 
     /**
      * @param string $category
      * @return Log
      */
-    public function category($category): self
+    public function category(string $category): self
     {
         $this->category = trim($category, '/');
         return $this;
@@ -33,7 +34,7 @@ class Log
      * @param string $prefix
      * @return Log
      */
-    public function prefix($prefix): self
+    public function prefix(string $prefix): self
     {
         $this->prefix = $prefix;
         return $this;
@@ -43,7 +44,7 @@ class Log
      * @param string $filename
      * @return Log
      */
-    public function filename($filename): self
+    public function filename(string $filename): self
     {
         $this->filename = $filename;
         return $this;
@@ -53,7 +54,7 @@ class Log
      * @param string $suffix
      * @return Log
      */
-    public function suffix($suffix): self
+    public function suffix(string $suffix): self
     {
         $this->suffix = $suffix;
         return $this;
@@ -63,9 +64,19 @@ class Log
      * @param int $level
      * @return Log
      */
-    public function level($level): self
+    public function level(int $level): self
     {
         $this->level = $level;
+        return $this;
+    }
+
+    /**
+     * @param $trace
+     * @return $this
+     */
+    public function backtrace($trace): self
+    {
+        $this->trace = $trace;
         return $this;
     }
 
@@ -123,6 +134,7 @@ class Log
                 break;
         }
         $message['content'] = $content;
+        $this->trace and $message['trace'] = $this->trace;
         return json_encode($message, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
