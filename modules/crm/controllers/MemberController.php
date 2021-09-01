@@ -17,13 +17,13 @@ class MemberController extends WebController
      */
     public function actionList(): array
     {
-        Validator::checkValidEmpty(request()->param(), ['token']);
+        Validator::checkValidEmpty(request()->params(), ['token']);
         $model = new MemberService();
-        $model->assignAttrs(request()->param(), ['account', 'key_word']);
+        $model->assignAttrs(request()->params(), ['account', 'key_word']);
         $model->merchant_code = mToken()->get('merchant_code');
-        $model->type = request()->param('type', MC::TYPE_MEMBER);
-        $model->page = request()->param('page', 1);
-        $model->limit = request()->param('limit', 0);
+        $model->type = request()->params('type', MC::TYPE_MEMBER);
+        $model->page = request()->params('page', 1);
+        $model->limit = request()->params('limit', 0);
         return $model->getList();
     }
 
@@ -33,11 +33,11 @@ class MemberController extends WebController
      */
     public function actionRegister()
     {
-        Validator::checkValidEmpty(request()->param(), ['name', 'account', 'birthday']);
+        Validator::checkValidEmpty(request()->params(), ['name', 'account', 'birthday']);
         $model = new MemberService();
-        $model->assignAttrs(request()->param(), ['account', 'birthday']);
+        $model->assignAttrs(request()->params(), ['account', 'birthday']);
         $model->merchant_code = mToken()->get('merchant_code');
-        $model->member_name = request()->param('name');
+        $model->member_name = request()->params('name');
         $model->register();
     }
 
@@ -48,7 +48,7 @@ class MemberController extends WebController
     public function actionEdit()
     {
         $model = new MemberService();
-        $model->assignAttrs(request()->param(), ['member_code']);
+        $model->assignAttrs(request()->params(), ['member_code']);
         $model->edit();
     }
 }

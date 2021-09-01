@@ -43,7 +43,7 @@ class Request
      * @param string|int $default
      * @return null|string|array
      */
-    public function header(string $key = null, $default = null)
+    public function headers(string $key = null, $default = null)
     {
         return is_null($key) ? $this->request['header'] : ($this->request['header'][$key] ?? $default);
     }
@@ -54,7 +54,7 @@ class Request
      * @param string|int $default
      * @return null|string|array
      */
-    public function param(string $key = null, $default = null)
+    public function params(string $key = null, $default = null)
     {
         return is_null($key) ? $this->request['param'] : ($this->request['param'][$key] ?? $default);
     }
@@ -64,7 +64,7 @@ class Request
      * @param string $key
      * @return null|array
      */
-    public function file(string $key = null)
+    public function files(string $key = null)
     {
         return is_null($key) ? $this->request['file'] : ($this->request['file'][$key] ?? null);
     }

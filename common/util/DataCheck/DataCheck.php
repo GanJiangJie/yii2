@@ -46,7 +46,6 @@ class DataCheck
         $string = urldecode(http_build_query($params)) . '&key=' . $app_key;
         hash_equals($sign, md5($string)) or
         throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_SIGN], C::API_ERROR_CODE_INVALID_SIGN);
-
     }
 
     /**
