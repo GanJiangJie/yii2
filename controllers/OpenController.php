@@ -29,9 +29,9 @@ class OpenController extends WebController
             //响应结果处理
             //response()->data($data);
             response()->data(app()->runAction(Route::method(request()->params('method'))));
-        } catch (Exception $exception) {
+        } catch (Exception $e) {
             //抛出异常处理
-            response()->error($exception->getMessage(), $exception->getCode());
+            response()->error($e->getMessage(), $e->getCode());
             logPrint()->level(2)->backtrace(exception());
         } finally {
             //打印日志
