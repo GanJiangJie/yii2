@@ -20,7 +20,7 @@ class Request
     {
         $this->request = [
             'header' => getallheaders(),
-            'param' => self::getParam(),
+            'param' => self::getParams(),
             'file' => $_FILES
         ];
     }
@@ -28,7 +28,7 @@ class Request
     /**
      * @return array
      */
-    private function getParam(): array
+    private function getParams(): array
     {
         if (app()->request->isGet) return app()->request->get();
         if (app()->request->isPost) return array_map(function ($value) {
