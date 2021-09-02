@@ -9,14 +9,6 @@ class Exception
     use SingleTrait;
 
     /**
-     * @var string $file
-     */
-    public $file;
-    /**
-     * @var int $line
-     */
-    public $line;
-    /**
      * @var string $class
      */
     public $class;
@@ -24,6 +16,14 @@ class Exception
      * @var string $function
      */
     public $function;
+    /**
+     * @var int $line
+     */
+    public $line;
+    /**
+     * @var string $file
+     */
+    public $file;
     /**
      * @var string $type
      */
@@ -43,11 +43,11 @@ class Exception
      */
     public function backtrace(array $back, array $trace)
     {
-        $this->file = $back['file'];
-        $this->line = $back['line'];
-        @list($this->message, $this->code) = $back['args'];
-        $this->class = $trace['class'];
-        $this->function = $trace['function'];
-        $this->type = $trace['type'];
+        $this->file = $back['file'] ?? '';
+        $this->line = $back['line'] ?? 0;
+        @list($this->message, $this->code) = $back['args'] ?? [];
+        $this->class = $trace['class'] ?? '';
+        $this->function = $trace['function'] ?? '';
+        $this->type = $trace['type'] ?? '';
     }
 }
