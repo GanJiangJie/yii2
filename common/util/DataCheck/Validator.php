@@ -4,6 +4,7 @@ namespace common\util\DataCheck;
 
 use app\common\constant\Constant as C;
 use yii\base\Exception;
+use yii\db\ActiveRecord;
 
 class Validator
 {
@@ -16,6 +17,11 @@ class Validator
      * @var array $messages
      */
     private static $messages;
+
+    /**
+     * @var int $code
+     */
+    private static $code = C::API_ERROR_CODE_INVALID_PARAMS;
 
     /**
      * 判断数据是否json格式
@@ -76,14 +82,14 @@ class Validator
     private static function required($key)
     {
         empty(self::$params[$key]) and
-        throwE(self::$messages[$key . '.required'] ?? 'Parameter ' . $key . ' cannot be empty');
+        throwE(self::$messages[$key . '.required'] ?? 'Parameter ' . $key . ' cannot be empty', self::$code);
     }
 
     /**
      * 可为空
      * @param $key
      */
-    private static function nullable($key)
+    private function nullable($key)
     {
     }
 
@@ -95,7 +101,7 @@ class Validator
     private static function numeral($key)
     {
         is_numeric(self::$params[$key]) or
-        throwE(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric');
+        throwE(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric', self::$code);
     }
 
     /**
@@ -107,7 +113,7 @@ class Validator
     private static function min($key, $value)
     {
         mb_strlen(self::$params[$key], 'utf-8') < $value and
-        throwE(self::$messages[$key . '.min'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value);
+        throwE(self::$messages[$key . '.min'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
     }
 
     /**
@@ -119,6 +125,25 @@ class Validator
     private static function max($key, $value)
     {
         mb_strlen(self::$params[$key], 'utf-8') > $value and
-        throwE(self::$messages[$key . '.max'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value);
+        throwE(self::$messages[$key . '.max'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value, self::$code);
+    }
+
+    /**
+     * 判断参数的值在表里面是否存在
+     * @param $key
+     * @param $value
+     * @throws Exception
+     */
+    private static function exists($key, $value)
+    {
+        @list($modelClass, $column) = explode(',', $value);
+        /**
+         * @var ActiveRecord $model
+         */
+        $model = $modelClass;
+        $model::find()
+            ->where($column . ' = :' . $column, [
+                ':' . $column => self::$params[$key]
+            ])->exists() or throwE('The selected ' . $key . ' is invalid', self::$code);
     }
 }
