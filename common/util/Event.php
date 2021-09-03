@@ -25,6 +25,12 @@ class Event extends EventService
          * @var string $event_class
          */
         $event_class = get_class($event_instance);
+        if (!class_exists($event_class)) {
+            return [
+                'status' => false,
+                'msg' => '事件\'' . $event_class . '\'类不存在'
+            ];
+        }
         if (!isset($events[$event_class])) {
             return [
                 'status' => false,
@@ -42,7 +48,7 @@ class Event extends EventService
             if (!class_exists($listen_class)) {
                 return [
                     'status' => false,
-                    'msg' => '监听\'' . $listen_class . '\'类名注册错误'
+                    'msg' => '监听\'' . $listen_class . '\'类不存在'
                 ];
             }
             /**
@@ -50,43 +56,12 @@ class Event extends EventService
              * @var BaseListen $listen_instance
              */
             $listen_instance = new $listen_class($event_instance->data);
-            //异步监听实例
-            if ($listen_instance->async) {
-                $result = self::async($listen_instance);
-                if (!$result['status']) return $result;
-                continue;
-            }
-            //执行监听方法
+            /**
+             * 执行监听方法
+             * @var array $result
+             */
             $result = $listen_instance->handle();
             if (isset($result['status']) && !$result['status']) return $result;
-        }
-        return ['status' => true];
-    }
-
-    /**
-     * 监听执行
-     * @param BaseListen $listen_instance
-     * @return array
-     */
-    public static function listen($listen_instance): array
-    {
-        if ($listen_instance->async) return self::async($listen_instance);
-        return self::handle($listen_instance);
-    }
-
-    /**
-     * 将监听对象扔进MNS队列
-     * @param BaseListen $listen_instance
-     * @return array
-     */
-    private static function async($listen_instance): array
-    {
-        $result = queue()->sendMessage(params('mns.queue.listen'), serialize($listen_instance));
-        if (!$result['status']) {
-            return [
-                'status' => false,
-                'msg' => $result['response']['error_msg']
-            ];
         }
         return ['status' => true];
     }
@@ -98,6 +73,9 @@ class Event extends EventService
      */
     public static function handle($listen_instance): array
     {
+        /**
+         * @var array $result
+         */
         $result = $listen_instance->handle();
         if (isset($result['status'])) return $result;
         return ['status' => true];

@@ -125,28 +125,6 @@ if (!function_exists('redis')) {
     }
 }
 
-if (!function_exists('queue')) {
-    /**
-     * 队列单例
-     * @return \app\common\package\mns\Queue
-     */
-    function queue(): \app\common\package\mns\Queue
-    {
-        return \app\common\package\mns\Queue::instance();
-    }
-}
-
-if (!function_exists('topic')) {
-    /**
-     * 主题单例
-     * @return \app\common\package\mns\Topic
-     */
-    function topic(): \app\common\package\mns\Topic
-    {
-        return \app\common\package\mns\Topic::instance();
-    }
-}
-
 if (!function_exists('event')) {
     /**
      * 事件挂起
@@ -157,21 +135,6 @@ if (!function_exists('event')) {
     function event($event_instance): array
     {
         $result = \app\common\util\Event::hangup($event_instance);
-        $result['status'] or throwE($result['msg']);
-        return $result;
-    }
-}
-
-if (!function_exists('listen')) {
-    /**
-     * 监听挂起
-     * @param \app\common\listen\BaseListen $listen_instance
-     * @return array
-     * @throws \yii\base\Exception
-     */
-    function listen($listen_instance): array
-    {
-        $result = \app\common\util\Event::listen($listen_instance);
         $result['status'] or throwE($result['msg']);
         return $result;
     }

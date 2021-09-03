@@ -16,12 +16,6 @@ abstract class BaseListen
     public $params;
 
     /**
-     * 异步执行
-     * @var bool $async
-     */
-    public $async = false;
-
-    /**
      * 参数挂载
      * BaseListen constructor.
      * @param array $params
