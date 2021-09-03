@@ -29,7 +29,7 @@ class Constant
         self::API_ERROR_CODE_INVALID_METHOD => '无效的方法名',
         self::API_ERROR_CODE_INVALID_SIGN => '无效签名',
         self::API_ERROR_CODE_LACK_TOKEN => '登录令牌必传',
-        self::API_ERROR_CODE_INVALID_TOKEN => '令牌已经失效',
+        self::API_ERROR_CODE_INVALID_TOKEN => '登录已失效，请重新登录',
         self::API_ERROR_CODE_INVALID_PARAMS => '无效参数',
         self::API_ERROR_CODE_SYSTEM_ERROR => '系统错误',
         self::API_ERROR_CODE_NOT_AUTH => '无权限访问',
