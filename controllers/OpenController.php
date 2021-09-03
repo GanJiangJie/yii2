@@ -12,6 +12,7 @@ class OpenController extends WebController
 {
     public function actionIndex(): string
     {
+        //api日志
         logPrint()->category('api_log')->prefix('api_');
         try {
             //验证必填参数
@@ -22,11 +23,7 @@ class OpenController extends WebController
             DataCheck::version(request()->params('version'));
             //验证签名
             DataCheck::checkSign(request()->params());
-            //方法获取路由
-            //$route = Route::method(request()->params('method'));
-            //跳转路由
-            //$data = app()->runAction($route);
-            //响应结果处理
+            //响应结果
             //response()->data($data);
             response()->data(app()->runAction(Route::method(request()->params('method'))));
         } catch (Exception $e) {

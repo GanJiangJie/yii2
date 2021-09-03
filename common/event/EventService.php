@@ -2,10 +2,14 @@
 
 namespace app\common\event;
 
-use app\common\event\model\DefaultEvent;
-use app\common\event\model\MemberRegisterEvent;
-use app\common\listen\model\DefaultListen;
-use app\common\listen\model\EmailListen;
+use app\common\event\model\{
+    DefaultEvent,
+    MemberRegisterEvent
+};
+use app\common\listen\model\{
+    DefaultListen,
+    EmailListen
+};
 
 class EventService
 {

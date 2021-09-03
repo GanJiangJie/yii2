@@ -64,7 +64,7 @@ class Curl
      * @param array $header
      * @return array
      */
-    public static function request($url, $method = 'GET', $timeout = 10, $post = [], $header = [])
+    public static function request(string $url, string $method = 'GET', int $timeout = 10, array $post = [], array $header = [])
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER, false);
@@ -72,17 +72,8 @@ class Curl
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-
-        //无需证书
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        //需要证书
-        /*curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
-        curl_setopt($ch,CURLOPT_SSLCERT, $this->cert_path);//证书文件路径
-        curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
-        curl_setopt($ch,CURLOPT_SSLKEY, $this->key_path);//秘钥文件路径*/
-
         switch ($method) {
             case 'GET' :
                 curl_setopt($ch, CURLOPT_HTTPGET, true);

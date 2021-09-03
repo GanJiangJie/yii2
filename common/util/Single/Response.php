@@ -30,9 +30,9 @@ class Response
      * @param array $data
      * @return Response
      */
-    public function data(array $data): self
+    public function data(array $data = null): self
     {
-        $this->response['data'] = $data;
+        $data and $this->response['data'] = $data;
         return $this;
     }
 
