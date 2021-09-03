@@ -2,6 +2,7 @@
 
 if (!function_exists('dd')) {
     /**
+     * 打印断点 相当执行：var_dump($a,$b,$c...);exit
      * @param mixed ...$vars
      */
     function dd(...$vars)
