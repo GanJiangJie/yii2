@@ -15,11 +15,11 @@ class OpenController extends WebController
         logPrint()->category('api_log')->prefix('api_');
         try {
             //验证必填参数
-            Validator::checkValidEmpty(request()->params(), ['app_id', 'method', 'sign_type', 'version', 'sign']);
+            Validator::notEmpty(request()->params(), ['app_id', 'method', 'sign_type', 'version', 'sign']);
             //验证签名类型
-            DataCheck::checkSignType(request()->params('sign_type'));
+            DataCheck::signType(request()->params('sign_type'));
             //验证版本
-            DataCheck::checkVersion(request()->params('version'));
+            DataCheck::version(request()->params('version'));
             //验证签名
             DataCheck::checkSign(request()->params());
             //方法获取路由

@@ -17,7 +17,7 @@ class MemberController extends WebController
      */
     public function actionList(): array
     {
-        Validator::checkValidEmpty(request()->params(), ['token']);
+        Validator::notEmpty(request()->params(), ['token']);
         $model = new MemberService();
         $model->assignAttrs(request()->params(), ['account', 'key_word']);
         $model->merchant_code = mToken()->get('merchant_code');
@@ -33,7 +33,7 @@ class MemberController extends WebController
      */
     public function actionRegister()
     {
-        Validator::checkValidEmpty(request()->params(), ['name', 'account', 'birthday']);
+        Validator::notEmpty(request()->params(), ['name', 'account', 'birthday']);
         $model = new MemberService();
         $model->assignAttrs(request()->params(), ['account', 'birthday']);
         $model->merchant_code = mToken()->get('merchant_code');

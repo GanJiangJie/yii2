@@ -17,7 +17,7 @@ class Config
      * @param string $key
      * @return string|array|null
      */
-    public function get($key)
+    public function get(string $key)
     {
         $key_array = explode('.', $key);
         $file_name = $key_array[0];

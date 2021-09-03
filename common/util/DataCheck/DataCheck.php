@@ -13,7 +13,7 @@ class DataCheck
      * @param string $version
      * @throws Exception
      */
-    public static function checkVersion($version)
+    public static function version(string $version)
     {
         $version == params('open.version') or
         throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_VERSION], C::API_ERROR_CODE_INVALID_VERSION);
@@ -24,7 +24,7 @@ class DataCheck
      * @param string $sign_type
      * @throws Exception
      */
-    public static function checkSignType($sign_type)
+    public static function signType(string $sign_type)
     {
         $sign_type == params('open.sign_type') or
         throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_SIGN_TYPE], C::API_ERROR_CODE_INVALID_SIGN_TYPE);
@@ -35,7 +35,7 @@ class DataCheck
      * @param array $params
      * @throws Exception
      */
-    public static function checkSign($params)
+    public static function checkSign(array $params)
     {
         $app_key = redis(RedisS::class, 'Get', [$params['app_id']]);
         empty($app_key) and
@@ -54,7 +54,7 @@ class DataCheck
      * @param string $method 方法名称
      * @return array
      */
-    public static function sign($params, $method): array
+    public static function sign(array $params, string $method): array
     {
         $params['app_id'] = params('open.app_id');
         $params['sign_type'] = params('open.sign_type');

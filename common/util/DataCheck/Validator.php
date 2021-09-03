@@ -41,7 +41,7 @@ class Validator
      * @param array $check_params
      * @throws Exception
      */
-    public static function checkValidEmpty(array $params, array $check_params)
+    public static function notEmpty(array $params, array $check_params)
     {
         $result = [];
         foreach ($check_params as $v) {
