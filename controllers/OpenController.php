@@ -24,7 +24,6 @@ class OpenController extends WebController
             //验证签名
             DataCheck::checkSign(request()->params());
             //响应结果
-            //response()->data($data);
             response()->data(app()->runAction(Route::method(request()->params('method'))));
         } catch (Exception $e) {
             //抛出异常处理
