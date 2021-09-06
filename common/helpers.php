@@ -157,12 +157,25 @@ if (!function_exists('listenHandle')) {
 
 if (!function_exists('request')) {
     /**
-     * 请求对象
+     * HTTPS请求对象
      * @return \app\common\util\Single\Request
      */
     function request(): \app\common\util\Single\Request
     {
         return \app\common\util\Single\Request::instance();
+    }
+}
+
+if (!function_exists('rParams')) {
+    /**
+     * HTTPS请求参数
+     * @param string $key
+     * @param string|int $default
+     * @return array|null|string
+     */
+    function rParams(string $key = null, $default = null)
+    {
+        return request()->params($key, $default);
     }
 }
 
@@ -177,6 +190,18 @@ if (!function_exists('mToken')) {
     }
 }
 
+if (!function_exists('mTokenGet')) {
+    /**
+     * @param string $key
+     * @return array|null|string
+     * @throws \yii\base\Exception
+     */
+    function mTokenGet(string $key)
+    {
+        return mToken()->get($key);
+    }
+}
+
 if (!function_exists('uToken')) {
     /**
      * 用户登录令牌
@@ -185,6 +210,18 @@ if (!function_exists('uToken')) {
     function uToken(): \app\common\util\Single\UToken
     {
         return \app\common\util\Single\UToken::instance();
+    }
+}
+
+if (!function_exists('uTokenGet')) {
+    /**
+     * @param string $key
+     * @return array|null|string
+     * @throws \yii\base\Exception
+     */
+    function uTokenGet(string $key)
+    {
+        return uToken()->get($key);
     }
 }
 
