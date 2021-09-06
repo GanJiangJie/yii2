@@ -12,9 +12,9 @@ class OpenController extends WebController
 {
     public function actionIndex(): string
     {
-        //api日志
-        logPrint()->category('api_log')->prefix('api_');
         try {
+            //api日志
+            logPrint()->category('api_log')->prefix('api_');
             //验证必填参数
             Validator::notEmpty(request()->params(), ['app_id', 'method', 'sign_type', 'version', 'sign']);
             //验证签名类型
