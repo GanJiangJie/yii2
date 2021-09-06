@@ -8,7 +8,9 @@ use app\common\event\model\{
 };
 use app\common\listen\model\{
     DefaultListen,
-    EmailListen
+    EmailListen,
+    MemberCouponListen,
+    RechargeOrderListen
 };
 
 class EventService
@@ -26,6 +28,8 @@ class EventService
         ],
         MemberRegisterEvent::class => [
             EmailListen::class,
+            MemberCouponListen::class,
+            RechargeOrderListen::class,
         ],
     ];
 }
