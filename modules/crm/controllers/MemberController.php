@@ -5,7 +5,6 @@ namespace app\modules\crm\controllers;
 use app\common\service\MemberService;
 use common\util\DataCheck\Validator;
 use app\components\WebController;
-use app\common\constant\MemberC as MC;
 use yii\base\Exception;
 
 class MemberController extends WebController
@@ -17,11 +16,8 @@ class MemberController extends WebController
      */
     public function actionList(): array
     {
-        Validator::notEmpty(rParams(), ['token']);
+        mTokenGet();
         $model = new MemberService();
-        $model->assignAttrs(rParams(), ['account', 'key_word']);
-        $model->merchant_code = mTokenGet('merchant_code');
-        $model->type = rParams('type', MC::TYPE_MEMBER);
         $model->page = rParams('page', 1);
         $model->limit = rParams('limit', 0);
         return $model->getList();
@@ -33,11 +29,8 @@ class MemberController extends WebController
      */
     public function actionRegister()
     {
-        Validator::notEmpty(rParams(), ['name', 'account', 'birthday']);
+        Validator::notEmpty(rParams(), ['merchant_code', 'name', 'account', 'birthday']);
         $model = new MemberService();
-        $model->assignAttrs(rParams(), ['account', 'birthday']);
-        $model->merchant_code = mTokenGet('merchant_code');
-        $model->member_name = rParams('name');
         $model->register();
     }
 
@@ -47,8 +40,8 @@ class MemberController extends WebController
      */
     public function actionEdit()
     {
+        uTokenGet();
         $model = new MemberService();
-        $model->assignAttrs(rParams(), ['member_code']);
         $model->edit();
     }
 }

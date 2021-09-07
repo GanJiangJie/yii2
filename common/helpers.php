@@ -196,7 +196,7 @@ if (!function_exists('mTokenGet')) {
      * @return array|null|string
      * @throws \yii\base\Exception
      */
-    function mTokenGet(string $key)
+    function mTokenGet(string $key = null)
     {
         return mToken()->get($key);
     }
@@ -219,7 +219,7 @@ if (!function_exists('uTokenGet')) {
      * @return array|null|string
      * @throws \yii\base\Exception
      */
-    function uTokenGet(string $key)
+    function uTokenGet(string $key = null)
     {
         return uToken()->get($key);
     }

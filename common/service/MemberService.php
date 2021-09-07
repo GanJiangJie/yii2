@@ -3,20 +3,18 @@
 namespace app\common\service;
 
 use app\common\event\model\MemberRegisterEvent;
-use app\common\constant\Constant as C;
+use app\common\constant\{
+    Constant as C,
+    MemberC as MC
+};
 use app\models\Member;
 use yii\base\Exception;
 
 class MemberService extends BaseService
 {
-    public $merchant_code;
-    public $type;
-    public $member_name;
-    public $account;
-    public $birthday;
-
     /**
      * @return array
+     * @throws Exception
      */
     public function getList(): array
     {
@@ -30,14 +28,16 @@ class MemberService extends BaseService
                 'create_time',
             ])
             ->where('merchant_code = :merchant_code and type = :type', [
-                ':merchant_code' => $this->merchant_code,
-                ':type' => $this->type
+                ':merchant_code' => mTokenGet('merchant_code'),
+                ':type' => rParams('type', MC::TYPE_MEMBER)
             ])
-            ->orderBy('id desc');
+            ->filterWhere(['account' => rParams('account')]);
 
-        $this->account and $members->where('account = :account', [
-            ':account' => $this->account
-        ]);
+        if ($key_word = rParams('key_word')) {
+            $members->where('(member_name like :name or nick_name like :name)', [':' => "%$key_word%"]);
+        }
+
+        $members->orderBy('id desc');
 
         self::queryPage($members);
 
@@ -63,14 +63,18 @@ class MemberService extends BaseService
     {
         Member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
-                ':merchant_code' => $this->merchant_code,
-                ':account' => $this->account
+                ':merchant_code' => rParams('merchant_code'),
+                ':account' => rParams('account')
             ])
             ->exists() and throwE('会员已存在');
 
         $member = new Member();
         $member->member_code = createCode($member, 'member_code');
-        $member->merchant_code = $this->merchant_code;
+        $member->merchant_code = rParams('merchant_code');
+        $member->member_name = rParams('nam');
+        $member->account = rParams(['account']);
+        $member->birthday = rParams('birthday');
+        if ($sex = rParams('sex')) $member->sex = $sex;
         $member->save() or throwE(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
 
         //会员注册事件
@@ -86,14 +90,11 @@ class MemberService extends BaseService
          * @var Member $member
          */
         $member = Member::find()
-            ->where('merchant_code = :merchant_code and account = :account', [
-                ':merchant_code' => $this->merchant_code,
-                ':account' => $this->account
-            ])
+            ->where('member_code = :member_code', [':member_code' => uTokenGet('member_code')])
             ->one() or throwE('会员不存在', C::API_ERROR_CODE_NO_DATA);
 
-        $this->member_name and $member->member_name = $this->member_name;
-        $this->birthday and $member->birthday = $this->birthday;
+        if ($member_name = rParams('member_name')) $member->member_name = $member_name;
+        if ($birthday = rParams('birthday')) $member->birthday = $birthday;
 
         $member->save() or throwE(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
     }

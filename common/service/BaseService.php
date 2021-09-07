@@ -28,18 +28,6 @@ class BaseService
     protected $list = [];
 
     /**
-     * 挂载参数
-     * @param array $params
-     * @param array $keys
-     */
-    public function assignAttrs(array $params = [], array $keys = [])
-    {
-        foreach ($keys as $key) {
-            $this->$key = $params[$key] ?? null;
-        }
-    }
-
-    /**
      * 查询分页
      * @param ActiveQuery $model
      */
