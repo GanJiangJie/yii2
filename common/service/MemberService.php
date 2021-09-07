@@ -72,7 +72,7 @@ class MemberService extends BaseService
         $member->member_code = createCode($member, 'member_code');
         $member->merchant_code = rParams('merchant_code');
         $member->member_name = rParams('name');
-        $member->account = rParams(['account']);
+        $member->account = rParams('account');
         $member->birthday = rParams('birthday');
         if ($sex = rParams('sex')) $member->sex = $sex;
         $member->save() or throwE(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
