@@ -166,14 +166,14 @@ if (!function_exists('request')) {
     }
 }
 
-if (!function_exists('rParams')) {
+if (!function_exists('requestParams')) {
     /**
      * HTTPS请求参数
      * @param string $key
      * @param string|int $default
      * @return array|null|string
      */
-    function rParams(string $key = null, $default = null)
+    function requestParams(string $key = null, $default = null)
     {
         return request()->params($key, $default);
     }

@@ -18,8 +18,8 @@ class MemberController extends WebController
     {
         mTokenGet();
         $model = new MemberService();
-        $model->page = rParams('page', 1);
-        $model->limit = rParams('limit', 0);
+        $model->page = requestParams('page', 1);
+        $model->limit = requestParams('limit', 0);
         return $model->getList();
     }
 
@@ -29,7 +29,7 @@ class MemberController extends WebController
      */
     public function actionRegister()
     {
-        Validator::notEmpty(rParams(), ['merchant_code', 'name', 'account', 'birthday']);
+        Validator::notEmpty(requestParams(), ['merchant_code', 'name', 'account', 'birthday']);
         $model = new MemberService();
         $model->register();
     }

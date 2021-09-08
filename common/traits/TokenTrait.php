@@ -77,7 +77,7 @@ trait TokenTrait
      */
     public function del()
     {
-        $token = rParams($this->name);
+        $token = requestParams($this->name);
         if (empty($token)) return false;
         return redis(RedisK::class, 'Del', [$this->prefix . $token], $this->driver);
     }
@@ -98,7 +98,7 @@ trait TokenTrait
      */
     private function storage()
     {
-        $token = rParams($this->name);
+        $token = requestParams($this->name);
         empty($token) and throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
         $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
         empty($info_json) || !Validator::isJson($info_json) and

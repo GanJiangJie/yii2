@@ -16,22 +16,22 @@ class OpenController extends WebController
             //api日志
             logPrint()->category('api_log')->prefix('api_');
             //验证必填参数
-            Validator::notEmpty(rParams(), ['app_id', 'method', 'sign_type', 'version', 'sign']);
+            Validator::notEmpty(requestParams(), ['app_id', 'method', 'sign_type', 'version', 'sign']);
             //验证签名类型
-            DataCheck::signType(rParams('sign_type'));
+            DataCheck::signType(requestParams('sign_type'));
             //验证版本
-            DataCheck::version(rParams('version'));
+            DataCheck::version(requestParams('version'));
             //验证签名
-            DataCheck::checkSign(rParams());
+            DataCheck::checkSign(requestParams());
             //响应结果
-            response()->data(app()->runAction(Route::method(rParams('method'))));
+            response()->data(app()->runAction(Route::method(requestParams('method'))));
         } catch (Exception $e) {
             //抛出异常处理
             response()->error($e->getMessage(), $e->getCode());
             logPrint()->level(2)->backtrace(exception());
         } finally {
             //打印日志
-            logPrint()->writeLog(['request' => rParams(), 'response' => response()->getResponse()]);
+            logPrint()->writeLog(['request' => requestParams(), 'response' => response()->getResponse()]);
             //输出响应
             return response()->responseJson();
         }
