@@ -99,10 +99,10 @@ trait TokenTrait
     private function storage()
     {
         $token = requestParams($this->name);
-        empty($token) and throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
+        empty($token) and tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
         $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
         empty($info_json) || !Validator::isJson($info_json) and
-        throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
+        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
         $this->data = $info_json;
     }
 }

@@ -48,7 +48,7 @@ class Validator
             empty($params[$v]) and $result[] = $v;
         }
         empty($result) or
-        throwE(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result), C::API_ERROR_CODE_LACK_PARAMS);
+        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result), C::API_ERROR_CODE_LACK_PARAMS);
     }
 
     /**
@@ -66,7 +66,7 @@ class Validator
             $rule_array = explode('|', $rule);
             foreach ($rule_array as $rule_item) {
                 @list($item, $value) = explode(':', $rule_item);
-                method_exists(self::class, $item) or throwE('Validator rule ' . $item . ' is undefined');
+                method_exists(self::class, $item) or tbe('Validator rule ' . $item . ' is undefined');
                 $params = [$key];
                 is_null($value) or $params[] = $value;
                 call_user_func_array([self::class, $item], $params);
@@ -82,7 +82,7 @@ class Validator
     private static function required($key)
     {
         empty(self::$params[$key]) and
-        throwE(self::$messages[$key . '.required'] ?? 'Parameter ' . $key . ' cannot be empty', self::$code);
+        tbe(self::$messages[$key . '.required'] ?? 'Parameter ' . $key . ' cannot be empty', self::$code);
     }
 
     /**
@@ -101,7 +101,7 @@ class Validator
     private static function numeral($key)
     {
         is_numeric(self::$params[$key]) or
-        throwE(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric', self::$code);
+        tbe(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric', self::$code);
     }
 
     /**
@@ -113,7 +113,7 @@ class Validator
     private static function min($key, $value)
     {
         mb_strlen(self::$params[$key], 'utf-8') < $value and
-        throwE(self::$messages[$key . '.min'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
+        tbe(self::$messages[$key . '.min'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
     }
 
     /**
@@ -125,7 +125,7 @@ class Validator
     private static function max($key, $value)
     {
         mb_strlen(self::$params[$key], 'utf-8') > $value and
-        throwE(self::$messages[$key . '.max'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value, self::$code);
+        tbe(self::$messages[$key . '.max'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value, self::$code);
     }
 
     /**
@@ -144,6 +144,6 @@ class Validator
         $model::find()
             ->where($column . ' = :' . $column, [
                 ':' . $column => self::$params[$key]
-            ])->exists() or throwE('The selected ' . $key . ' is invalid', self::$code);
+            ])->exists() or tbe('The selected ' . $key . ' is invalid', self::$code);
     }
 }

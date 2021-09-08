@@ -66,7 +66,7 @@ class MemberService extends BaseService
                 ':merchant_code' => requestParams('merchant_code'),
                 ':account' => requestParams('account')
             ])
-            ->exists() and throwE('会员已存在');
+            ->exists() and tbe('会员已存在');
 
         $member = new Member();
         $member->member_code = createCode($member, 'member_code');
@@ -75,7 +75,7 @@ class MemberService extends BaseService
         $member->account = requestParams('account');
         $member->birthday = requestParams('birthday');
         if ($sex = requestParams('sex')) $member->sex = $sex;
-        $member->save() or throwE(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
+        $member->save() or tbe(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
 
         //会员注册事件
         event(new MemberRegisterEvent($member->toArray()));
@@ -91,11 +91,11 @@ class MemberService extends BaseService
          */
         $member = Member::find()
             ->where('member_code = :member_code', [':member_code' => uTokenGet('member_code')])
-            ->one() or throwE('会员不存在', C::API_ERROR_CODE_NO_DATA);
+            ->one() or tbe('会员不存在', C::API_ERROR_CODE_NO_DATA);
 
         if ($member_name = requestParams('member_name')) $member->member_name = $member_name;
         if ($birthday = requestParams('birthday')) $member->birthday = $birthday;
 
-        $member->save() or throwE(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
+        $member->save() or tbe(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
     }
 }

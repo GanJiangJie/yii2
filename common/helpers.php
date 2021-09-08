@@ -14,13 +14,13 @@ if (!function_exists('dd')) {
     }
 }
 
-if (!function_exists('throwE')) {
+if (!function_exists('tbe')) {
     /**
      * @param string $message
      * @param int $code
      * @throws \yii\base\Exception
      */
-    function throwE(string $message, int $code = 0)
+    function tbe(string $message, int $code = 0)
     {
         @list($back, $trace) = debug_backtrace();
         exception()->backtrace($back ?? [], $trace ?? []);
@@ -135,7 +135,7 @@ if (!function_exists('event')) {
     function event($event_instance): array
     {
         $result = \app\common\util\Event::hangup($event_instance);
-        $result['status'] or throwE($result['msg']);
+        $result['status'] or tbe($result['msg']);
         return $result;
     }
 }
@@ -150,7 +150,7 @@ if (!function_exists('listenHandle')) {
     function listenHandle($listen_instance): array
     {
         $result = \app\common\util\Event::handle($listen_instance);
-        $result['status'] or throwE($result['msg']);
+        $result['status'] or tbe($result['msg']);
         return $result;
     }
 }
