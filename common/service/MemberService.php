@@ -91,7 +91,8 @@ class MemberService extends BaseService
          */
         $member = Member::find()
             ->where('member_code = :member_code', [':member_code' => uTokenGet('member_code')])
-            ->one() or tbe('会员不存在', C::API_ERROR_CODE_NO_DATA);
+            ->one();
+        empty($member) and tbe('会员不存在', C::API_ERROR_CODE_NO_DATA);
 
         if ($member_name = requestParams('member_name')) $member->member_name = $member_name;
         if ($birthday = requestParams('birthday')) $member->birthday = $birthday;
