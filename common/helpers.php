@@ -280,7 +280,7 @@ if (!function_exists('getDirFile')) {
      */
     function getDirFile(string $path, bool $flag = false): array
     {
-        return \app\common\util\FolderFile::getDirFile($path, $flag);
+        return \app\common\util\DirFile::getDirFile($path, $flag);
     }
 }
 
@@ -292,7 +292,7 @@ if (!function_exists('delDirFile')) {
      */
     function delDirFile(string $path)
     {
-        return \app\common\util\FolderFile::delDirFile($path);
+        return \app\common\util\DirFile::delDirFile($path);
     }
 }
 

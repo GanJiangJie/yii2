@@ -2,7 +2,7 @@
 
 namespace app\common\util;
 
-class FolderFile
+class DirFile
 {
     /**
      * 获取目录全部文件路径或者名称
