@@ -86,7 +86,7 @@ class Request
      * 获取客户端IP地址
      * @return null|string
      */
-    public function ClientIp()
+    public function clientIp()
     {
         if (empty($this->clientIp)) $this->clientIp = self::getClientIp();
         return $this->clientIp;
