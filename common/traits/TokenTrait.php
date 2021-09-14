@@ -33,6 +33,30 @@ trait TokenTrait
     private $data;
 
     /**
+     * 生成令牌
+     * @param $data_json
+     * @return string
+     */
+    private function token(string $data_json): string
+    {
+        return md5($data_json . time() . mt_rand(100, 999));
+    }
+
+    /**
+     * 暂存信息
+     * @throws Exception
+     */
+    private function storage()
+    {
+        $token = requestParams($this->name);
+        empty($token) and tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
+        $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
+        empty($info_json) || !Validator::isJson($info_json) and
+        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
+        $this->data = $info_json;
+    }
+
+    /**
      * 设置令牌
      * @param array $data
      * @return string
@@ -80,29 +104,5 @@ trait TokenTrait
         $token = requestParams($this->name);
         if (empty($token)) return false;
         return redis(RedisK::class, 'Del', [$this->prefix . $token], $this->driver);
-    }
-
-    /**
-     * 生成令牌
-     * @param $data_json
-     * @return string
-     */
-    private function token(string $data_json): string
-    {
-        return md5($data_json . time() . mt_rand(100, 999));
-    }
-
-    /**
-     * 暂存信息
-     * @throws Exception
-     */
-    private function storage()
-    {
-        $token = requestParams($this->name);
-        empty($token) and tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
-        $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
-        empty($info_json) || !Validator::isJson($info_json) and
-        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
-        $this->data = $info_json;
     }
 }
