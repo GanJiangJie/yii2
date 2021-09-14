@@ -9,39 +9,42 @@ class Request
     use InstanceTrait;
 
     /**
-     * @var array $request
+     * 客户端IP
+     * @var string $clientIp
      */
-    private $request;
+    public $clientIp;
+
+    /**
+     * 请求头信息
+     * @var array $header
+     */
+    public $header;
+
+    /**
+     * 请求参数
+     * @var array $params
+     */
+    public $params;
+
+    /**
+     * 上传文件
+     * @var array $files
+     */
+    public $files;
 
     /**
      * Request constructor.
      */
     private function __construct()
     {
-        $this->request = [
-            'headers' => getallheaders(),
-            'params' => self::getParams(),
-            'files' => $_FILES
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getParams(): array
-    {
-        if (app()->request->isGet) return app()->request->get();
-        if (app()->request->isPost) return array_map(function ($value) {
-            return urldecode($value);
-        }, app()->request->post());
-        return [];
+        $this->params = self::getParams();
     }
 
     /**
      * 获取客户端IP地址
      * @return null|string
      */
-    public function ip()
+    private function getClientIp()
     {
         // check for shared internet/ISP IP
         if (isset($_SERVER['HTTP_CLIENT_IP'])) {
@@ -67,14 +70,38 @@ class Request
     }
 
     /**
+     * 获取请求参数
+     * @return array
+     */
+    private function getParams(): array
+    {
+        if (app()->request->isGet) return app()->request->get();
+        if (app()->request->isPost) return array_map(function ($value) {
+            return urldecode($value);
+        }, app()->request->post());
+        return [];
+    }
+
+    /**
+     * 获取客户端IP地址
+     * @return null|string
+     */
+    public function ClientIp()
+    {
+        if (empty($this->clientIp)) $this->clientIp = self::getClientIp();
+        return $this->clientIp;
+    }
+
+    /**
      * 获取请求头的信息
      * @param string $key
      * @param string|int $default
      * @return null|string|array
      */
-    public function headers(string $key = null, $default = null)
+    public function header(string $key = null, $default = null)
     {
-        return is_null($key) ? $this->request['headers'] : ($this->request['headers'][$key] ?? $default);
+        if (empty($this->header)) $this->header = getallheaders();
+        return is_null($key) ? $this->header : ($this->header[$key] ?? $default);
     }
 
     /**
@@ -85,7 +112,7 @@ class Request
      */
     public function params(string $key = null, $default = null)
     {
-        return is_null($key) ? $this->request['params'] : ($this->request['params'][$key] ?? $default);
+        return is_null($key) ? $this->params : ($this->params[$key] ?? $default);
     }
 
     /**
@@ -95,6 +122,7 @@ class Request
      */
     public function files(string $key = null)
     {
-        return is_null($key) ? $this->request['files'] : ($this->request['files'][$key] ?? null);
+        if (empty($this->files)) $this->files = $_FILES;
+        return is_null($key) ? $this->files : ($this->files[$key] ?? null);
     }
 }
