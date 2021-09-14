@@ -31,7 +31,7 @@ class OpenController extends WebController
             logPrint()->level(2)->backtrace(exception());
         } finally {
             //打印日志
-            logPrint()->writeLog(['request' => requestParams(), 'response' => response()->getResponse()]);
+            logPrint()->writeLog(['request' => request(), 'response' => response()->response]);
             //输出响应
             return response()->responseJson();
         }

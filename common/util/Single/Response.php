@@ -13,7 +13,7 @@ class Response
     /**
      * @var array $response
      */
-    private $response;
+    public $response;
 
     /**
      * Response constructor.
@@ -48,14 +48,6 @@ class Response
             'errMsg' => $errMsg ?: C::__API_ERROR_CODE[C::API_ERROR_CODE_FAIL]
         ];
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getResponse(): array
-    {
-        return $this->response;
     }
 
     /**
