@@ -24,8 +24,7 @@ class Route
         //获取方法对应路由
         foreach ($route_paths as $route_path) {
             $routes = (include($route_path . '')) ?: [];
-            if (!is_array($routes)) continue;
-            if (isset($routes[$method])) return $routes[$method];
+            if (is_array($routes) && isset($routes[$method])) return $routes[$method];
         }
         tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_METHOD], C::API_ERROR_CODE_INVALID_METHOD);
     }
