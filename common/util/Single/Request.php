@@ -37,7 +37,10 @@ class Request
      */
     private function __construct()
     {
+        $this->clientIp = self::getClientIp();
+        $this->header = getallheaders();
         $this->params = self::getParams();
+        $this->files = $_FILES;
     }
 
     /**
@@ -49,24 +52,29 @@ class Request
         // check for shared internet/ISP IP
         if (isset($_SERVER['HTTP_CLIENT_IP'])) {
             return $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            // check for IPs passing through proxies
+        }
+        // check for IPs passing through proxies
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             // check if multiple ips exist in var
             @list($ip) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
             return $ip;
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED'])) {
-            return $_SERVER['HTTP_X_FORWARDED'];
-        } elseif (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) {
-            return $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
-        } elseif (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
-            return $_SERVER['HTTP_FORWARDED_FOR'];
-        } elseif (isset($_SERVER['HTTP_FORWARDED'])) {
-            return $_SERVER['HTTP_FORWARDED'];
-        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
-            return $_SERVER['REMOTE_ADDR'];
-        } else {
-            return NULL;
         }
+        if (isset($_SERVER['HTTP_X_FORWARDED'])) {
+            return $_SERVER['HTTP_X_FORWARDED'];
+        }
+        if (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) {
+            return $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+        }
+        if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
+            return $_SERVER['HTTP_FORWARDED_FOR'];
+        }
+        if (isset($_SERVER['HTTP_FORWARDED'])) {
+            return $_SERVER['HTTP_FORWARDED'];
+        }
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            return $_SERVER['REMOTE_ADDR'];
+        }
+        return null;
     }
 
     /**
@@ -88,7 +96,6 @@ class Request
      */
     public function clientIp()
     {
-        if (empty($this->clientIp)) $this->clientIp = self::getClientIp();
         return $this->clientIp;
     }
 
@@ -100,7 +107,6 @@ class Request
      */
     public function header(string $key = null, $default = null)
     {
-        if (empty($this->header)) $this->header = getallheaders();
         return is_null($key) ? $this->header : ($this->header[$key] ?? $default);
     }
 
@@ -122,7 +128,6 @@ class Request
      */
     public function files(string $key = null)
     {
-        if (empty($this->files)) $this->files = $_FILES;
         return is_null($key) ? $this->files : ($this->files[$key] ?? null);
     }
 }
