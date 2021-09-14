@@ -17,7 +17,7 @@ class Route
      * @return string
      * @throws Exception
      */
-    public static function method($method): string
+    public static function method(string $method): string
     {
         //路由文件路径归纳
         $route_paths = getDirFile(BASE_PATH . '/routes', true);
