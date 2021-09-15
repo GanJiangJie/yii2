@@ -33,6 +33,16 @@ trait TokenTrait
     private $data;
 
     /**
+     * TokenTrait constructor.
+     */
+    private function __construct()
+    {
+        $this->driver = config($this->key . 'driver');
+        $this->prefix = config($this->key . 'prefix');
+        $this->name = config($this->key . 'name');
+    }
+
+    /**
      * 生成令牌
      * @param $data_json
      * @return string

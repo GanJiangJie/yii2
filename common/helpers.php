@@ -75,20 +75,6 @@ if (!function_exists('db')) {
     }
 }
 
-if (!function_exists('params')) {
-    /**
-     * @param string $key
-     * @return mixed
-     */
-    function params(string $key)
-    {
-        $key_array = explode('.', $key);
-        if (!isset(app()->params[$key_array[0]])) return null;
-        if (is_array(app()->params[$key_array[0]])) return arraySeriesIndex(app()->params, $key_array);
-        return app()->params[$key_array[0]];
-    }
-}
-
 if (!function_exists('arraySeriesIndex')) {
     /**
      * 数组$array_index全部元素作为数组$array_subject多级索引

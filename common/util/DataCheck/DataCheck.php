@@ -15,7 +15,7 @@ class DataCheck
      */
     public static function version(string $version)
     {
-        $version == params('open.version') or
+        $version == config('params.open.version') or
         tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_VERSION], C::API_ERROR_CODE_INVALID_VERSION);
     }
 
@@ -26,7 +26,7 @@ class DataCheck
      */
     public static function signType(string $sign_type)
     {
-        $sign_type == params('open.sign_type') or
+        $sign_type == config('params.open.sign_type') or
         tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_SIGN_TYPE], C::API_ERROR_CODE_INVALID_SIGN_TYPE);
     }
 
@@ -56,12 +56,12 @@ class DataCheck
      */
     public static function sign(array $params, string $method): array
     {
-        $params['app_id'] = params('open.app_id');
-        $params['sign_type'] = params('open.sign_type');
-        $params['version'] = params('open.version');
+        $params['app_id'] = config('params.open.app_id');
+        $params['sign_type'] = config('params.open.sign_type');
+        $params['version'] = config('params.open.version');
         $params['method'] = $method;
         ksort($params);
-        $string = urldecode(http_build_query($params)) . '&key=' . params('open.app_key');
+        $string = urldecode(http_build_query($params)) . '&key=' . config('params.open.app_key');
         $params['sign'] = md5($string);
         return $params;
     }

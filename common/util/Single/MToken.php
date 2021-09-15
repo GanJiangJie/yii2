@@ -8,15 +8,5 @@ class MToken
 {
     use TokenTrait;
 
-    private $m = 'auth.mToken.';
-
-    /**
-     * MToken constructor.
-     */
-    private function __construct()
-    {
-        $this->driver = params($this->m . 'driver');
-        $this->prefix = params($this->m . 'prefix');
-        $this->name = params($this->m . 'name');
-    }
+    private $key = 'params.auth.mToken.';
 }
