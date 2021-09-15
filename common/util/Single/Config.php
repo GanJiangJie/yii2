@@ -23,12 +23,10 @@ class Config
         $file_name = array_shift($key_array);
         if ($file_name == 'params') {
             if (empty($key_array)) return app()->params;
-            if (is_array(app()->params)) {
-                return arraySeriesIndex(app()->params, $key_array);
-            }
+            if (is_array(app()->params)) return arraySeriesIndex(app()->params, $key_array);
             return null;
         }
-        if (empty($this->config) || !isset($this->config[$file_name])) {
+        if (!isset($this->config[$file_name])) {
             $config_file = BASE_PATH . '/config/' . $file_name . '.php';
             if (!is_file($config_file)) return null;
             $this->config[$file_name] = (include($config_file . '')) ?: [];
