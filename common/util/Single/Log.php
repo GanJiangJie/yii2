@@ -141,7 +141,7 @@ class Log
     /**
      * @param string $content
      */
-    public static function ERROR($content)
+    public static function error($content)
     {
         //创建日志文件
         $log_file = call_user_func([self::class, 'createLogFile']);
@@ -153,7 +153,7 @@ class Log
     /**
      * @param string $content
      */
-    public static function WARNING($content)
+    public static function warning($content)
     {
         //创建日志文件
         $log_file = call_user_func([self::class, 'createLogFile']);
@@ -165,7 +165,7 @@ class Log
     /**
      * @param string $content
      */
-    public static function INFO($content)
+    public static function info($content)
     {
         //创建日志文件
         $log_file = call_user_func([self::class, 'createLogFile']);
@@ -177,7 +177,7 @@ class Log
     /**
      * @param string $content
      */
-    public static function TRACE($content)
+    public static function trace($content)
     {
         //创建日志文件
         $log_file = call_user_func([self::class, 'createLogFile']);
