@@ -8,5 +8,5 @@ class UToken
 {
     use TokenTrait;
 
-    private $key = 'params.auth.uToken.';
+    private $key = 'uToken';
 }

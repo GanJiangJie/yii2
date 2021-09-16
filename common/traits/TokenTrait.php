@@ -36,9 +36,9 @@ trait TokenTrait
      */
     private function __construct()
     {
-        $this->driver = config($this->key . 'driver');
-        $this->prefix = config($this->key . 'prefix');
-        $this->name = config($this->key . 'name');
+        $this->driver = config('params.auth.' . $this->key . '.driver');
+        $this->prefix = config('params.auth.' . $this->key . '.prefix');
+        $this->name = config('params.auth.' . $this->key . '.name');
     }
 
     /**

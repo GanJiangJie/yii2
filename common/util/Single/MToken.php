@@ -8,5 +8,5 @@ class MToken
 {
     use TokenTrait;
 
-    private $key = 'params.auth.mToken.';
+    private $key = 'mToken';
 }
