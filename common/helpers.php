@@ -20,7 +20,7 @@ if (!function_exists('tbe')) {
      * @param int $code
      * @throws \yii\base\Exception
      */
-    function tbe(string $message, int $code = 0)
+    function tbe(string $message, int $code = API_ERROR_CODE_FAIL)
     {
         @list($back, $trace) = debug_backtrace();
         exception()->backtrace($back ?? [], $trace ?? []);
