@@ -2,7 +2,6 @@
 
 namespace app\common\traits;
 
-use app\common\constant\Constant as C;
 use common\util\DataCheck\Validator;
 use app\common\util\Redis\RedisK;
 use app\common\util\Redis\RedisS;
@@ -59,10 +58,10 @@ trait TokenTrait
     private function storage()
     {
         $token = requestParams($this->name);
-        empty($token) and tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_TOKEN], C::API_ERROR_CODE_LACK_TOKEN);
+        empty($token) and tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_TOKEN], API_ERROR_CODE_LACK_TOKEN);
         $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
         empty($info_json) || !Validator::isJson($info_json) and
-        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_TOKEN], C::API_ERROR_CODE_INVALID_TOKEN);
+        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_TOKEN], API_ERROR_CODE_INVALID_TOKEN);
         $this->data = $info_json;
     }
 

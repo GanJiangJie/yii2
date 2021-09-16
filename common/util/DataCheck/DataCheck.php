@@ -2,7 +2,6 @@
 
 namespace common\util\DataCheck;
 
-use app\common\constant\Constant as C;
 use app\common\util\Redis\RedisS;
 use yii\base\Exception;
 
@@ -16,7 +15,7 @@ class DataCheck
     public static function version(string $version)
     {
         $version == config('params.open.version') or
-        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_VERSION], C::API_ERROR_CODE_INVALID_VERSION);
+        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_VERSION], API_ERROR_CODE_INVALID_VERSION);
     }
 
     /**
@@ -27,7 +26,7 @@ class DataCheck
     public static function signType(string $sign_type)
     {
         $sign_type == config('params.open.sign_type') or
-        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_SIGN_TYPE], C::API_ERROR_CODE_INVALID_SIGN_TYPE);
+        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN_TYPE], API_ERROR_CODE_INVALID_SIGN_TYPE);
     }
 
     /**
@@ -39,13 +38,13 @@ class DataCheck
     {
         $app_key = redis(RedisS::class, 'Get', [$params['app_id']]);
         empty($app_key) and
-        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_APP_ID], C::API_ERROR_CODE_INVALID_APP_ID);
+        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_APP_ID], API_ERROR_CODE_INVALID_APP_ID);
         $sign = $params['sign'];
         unset($params['sign']);
         ksort($params);
         $string = urldecode(http_build_query($params)) . '&key=' . $app_key;
         hash_equals($sign, md5($string)) or
-        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_INVALID_SIGN], C::API_ERROR_CODE_INVALID_SIGN);
+        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN], API_ERROR_CODE_INVALID_SIGN);
     }
 
     /**

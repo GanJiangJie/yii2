@@ -3,10 +3,6 @@
 namespace app\common\service;
 
 use app\common\event\model\MemberRegisterEvent;
-use app\common\constant\{
-    Constant as C,
-    MemberC as MC
-};
 use app\models\Member;
 use yii\base\Exception;
 
@@ -29,7 +25,7 @@ class MemberService extends BaseService
             ])
             ->where('merchant_code = :merchant_code and type = :type', [
                 ':merchant_code' => mTokenGet('merchant_code'),
-                ':type' => requestParams('type', MC::TYPE_MEMBER)
+                ':type' => requestParams('type', MEMBER_TYPE_MEMBER)
             ])
             ->filterWhere(['account' => requestParams('account')]);
 
@@ -75,7 +71,7 @@ class MemberService extends BaseService
         $member->account = requestParams('account');
         $member->birthday = requestParams('birthday');
         if ($sex = requestParams('sex')) $member->sex = $sex;
-        $member->save() or tbe(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
+        $member->save() or tbe(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
 
         //会员注册事件
         event(new MemberRegisterEvent($member->toArray()));
@@ -92,11 +88,11 @@ class MemberService extends BaseService
         $member = Member::find()
             ->where('member_code = :member_code', [':member_code' => uTokenGet('member_code')])
             ->one();
-        empty($member) and tbe('会员不存在', C::API_ERROR_CODE_NO_DATA);
+        empty($member) and tbe('会员不存在', API_ERROR_CODE_NO_DATA);
 
         if ($member_name = requestParams('member_name')) $member->member_name = $member_name;
         if ($birthday = requestParams('birthday')) $member->birthday = $birthday;
 
-        $member->save() or tbe(json_encode($member->getErrors()), C::API_ERROR_CODE_SYSTEM_ERROR);
+        $member->save() or tbe(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
     }
 }

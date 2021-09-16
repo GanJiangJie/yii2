@@ -2,7 +2,6 @@
 
 namespace common\util\DataCheck;
 
-use app\common\constant\Constant as C;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
 
@@ -21,7 +20,7 @@ class Validator
     /**
      * @var int $code
      */
-    private static $code = C::API_ERROR_CODE_INVALID_PARAMS;
+    private static $code = API_ERROR_CODE_INVALID_PARAMS;
 
     /**
      * 判断数据是否json格式
@@ -48,7 +47,7 @@ class Validator
             empty($params[$v]) and $result[] = $v;
         }
         empty($result) or
-        tbe(C::__API_ERROR_CODE[C::API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result), C::API_ERROR_CODE_LACK_PARAMS);
+        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result), API_ERROR_CODE_LACK_PARAMS);
     }
 
     /**
