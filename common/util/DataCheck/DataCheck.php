@@ -14,8 +14,7 @@ class DataCheck
      */
     public static function version(string $version)
     {
-        $version == config('params.open.version') or
-        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_VERSION], API_ERROR_CODE_INVALID_VERSION);
+        $version == config('params.open.version') or tbe('', API_ERROR_CODE_INVALID_VERSION);
     }
 
     /**
@@ -25,8 +24,7 @@ class DataCheck
      */
     public static function signType(string $sign_type)
     {
-        $sign_type == config('params.open.sign_type') or
-        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN_TYPE], API_ERROR_CODE_INVALID_SIGN_TYPE);
+        $sign_type == config('params.open.sign_type') or tbe('', API_ERROR_CODE_INVALID_SIGN_TYPE);
     }
 
     /**
@@ -37,14 +35,12 @@ class DataCheck
     public static function checkSign(array $params)
     {
         $app_key = redis(RedisS::class, 'Get', [$params['app_id']]);
-        empty($app_key) and
-        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_APP_ID], API_ERROR_CODE_INVALID_APP_ID);
+        empty($app_key) and tbe('', API_ERROR_CODE_INVALID_APP_ID);
         $sign = $params['sign'];
         unset($params['sign']);
         ksort($params);
         $string = urldecode(http_build_query($params)) . '&key=' . $app_key;
-        hash_equals($sign, md5($string)) or
-        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_SIGN], API_ERROR_CODE_INVALID_SIGN);
+        hash_equals($sign, md5($string)) or tbe('', API_ERROR_CODE_INVALID_SIGN);
     }
 
     /**

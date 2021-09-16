@@ -25,6 +25,6 @@ class Route
             $routes = (include($route_path . '')) ?: [];
             if (is_array($routes) && isset($routes[$method])) return $routes[$method];
         }
-        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_INVALID_METHOD], API_ERROR_CODE_INVALID_METHOD);
+        tbe('', API_ERROR_CODE_INVALID_METHOD);
     }
 }
