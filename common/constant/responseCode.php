@@ -30,6 +30,3 @@ $GLOBALS['__API_ERROR_CODE'] = [
     API_ERROR_CODE_NOT_AUTH => '无权限访问',
     API_ERROR_CODE_NO_DATA => '未查询到数据',
 ];
-
-define('YES', 1);
-define('NO', 0);
