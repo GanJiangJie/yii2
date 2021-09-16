@@ -104,9 +104,7 @@ if (!function_exists('redis')) {
      */
     function redis(string $class, string $method, array $params, string $redis = '')
     {
-        if (!method_exists($class, $method)) {
-            throw new \yii\base\Exception('Invalid method \'' . $method . '\' of class \'' . $class . '\'');
-        }
+        method_exists($class, $method) or tbe('Invalid method \'' . $method . '\' of class \'' . $class . '\'');
         if (empty($redis)) return call_user_func_array([$class, $method], $params);
         \app\common\util\Redis\RedisBase::$redis = $redis;
         $res = call_user_func_array([$class, $method], $params);
