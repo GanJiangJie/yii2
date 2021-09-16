@@ -1,6 +1,6 @@
 <?php
 
-namespace common\util;
+namespace common\util\Single;
 
 use app\common\traits\SingleTrait;
 

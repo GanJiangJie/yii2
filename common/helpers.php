@@ -100,10 +100,13 @@ if (!function_exists('redis')) {
      * @param array $params
      * @param string $redis
      * @return mixed
+     * @throws \yii\base\Exception
      */
     function redis(string $class, string $method, array $params, string $redis = '')
     {
-        if (!method_exists($class, $method)) return null;
+        if (!method_exists($class, $method)) {
+            throw new \yii\base\Exception('Invalid method \'' . $method . '\' of class \'' . $class . '\'');
+        }
         if (empty($redis)) return call_user_func_array([$class, $method], $params);
         \app\common\util\Redis\RedisBase::$redis = $redis;
         $res = call_user_func_array([$class, $method], $params);
@@ -250,11 +253,11 @@ if (!function_exists('createCode')) {
 if (!function_exists('logPrint')) {
     /**
      * 日志打印
-     * @return \common\util\Log
+     * @return \common\util\Single\Log
      */
-    function logPrint(): \common\util\Log
+    function logPrint(): \common\util\Single\Log
     {
-        return \common\util\Log::instance();
+        return \common\util\Single\Log::instance();
     }
 }
 

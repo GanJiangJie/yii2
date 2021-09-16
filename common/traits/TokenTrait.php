@@ -70,6 +70,7 @@ trait TokenTrait
      * 设置令牌
      * @param array $data
      * @return string
+     * @throws Exception
      */
     public function set(array $data): string
     {
@@ -84,6 +85,7 @@ trait TokenTrait
      * @param array $data
      * @param int $seconds
      * @return string
+     * @throws Exception
      */
     public function setEx(array $data, int $seconds): string
     {
@@ -108,6 +110,7 @@ trait TokenTrait
     /**
      * 删除令牌
      * @return bool|string
+     * @throws Exception
      */
     public function del()
     {
