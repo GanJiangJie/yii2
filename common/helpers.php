@@ -225,42 +225,6 @@ if (!function_exists('response')) {
     }
 }
 
-if (!function_exists('createCode')) {
-    /**
-     * 生成随机且不重复12位编号
-     * @param \yii\db\ActiveRecord $model
-     * @param string $attribute
-     * @param int $length
-     * @return string
-     */
-    function createCode(\yii\db\ActiveRecord $model, string $attribute, int $length = 12): string
-    {
-        $start = (int)str_pad('1', $length, '0');
-        $end = (int)str_pad('9', $length, '9');
-        do {
-            $code = (string)mt_rand($start, $end);
-        } while (
-            $model::find()
-                ->where($attribute . ' = :' . $attribute, [
-                    ':' . $attribute => $code
-                ])
-                ->exists()
-        );
-        return $code;
-    }
-}
-
-if (!function_exists('logPrint')) {
-    /**
-     * 日志打印
-     * @return \common\util\Single\Log
-     */
-    function logPrint(): \common\util\Single\Log
-    {
-        return \common\util\Single\Log::instance();
-    }
-}
-
 if (!function_exists('getDirFile')) {
     /**
      * 获取文件夹下全部文件
@@ -283,6 +247,42 @@ if (!function_exists('delDirFile')) {
     function delDirFile(string $path)
     {
         return \app\common\util\DirFile::delDirFile($path);
+    }
+}
+
+if (!function_exists('logPrint')) {
+    /**
+     * 日志打印
+     * @return \common\util\Single\Log
+     */
+    function logPrint(): \common\util\Single\Log
+    {
+        return \common\util\Single\Log::instance();
+    }
+}
+
+if (!function_exists('createCode')) {
+    /**
+     * 生成随机且不重复12位编号
+     * @param \yii\db\ActiveRecord $model
+     * @param string $attribute
+     * @param int $length
+     * @return string
+     */
+    function createCode(\yii\db\ActiveRecord $model, string $attribute, int $length = 12): string
+    {
+        $start = (int)str_pad('1', $length, '0');
+        $end = (int)str_pad('9', $length, '9');
+        do {
+            $code = (string)mt_rand($start, $end);
+        } while (
+            $model::find()
+                ->where($attribute . ' = :' . $attribute, [
+                    ':' . $attribute => $code
+                ])
+                ->exists()
+        );
+        return $code;
     }
 }
 
