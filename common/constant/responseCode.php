@@ -30,18 +30,3 @@ $GLOBALS['__API_ERROR_CODE'] = [
     API_ERROR_CODE_NOT_AUTH => '无权限访问',
     API_ERROR_CODE_NO_DATA => '未查询到数据',
 ];
-
-//20000-29999商家
-
-//30000-39999门店
-
-//40000-49999会员
-define('API_ERROR_CODE_MEMBER_EXISTS', 40000);
-define('API_ERROR_CODE_MEMBER_NO_EXISTS', 40001);
-$api_error_code_member = [
-    API_ERROR_CODE_MEMBER_EXISTS => '会员已存在',
-    API_ERROR_CODE_MEMBER_NO_EXISTS => '会员不存在',
-];
-$GLOBALS['__API_ERROR_CODE'] = array_merge($GLOBALS['__API_ERROR_CODE'], $api_error_code_member);
-
-//50000-59999用户

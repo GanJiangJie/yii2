@@ -62,7 +62,7 @@ class MemberService extends BaseService
                 ':merchant_code' => requestParams('merchant_code'),
                 ':account' => requestParams('account')
             ])
-            ->exists() and tbe('', API_ERROR_CODE_MEMBER_EXISTS);
+            ->exists() and tbe('会员已存在');
 
         $member = new Member();
         $member->member_code = createCode($member, 'member_code');
@@ -88,7 +88,7 @@ class MemberService extends BaseService
         $member = Member::find()
             ->where('member_code = :member_code', [':member_code' => uTokenGet('member_code')])
             ->one();
-        empty($member) and tbe('', API_ERROR_CODE_MEMBER_NO_EXISTS);
+        empty($member) and tbe('会员不存在', API_ERROR_CODE_NO_DATA);
 
         if ($member_name = requestParams('member_name')) $member->member_name = $member_name;
         if ($birthday = requestParams('birthday')) $member->birthday = $birthday;
