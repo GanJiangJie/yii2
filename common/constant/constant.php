@@ -1,4 +1,4 @@
 <?php
 
-include('member.php');
+include('memberConstant.php');
 include('responseCode.php');
