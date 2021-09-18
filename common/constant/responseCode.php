@@ -38,10 +38,10 @@ $GLOBALS['__API_ERROR_CODE'] = [
 //40000-49999会员
 define('API_ERROR_CODE_MEMBER_EXISTS', 40000);
 define('API_ERROR_CODE_MEMBER_NO_EXISTS', 40001);
-$member = [
+$api_error_code_member = [
     API_ERROR_CODE_MEMBER_EXISTS => '会员已存在',
     API_ERROR_CODE_MEMBER_NO_EXISTS => '会员不存在',
 ];
-$GLOBALS['__API_ERROR_CODE'] = array_merge($GLOBALS['__API_ERROR_CODE'], $member);
+$GLOBALS['__API_ERROR_CODE'] = array_merge($GLOBALS['__API_ERROR_CODE'], $api_error_code_member);
 
 //50000-59999用户
