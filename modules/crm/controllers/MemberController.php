@@ -29,7 +29,7 @@ class MemberController extends WebController
      */
     public function actionRegister()
     {
-        Validator::notEmpty(requestParams(), ['merchant_code', 'name', 'account', 'birthday']);
+        Validator::notEmpty(request()->params, ['merchant_code', 'name', 'account', 'birthday']);
         $model = new MemberService();
         $model->register();
     }
