@@ -22,9 +22,9 @@ if (!function_exists('tbe')) {
      */
     function tbe(string $message, int $code = API_ERROR_CODE_FAIL)
     {
-        $msg = $message ?: ($GLOBALS['__API_ERROR_CODE'][$code] ?? $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_FAIL]);
         @list($back, $trace) = debug_backtrace();
         exception()->backtrace($back ?? [], $trace ?? []);
+        $msg = $message ?: ($GLOBALS['__API_ERROR_CODE'][$code] ?? $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_FAIL]);
         exception()->message = $msg;
         throw new \yii\base\Exception($msg, $code);
     }
