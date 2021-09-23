@@ -43,7 +43,7 @@ trait TokenTrait
 
     /**
      * 生成令牌
-     * @param $data_json
+     * @param string $data_json
      * @return string
      */
     private function token(string $data_json): string
