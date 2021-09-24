@@ -12,11 +12,6 @@ use app\common\listen\BaseListen;
 class DefaultListen extends BaseListen
 {
     /**
-     * @var bool $async
-     */
-    public $async = true;
-
-    /**
      * @return array
      */
     public function handle(): array

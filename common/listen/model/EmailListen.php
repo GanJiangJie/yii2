@@ -11,8 +11,6 @@ use app\common\listen\BaseListen;
  */
 class EmailListen extends BaseListen
 {
-    public $async = true;
-
     /**
      * @return array
      */
