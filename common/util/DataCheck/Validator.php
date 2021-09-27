@@ -66,9 +66,14 @@ class Validator
             foreach ($rule_array as $rule_item) {
                 @list($item, $value) = explode(':', $rule_item);
                 method_exists(self::class, $item) or tbe('Validator rule ' . $item . ' is undefined');
-                $params = [$key];
+                if ($value) {
+                    self::$item($key, $value);
+                } else {
+                    self::$item($key);
+                }
+                /*$params = [$key];
                 is_null($value) or $params[] = $value;
-                call_user_func_array([self::class, $item], $params);
+                call_user_func_array([self::class, $item], $params);*/
             }
         }
     }
