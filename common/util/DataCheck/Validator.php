@@ -104,7 +104,7 @@ class Validator
      */
     private static function numeral($key)
     {
-        is_numeric(self::$params[$key]) or
+        isset(self::$params[$key]) && !is_numeric(self::$params[$key]) or
         tbe(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric', self::$code);
     }
 
@@ -116,7 +116,7 @@ class Validator
      */
     private static function min($key, $value)
     {
-        mb_strlen(self::$params[$key], 'utf-8') < $value and
+        isset(self::$params[$key]) && mb_strlen(self::$params[$key], 'utf-8') < $value and
         tbe(self::$messages[$key . '.min'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
     }
 
@@ -128,7 +128,7 @@ class Validator
      */
     private static function max($key, $value)
     {
-        mb_strlen(self::$params[$key], 'utf-8') > $value and
+        isset(self::$params[$key]) && mb_strlen(self::$params[$key], 'utf-8') > $value and
         tbe(self::$messages[$key . '.max'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value, self::$code);
     }
 
@@ -140,14 +140,16 @@ class Validator
      */
     private static function exists($key, $value)
     {
-        @list($modelClass, $column) = explode(',', $value);
-        /**
-         * @var ActiveRecord $model
-         */
-        $model = $modelClass;
-        $model::find()
-            ->where($column . ' = :' . $column, [
-                ':' . $column => self::$params[$key]
-            ])->exists() or tbe('The selected ' . $key . ' is invalid', self::$code);
+        if (isset(self::$params[$key])) {
+            @list($modelClass, $column) = explode(',', $value);
+            /**
+             * @var ActiveRecord $model
+             */
+            $model = $modelClass;
+            $model::find()
+                ->where($column . ' = :' . $column, [
+                    ':' . $column => self::$params[$key]
+                ])->exists() or tbe('The selected ' . $key . ' is invalid', self::$code);
+        }
     }
 }
