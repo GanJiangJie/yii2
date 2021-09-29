@@ -16,7 +16,7 @@ class MemberController extends WebController
      */
     public function actionList(): array
     {
-        mTokenGet();
+        tokenGet();
         $model = new MemberService();
         $model->page = requestParams('page', 1);
         $model->limit = requestParams('limit', 0);
@@ -40,7 +40,7 @@ class MemberController extends WebController
      */
     public function actionEdit()
     {
-        uTokenGet();
+        tokenGet();
         $model = new MemberService();
         $model->edit();
     }

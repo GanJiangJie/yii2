@@ -24,7 +24,7 @@ class MemberService extends BaseService
                 'create_time',
             ])
             ->where('merchant_code = :merchant_code and type = :type', [
-                ':merchant_code' => mTokenGet('merchant_code'),
+                ':merchant_code' => tokenGet('merchant_code'),
                 ':type' => requestParams('type', MEMBER_TYPE_MEMBER)
             ])
             ->filterWhere(['account' => requestParams('account')]);
@@ -86,7 +86,7 @@ class MemberService extends BaseService
          * @var Member $member
          */
         $member = Member::find()
-            ->where('member_code = :member_code', [':member_code' => uTokenGet('member_code')])
+            ->where('member_code = :member_code', [':member_code' => tokenGet('member_code')])
             ->one();
         empty($member) and tbe('会员不存在', API_ERROR_CODE_NO_DATA);
 

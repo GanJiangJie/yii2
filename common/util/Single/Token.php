@@ -2,7 +2,7 @@
 
 namespace app\common\util\Single;
 
-use app\common\traits\SingleTrait;
+use app\common\traits\InstanceTrait;
 use common\util\DataCheck\Validator;
 use app\common\util\Redis\{
     RedisK,
@@ -12,11 +12,7 @@ use yii\base\Exception;
 
 class Token
 {
-    use SingleTrait;
-
-    private $mKey = 'mToken';
-
-    private $uKey = 'uToken';
+    use InstanceTrait;
 
     /**
      * @var string $driver
@@ -44,31 +40,13 @@ class Token
     public $data;
 
     /**
-     * @param string $key
+     * Token constructor.
      */
-    private function init(string $key)
+    private function __construct()
     {
-        $this->driver = config('params.auth.' . $key . '.driver');
-        $this->prefix = config('params.auth.' . $key . '.prefix');
-        $this->name = config('params.auth.' . $key . '.name');
-    }
-
-    /**
-     * @return $this
-     */
-    public function mToken()
-    {
-        self::init($this->mKey);
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function uToken()
-    {
-        self::init($this->uKey);
-        return $this;
+        $this->driver = config('params.token.driver');
+        $this->prefix = config('params.token.prefix');
+        $this->name = config('params.token.name');
     }
 
     /**
@@ -76,20 +54,29 @@ class Token
      * @param string $data_json
      * @return string
      */
-    private function token(string $data_json): string
+    private function createToken(string $data_json): string
     {
         return md5($data_json . time() . mt_rand(100, 999));
     }
 
     /**
-     * 暂存信息
+     * 获取请求令牌
      * @throws Exception
      */
-    private function storage()
+    private function getToken()
     {
-        $token = requestParams($this->name);
-        empty($token) and tbe('', API_ERROR_CODE_LACK_TOKEN);
-        $info_json = redis(RedisS::class, 'Get', [$this->prefix . $token], $this->driver);
+        $this->token = requestParams($this->name);
+        empty($this->token) and tbe('', API_ERROR_CODE_LACK_TOKEN);
+    }
+
+    /**
+     * 暂存令牌信息
+     * @throws Exception
+     */
+    public function storage()
+    {
+        self::getToken();
+        $info_json = redis(RedisS::class, 'Get', [$this->prefix . $this->token], $this->driver);
         empty($info_json) || !Validator::isJson($info_json) and tbe('', API_ERROR_CODE_INVALID_TOKEN);
         $this->data = $info_json;
     }
@@ -103,7 +90,7 @@ class Token
     public function set(array $data): string
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $token = self::token($data_json);
+        $token = self::createToken($data_json);
         redis(RedisS::class, 'Set', [$this->prefix . $token, $data_json], $this->driver);
         return $token;
     }
@@ -118,7 +105,7 @@ class Token
     public function setEx(array $data, int $seconds): string
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $token = self::token($data_json);
+        $token = self::createToken($data_json);
         redis(RedisS::class, 'SetEx', [$this->prefix . $token, $data_json, $seconds], $this->driver);
         return $token;
     }

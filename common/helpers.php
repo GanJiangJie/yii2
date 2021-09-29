@@ -169,57 +169,27 @@ if (!function_exists('requestParams')) {
     }
 }
 
-if (!function_exists('mToken')) {
+if (!function_exists('token')) {
     /**
-     * 商户登录令牌
+     * 登录令牌
      * @return \app\common\util\Single\Token
      */
-    function mToken(): \app\common\util\Single\Token
+    function token(): \app\common\util\Single\Token
     {
-        /**
-         * @var \app\common\util\Single\Token $token
-         */
-        $token = \app\common\util\Single\Token::instance();
-        return $token->mToken();
+        return \app\common\util\Single\Token::instance();
     }
 }
 
-if (!function_exists('mTokenGet')) {
+if (!function_exists('tokenGet')) {
     /**
+     * 令牌信息
      * @param string $key
      * @return array|null|string
      * @throws \yii\base\Exception
      */
-    function mTokenGet(string $key = null)
+    function tokenGet(string $key = null)
     {
-        return mToken()->get($key);
-    }
-}
-
-if (!function_exists('uToken')) {
-    /**
-     * 用户登录令牌
-     * @return \app\common\util\Single\Token
-     */
-    function uToken(): \app\common\util\Single\Token
-    {
-        /**
-         * @var \app\common\util\Single\Token $token
-         */
-        $token = \app\common\util\Single\Token::instance();
-        return $token->uToken();
-    }
-}
-
-if (!function_exists('uTokenGet')) {
-    /**
-     * @param string $key
-     * @return array|null|string
-     * @throws \yii\base\Exception
-     */
-    function uTokenGet(string $key = null)
-    {
-        return uToken()->get($key);
+        return token()->get($key);
     }
 }
 
