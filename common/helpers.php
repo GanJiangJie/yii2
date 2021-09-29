@@ -172,11 +172,15 @@ if (!function_exists('requestParams')) {
 if (!function_exists('mToken')) {
     /**
      * 商户登录令牌
-     * @return \app\common\util\Single\MToken
+     * @return \app\common\util\Single\Token
      */
-    function mToken(): \app\common\util\Single\MToken
+    function mToken(): \app\common\util\Single\Token
     {
-        return \app\common\util\Single\MToken::instance();
+        /**
+         * @var \app\common\util\Single\Token $token
+         */
+        $token = \app\common\util\Single\Token::instance();
+        return $token->mToken();
     }
 }
 
@@ -195,11 +199,15 @@ if (!function_exists('mTokenGet')) {
 if (!function_exists('uToken')) {
     /**
      * 用户登录令牌
-     * @return \app\common\util\Single\UToken
+     * @return \app\common\util\Single\Token
      */
-    function uToken(): \app\common\util\Single\UToken
+    function uToken(): \app\common\util\Single\Token
     {
-        return \app\common\util\Single\UToken::instance();
+        /**
+         * @var \app\common\util\Single\Token $token
+         */
+        $token = \app\common\util\Single\Token::instance();
+        return $token->uToken();
     }
 }
 

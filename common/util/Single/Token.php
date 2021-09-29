@@ -1,15 +1,22 @@
 <?php
 
-namespace app\common\traits;
+namespace app\common\util\Single;
 
+use app\common\traits\SingleTrait;
 use common\util\DataCheck\Validator;
-use app\common\util\Redis\RedisK;
-use app\common\util\Redis\RedisS;
+use app\common\util\Redis\{
+    RedisK,
+    RedisS
+};
 use yii\base\Exception;
 
-trait TokenTrait
+class Token
 {
-    use InstanceTrait;
+    use SingleTrait;
+
+    private $mKey = 'mToken';
+
+    private $uKey = 'uToken';
 
     /**
      * @var string $driver
@@ -27,18 +34,41 @@ trait TokenTrait
     private $name;
 
     /**
-     * @var array $data
+     * @var string $token
      */
-    private $data;
+    public $token;
 
     /**
-     * TokenTrait constructor.
+     * @var array $data
      */
-    private function __construct()
+    public $data;
+
+    /**
+     * @param string $key
+     */
+    private function init(string $key)
     {
-        $this->driver = config('params.auth.' . $this->key . '.driver');
-        $this->prefix = config('params.auth.' . $this->key . '.prefix');
-        $this->name = config('params.auth.' . $this->key . '.name');
+        $this->driver = config('params.auth.' . $key . '.driver');
+        $this->prefix = config('params.auth.' . $key . '.prefix');
+        $this->name = config('params.auth.' . $key . '.name');
+    }
+
+    /**
+     * @return $this
+     */
+    public function mToken()
+    {
+        self::init($this->mKey);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function uToken()
+    {
+        self::init($this->uKey);
+        return $this;
     }
 
     /**
