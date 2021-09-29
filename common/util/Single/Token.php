@@ -51,12 +51,12 @@ class Token
 
     /**
      * 生成令牌
-     * @param string $data_json
+     * @param string $unique
      * @return string
      */
-    private function createToken(string $data_json): string
+    private function createToken(string $unique): string
     {
-        return md5($data_json . time() . mt_rand(100, 999));
+        return md5($unique . time() . mt_rand(100, 999));
     }
 
     /**
@@ -84,13 +84,14 @@ class Token
     /**
      * 设置令牌
      * @param array $data
+     * @param string $unique
      * @return string
      * @throws Exception
      */
-    public function set(array $data): string
+    public function set(array $data, string $unique = ''): string
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $token = self::createToken($data_json);
+        $token = self::createToken($unique ?: $data_json);
         redis(RedisS::class, 'Set', [$this->prefix . $token, $data_json], $this->driver);
         return $token;
     }
@@ -99,13 +100,14 @@ class Token
      * 设置令牌，设置期限
      * @param array $data
      * @param int $seconds
+     * @param string $unique
      * @return string
      * @throws Exception
      */
-    public function setEx(array $data, int $seconds): string
+    public function setEx(array $data, int $seconds, string $unique = ''): string
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $token = self::createToken($data_json);
+        $token = self::createToken($unique ?: $data_json);
         redis(RedisS::class, 'SetEx', [$this->prefix . $token, $data_json, $seconds], $this->driver);
         return $token;
     }
