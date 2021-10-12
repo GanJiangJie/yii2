@@ -145,6 +145,16 @@ if (!function_exists('listenHandle')) {
     }
 }
 
+if (!function_exists('route')) {
+    /**
+     * @return \app\common\util\Single\Route
+     */
+    function route(): \app\common\util\Single\Route
+    {
+        return \app\common\util\Single\Route::instance();
+    }
+}
+
 if (!function_exists('request')) {
     /**
      * HTTPS请求对象
@@ -185,7 +195,6 @@ if (!function_exists('tokenGet')) {
      * 令牌信息
      * @param string $key
      * @return array|null|string
-     * @throws \yii\base\Exception
      */
     function tokenGet(string $key = null)
     {

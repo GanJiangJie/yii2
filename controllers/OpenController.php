@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use yii\base\Exception;
-use app\common\util\Route;
 use app\components\WebController;
 use common\util\DataCheck\DataCheck;
 use common\util\DataCheck\Validator;
@@ -24,7 +23,7 @@ class OpenController extends WebController
             //验证签名
             DataCheck::checkSign(request()->params);
             //响应结果
-            response()->data(app()->runAction(Route::method(requestParams('method'))));
+            response()->data(app()->runAction(Route()->method(requestParams('method'))));
         } catch (Exception $e) {
             //抛出异常处理
             response()->error($e->getMessage(), $e->getCode());

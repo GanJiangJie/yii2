@@ -20,11 +20,6 @@ class Token
     private $driver;
 
     /**
-     * @var string $prefix
-     */
-    private $prefix;
-
-    /**
      * @var string $name
      */
     private $name;
@@ -45,82 +40,69 @@ class Token
     private function __construct()
     {
         $this->driver = config('params.token.driver');
-        $this->prefix = config('params.token.prefix');
         $this->name = config('params.token.name');
+        $this->token = requestParams($this->name);
     }
 
     /**
      * 生成令牌
-     * @param string $unique
-     * @return string
+     * @param string $prefix
      */
-    private function createToken(string $unique): string
+    private function createToken(string $prefix)
     {
-        return md5($unique . time() . mt_rand(100, 999));
+        $this->token = md5($prefix . time() . mt_rand(100, 999));
     }
 
     /**
-     * 获取请求令牌
+     * 令牌校验
      * @throws Exception
      */
-    private function getToken()
+    public function check()
     {
-        $this->token = requestParams($this->name);
         empty($this->token) and tbe('', API_ERROR_CODE_LACK_TOKEN);
-    }
-
-    /**
-     * 暂存令牌信息
-     * @throws Exception
-     */
-    public function storage()
-    {
-        self::getToken();
-        $info_json = redis(RedisS::class, 'Get', [$this->prefix . $this->token], $this->driver);
-        empty($info_json) || !Validator::isJson($info_json) and tbe('', API_ERROR_CODE_INVALID_TOKEN);
-        $this->data = $info_json;
+        $info = redis(RedisS::class, 'Get', [$this->token], $this->driver);
+        empty($info) || !Validator::isJson($info) and tbe('', API_ERROR_CODE_INVALID_TOKEN);
+        $this->data = $info;
     }
 
     /**
      * 设置令牌
      * @param array $data
-     * @param string $unique
+     * @param string $prefix
      * @return string
      * @throws Exception
      */
-    public function set(array $data, string $unique = ''): string
+    public function set(array $data, string $prefix = ''): string
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $token = self::createToken($unique ?: $data_json);
-        redis(RedisS::class, 'Set', [$this->prefix . $token, $data_json], $this->driver);
-        return $token;
+        self::createToken($prefix ?: $data_json);
+        redis(RedisS::class, 'Set', [$this->token, $data_json], $this->driver);
+        return $this->token;
     }
 
     /**
      * 设置令牌，设置期限
      * @param array $data
      * @param int $seconds
-     * @param string $unique
+     * @param string $prefix
      * @return string
      * @throws Exception
      */
-    public function setEx(array $data, int $seconds, string $unique = ''): string
+    public function setEx(array $data, int $seconds, string $prefix = ''): string
     {
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $token = self::createToken($unique ?: $data_json);
-        redis(RedisS::class, 'SetEx', [$this->prefix . $token, $data_json, $seconds], $this->driver);
-        return $token;
+        self::createToken($prefix ?: $data_json);
+        redis(RedisS::class, 'SetEx', [$this->token, $data_json, $seconds], $this->driver);
+        return $this->token;
     }
 
     /**
      * 获取令牌信息
      * @param string $key
      * @return null|string|array
-     * @throws Exception
      */
     public function get(string $key = null)
     {
-        if (empty($this->data)) self::storage();
         return is_null($key) ? $this->data : ($this->data[$key] ?? null);
     }
 
@@ -131,8 +113,7 @@ class Token
      */
     public function del()
     {
-        $token = requestParams($this->name);
-        if (empty($token)) return false;
-        return redis(RedisK::class, 'Del', [$this->prefix . $token], $this->driver);
+        if (empty($this->token)) return false;
+        return redis(RedisK::class, 'Del', [$this->token], $this->driver);
     }
 }
