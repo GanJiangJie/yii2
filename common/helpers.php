@@ -40,22 +40,6 @@ if (!function_exists('exception')) {
     }
 }
 
-if (!function_exists('config')) {
-    /**
-     * 获取config目录下的参数
-     * @param string $key 例：'params.queue.listen'
-     * @return mixed
-     */
-    function config(string $key)
-    {
-        /**
-         * @var \app\common\util\Single\Config $config
-         */
-        $config = \app\common\util\Single\Config::instance();
-        return $config->get($key);
-    }
-}
-
 if (!function_exists('app')) {
     /**
      * @return \yii\console\Application|\yii\web\Application
@@ -74,6 +58,22 @@ if (!function_exists('db')) {
     function db(string $db = 'db'): \yii\db\Connection
     {
         return app()->$db;
+    }
+}
+
+if (!function_exists('config')) {
+    /**
+     * 获取config目录下的参数
+     * @param string $key 例：'params.queue.listen'
+     * @return mixed
+     */
+    function config(string $key)
+    {
+        /**
+         * @var \app\common\util\Single\Config $config
+         */
+        $config = \app\common\util\Single\Config::instance();
+        return $config->get($key);
     }
 }
 
