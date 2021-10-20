@@ -12,11 +12,9 @@ class MemberController extends WebController
     /**
      * 会员列表
      * @return array
-     * @throws Exception
      */
     public function actionList(): array
     {
-        token()->check();//token校验
         $model = new MemberService();
         $model->page = requestParams('page', 1);
         $model->limit = requestParams('limit', 0);
@@ -40,7 +38,6 @@ class MemberController extends WebController
      */
     public function actionEdit()
     {
-        token()->check();
         $model = new MemberService();
         $model->edit();
     }

@@ -10,7 +10,6 @@ class MemberService extends BaseService
 {
     /**
      * @return array
-     * @throws Exception
      */
     public function getList(): array
     {

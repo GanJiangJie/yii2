@@ -54,18 +54,6 @@ class Token
     }
 
     /**
-     * 令牌校验
-     * @throws Exception
-     */
-    public function check()
-    {
-        empty($this->token) and tbe('', API_ERROR_CODE_LACK_TOKEN);
-        $info = redis(RedisS::class, 'Get', [$this->token], $this->driver);
-        empty($info) || !Validator::isJson($info) and tbe('', API_ERROR_CODE_INVALID_TOKEN);
-        $this->data = $info;
-    }
-
-    /**
      * 设置令牌
      * @param array $data
      * @param string $prefix
@@ -74,6 +62,7 @@ class Token
      */
     public function set(array $data, string $prefix = ''): string
     {
+        $this->data = $data;
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         self::createToken($prefix ?: $data_json);
         redis(RedisS::class, 'Set', [$this->token, $data_json], $this->driver);
@@ -90,10 +79,23 @@ class Token
      */
     public function setEx(array $data, int $seconds, string $prefix = ''): string
     {
+        $this->data = $data;
         $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         self::createToken($prefix ?: $data_json);
         redis(RedisS::class, 'SetEx', [$this->token, $data_json, $seconds], $this->driver);
         return $this->token;
+    }
+
+    /**
+     * 令牌校验
+     * @throws Exception
+     */
+    public function check()
+    {
+        empty($this->token) and tbe('', API_ERROR_CODE_LACK_TOKEN);
+        $info = redis(RedisS::class, 'Get', [$this->token], $this->driver);
+        empty($info) || !Validator::isJson($info) and tbe('', API_ERROR_CODE_INVALID_TOKEN);
+        $this->data = $info;
     }
 
     /**
