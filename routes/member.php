@@ -1,7 +1,7 @@
 <?php
 
 route()->before([
-    'auth',
+    //'auth',
     'mThrottle:3,1,今日访问次数已达上限'
 ], [
     'crm.member.list' => 'crm/member/list',
