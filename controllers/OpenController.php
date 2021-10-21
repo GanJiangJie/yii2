@@ -16,13 +16,7 @@ class OpenController extends WebController
 
             self::dataCheck();
 
-            route()->method(requestParams('method'));//method获取route
-
-            route()->beforeHandle();//front处理
-
-            response()->data(app()->runAction(route()->route));//响应结果
-
-            route()->afterHandle();//behind处理
+            route()->handle();
         } catch (Exception $e) {
             //抛出异常处理
             response()->error($e->getMessage(), $e->getCode());

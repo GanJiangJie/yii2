@@ -44,10 +44,21 @@ class Route
     }
 
     /**
+     * @throws \yii\base\Exception
+     */
+    public function handle()
+    {
+        self::method(requestParams('method'));//method获取route
+        self::beforeHandle();//front处理
+        response()->data(app()->runAction(route()->route));//响应结果
+        route()->afterHandle();//behind处理
+    }
+
+    /**
      * @param string $method
      * @throws \yii\base\Exception
      */
-    public function method(string $method)
+    private function method(string $method)
     {
         //获取方法对应路由
         foreach ($this->filePaths as $filePath) {
@@ -93,7 +104,7 @@ class Route
     /**
      * @throws \yii\base\Exception
      */
-    public function beforeHandle()
+    private function beforeHandle()
     {
         if (empty($this->routeBefore[$this->route])) return;
         foreach ((array)$this->routeBefore[$this->route] as $middleware) {
@@ -104,7 +115,7 @@ class Route
     /**
      * @throws \yii\base\Exception
      */
-    public function afterHandle()
+    private function afterHandle()
     {
         if (empty($this->routeAfter[$this->route])) return;
         foreach ((array)$this->routeAfter[$this->route] as $middleware) {
