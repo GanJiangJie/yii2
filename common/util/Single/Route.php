@@ -118,16 +118,16 @@ class Route
      */
     private function middleHandle(string $middlewareParam)
     {
-        @list($middleware, $param) = explode(':', $middlewareParam);
-        isset(Middleware::$middleware[$middleware]) or tbe('Middleware \'' . $middleware . '\' not register');
+        @list($alias, $param) = explode(':', $middlewareParam);
+        isset(Middleware::$middleware[$alias]) or tbe('Middleware \'' . $alias . '\' not register');
         /**
-         * @var Middleware $middlewareClass
+         * @var Middleware $class
          */
-        $middlewareClass = Middleware::$middleware[$middleware];
-        if (!method_exists($middlewareClass, 'handle')) {
-            tbe('Undefined method \'handle\' of class \'' . $middlewareClass . '\'');
+        $class = Middleware::$middleware[$alias];
+        if (!method_exists($class, 'handle')) {
+            tbe('Undefined method \'handle\' of class \'' . $class . '\'');
         }
-        $middlewareClass::handle($param ?: '');
+        $class::handle($param ?: '');
     }
 
     private function clear()
