@@ -50,7 +50,7 @@ class Token
      */
     private function createToken(string $prefix)
     {
-        $this->token = md5($prefix . time() . mt_rand(100, 999));
+        $this->token = md5('token' . $prefix . time() . mt_rand(100, 999));
     }
 
     /**
