@@ -110,11 +110,15 @@ class Token
 
     /**
      * 删除令牌
+     * @param string $token
      * @return bool|string
      * @throws Exception
      */
-    public function del()
+    public function del(string $token = null)
     {
+        if (!empty($token)) {
+            return redis(RedisK::class, 'Del', [$token], $this->driver);
+        }
         if (empty($this->token)) return false;
         return redis(RedisK::class, 'Del', [$this->token], $this->driver);
     }

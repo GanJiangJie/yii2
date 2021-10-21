@@ -5,7 +5,7 @@ namespace app\common\middleware\model;
 use app\common\middleware\Middleware;
 use app\common\traits\ThrottleTrait;
 
-class MerchantThrottleMiddleware extends Middleware
+class MemberThrottleMiddleware extends Middleware
 {
     use ThrottleTrait;
 
@@ -25,7 +25,7 @@ class MerchantThrottleMiddleware extends Middleware
         if (empty(token()->data)) {
             token()->check();
         }
-        if (!self::throttle(md5(route()->route . 'throttle' . tokenGet('merchant_code')),
+        if (!self::throttle(md5(route()->route . 'throttle' . (tokenGet('member_code') ?: tokenGet('user_code'))),
             (int)$limit, 60 * $minute)) {
             tbe($message ?: '访问已超限制，请稍后再试');
         }
