@@ -5,7 +5,7 @@ namespace app\common\middleware\model;
 use app\common\middleware\Middleware;
 use app\common\traits\ThrottleTrait;
 
-class MerchantMiddleware extends Middleware
+class MerchantThrottleMiddleware extends Middleware
 {
     use ThrottleTrait;
 
