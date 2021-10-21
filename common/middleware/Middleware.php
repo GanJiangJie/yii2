@@ -2,9 +2,11 @@
 
 namespace app\common\middleware;
 
-use app\common\middleware\model\AuthMiddleware;
-use app\common\middleware\model\MemberThrottleMiddleware;
-use app\common\middleware\model\MerchantThrottleMiddleware;
+use app\common\middleware\model\{
+    AuthMiddleware,
+    MemberThrottleMiddleware,
+    MerchantThrottleMiddleware
+};
 use yii\base\Exception;
 
 abstract class Middleware

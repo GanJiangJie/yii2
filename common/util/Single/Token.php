@@ -30,6 +30,11 @@ class Token
     public $token;
 
     /**
+     * @var bool $state
+     */
+    public $state = false;
+
+    /**
      * @var array $data
      */
     public $data;
@@ -92,6 +97,7 @@ class Token
      */
     public function check()
     {
+        $this->state = true;
         empty($this->token) and tbe('', API_ERROR_CODE_LACK_TOKEN);
         $info = redis(RedisS::class, 'Get', [$this->token], $this->driver);
         empty($info) || !Validator::isJson($info) and tbe('', API_ERROR_CODE_INVALID_TOKEN);
