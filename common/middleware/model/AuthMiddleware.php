@@ -1,6 +1,8 @@
 <?php
 
-namespace app\common\middleware;
+namespace app\common\middleware\model;
+
+use app\common\middleware\Middleware;
 
 class AuthMiddleware extends Middleware
 {
