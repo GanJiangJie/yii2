@@ -414,6 +414,6 @@ if (!function_exists('centConvertYuan')) {
      */
     function centConvertYuan($cent)
     {
-        return bcdiv($cent, 100);
+        return bcdiv($cent, 100, 2);
     }
 }
