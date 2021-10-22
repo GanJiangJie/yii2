@@ -19,13 +19,13 @@ class MemberThrottleMiddleware extends Middleware
         if (empty(token()->token)) {
             if (!self::throttle(md5(route()->route . 'throttle' . request()->clientIp()),
                 (int)$limit, 60 * $minute)) {
-                tbe($message ?: '访问已超限制，请稍后再试');
+                tbe($message ?: '访问次数已达上限，请稍后再试');
             }
         }
         if (!token()->state) token()->check();
         if (!self::throttle(md5(route()->route . 'throttle' . (tokenGet('member_code') ?: tokenGet('user_code'))),
             (int)$limit, 60 * $minute)) {
-            tbe($message ?: '访问已超限制，请稍后再试');
+            tbe($message ?: '访问次数已达上限，请稍后再试');
         }
     }
 }
