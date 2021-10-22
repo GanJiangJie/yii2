@@ -26,6 +26,7 @@ if (!function_exists('tbe')) {
         exception()->backtrace($back ?? [], $trace ?? []);
         $msg = $message ?: ($GLOBALS['__API_ERROR_CODE'][$code] ?? $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_FAIL]);
         exception()->message = $msg;
+        exception()->code = $code;
         throw new \yii\base\Exception($msg, $code);
     }
 }
