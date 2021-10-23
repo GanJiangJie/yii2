@@ -30,10 +30,11 @@ class BaseService
     /**
      * 查询分页
      * @param ActiveQuery $model
+     * @param string $count_column
      */
-    protected function queryPage(ActiveQuery &$model)
+    protected function queryPage(ActiveQuery &$model, string $count_column = 'id')
     {
-        $this->total = $model->count();
+        $this->total = $model->count($count_column);
         if ($this->total > 0 && $this->limit > 0) {
             $this->last_page = (int)(ceil($this->total / $this->limit));
             $this->page > $this->last_page and $this->page = $this->last_page;

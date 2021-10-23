@@ -13,7 +13,7 @@ trait ThrottleTrait
      * @param int $second
      * @return bool
      */
-    public static function throttle(string $key, int $limit, int $second)
+    public static function throttle(string $key, int $limit, int $second): bool
     {
         $count = RedisS::Get($key);
         if ($count >= $limit) return false;
