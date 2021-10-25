@@ -55,25 +55,6 @@ class Route
     }
 
     /**
-     * @param string $method
-     * @throws \yii\base\Exception
-     */
-    private function method(string $method)
-    {
-        //获取方法对应路由
-        foreach ($this->filePaths as $filePath) {
-            self::clear();
-            $methodRoutes = (include($filePath . '')) ?: [];
-            $this->methodRoutes = array_merge($this->methodRoutes, $methodRoutes);
-            if (isset($this->methodRoutes[$method])) {
-                $this->route = $this->methodRoutes[$method];
-                return;
-            }
-        }
-        tbe('', API_ERROR_CODE_INVALID_METHOD);
-    }
-
-    /**
      * @param array $ms
      * @param array $methodRoutes
      * @return $this
@@ -99,6 +80,25 @@ class Route
             $this->routeAfter[$route] = $ms;
         }
         return $this;
+    }
+
+    /**
+     * @param string $method
+     * @throws \yii\base\Exception
+     */
+    private function method(string $method)
+    {
+        //获取方法对应路由
+        foreach ($this->filePaths as $filePath) {
+            self::clear();
+            $methodRoutes = (include($filePath . '')) ?: [];
+            $this->methodRoutes = array_merge($this->methodRoutes, $methodRoutes);
+            if (isset($this->methodRoutes[$method])) {
+                $this->route = $this->methodRoutes[$method];
+                return;
+            }
+        }
+        tbe('', API_ERROR_CODE_INVALID_METHOD);
     }
 
     /**
