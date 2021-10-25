@@ -50,8 +50,8 @@ class Route
     {
         self::method(requestParams('method'));//method获取route
         self::beforeHandle();//front处理
-        response()->data(app()->runAction(route()->route));//响应结果
-        route()->afterHandle();//behind处理
+        response()->data(app()->runAction($this->route));//响应结果
+        self::afterHandle();//behind处理
     }
 
     /**
