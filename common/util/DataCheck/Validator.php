@@ -68,12 +68,9 @@ class Validator
                 method_exists(self::class, $item) or tbe('Validator rule ' . $item . ' is undefined');
                 if ($value) {
                     self::$item($key, $value);
-                } else {
-                    self::$item($key);
+                    continue;
                 }
-                /*$params = [$key];
-                is_null($value) or $params[] = $value;
-                call_user_func_array([self::class, $item], $params);*/
+                self::$item($key);
             }
         }
     }
@@ -104,8 +101,34 @@ class Validator
      */
     private static function numeral($key)
     {
-        isset(self::$params[$key]) && !is_numeric(self::$params[$key]) or
+        isset(self::$params[$key]) && !is_numeric(self::$params[$key]) and
         tbe(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric', self::$code);
+    }
+
+    /**
+     * 最小数值
+     * @param $key
+     * @param $value
+     * @throws Exception
+     */
+    private static function min($key, $value)
+    {
+        self::numeral($key);
+        isset(self::$params[$key]) && self::$params[$key] < $value and
+        tbe(self::$messages[$key . '.min'] ?? 'The value of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
+    }
+
+    /**
+     * 最大数值
+     * @param $key
+     * @param $value
+     * @throws Exception
+     */
+    private static function max($key, $value)
+    {
+        self::numeral($key);
+        isset(self::$params[$key]) && self::$params[$key] > $value and
+        tbe(self::$messages[$key . '.min'] ?? 'The value of parameter ' . $key . ' cannot be greater than ' . $value, self::$code);
     }
 
     /**
@@ -114,10 +137,10 @@ class Validator
      * @param $value
      * @throws Exception
      */
-    private static function min($key, $value)
+    private static function lenMin($key, $value)
     {
         isset(self::$params[$key]) && mb_strlen(self::$params[$key], 'utf-8') < $value and
-        tbe(self::$messages[$key . '.min'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
+        tbe(self::$messages[$key . '.lenMin'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
     }
 
     /**
@@ -126,10 +149,22 @@ class Validator
      * @param $value
      * @throws Exception
      */
-    private static function max($key, $value)
+    private static function lenMax($key, $value)
     {
         isset(self::$params[$key]) && mb_strlen(self::$params[$key], 'utf-8') > $value and
-        tbe(self::$messages[$key . '.max'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value, self::$code);
+        tbe(self::$messages[$key . '.lenMax'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value, self::$code);
+    }
+
+    /**
+     * 正则表达式
+     * @param $key
+     * @param $value
+     * @throws Exception
+     */
+    private static function regex($key, $value)
+    {
+        preg_match($value, self::$params[$key]) or
+        tbe(self::$messages[$key . '.regex'] ?? 'Parameter ' . $key . ' is invalid', self::$code);
     }
 
     /**
@@ -143,13 +178,13 @@ class Validator
         if (isset(self::$params[$key])) {
             @list($modelClass, $column) = explode(',', $value);
             /**
-             * @var ActiveRecord $model
+             * @var ActiveRecord $modelClass
              */
-            $model = $modelClass;
-            $model::find()
+            $modelClass::find()
                 ->where($column . ' = :' . $column, [
                     ':' . $column => self::$params[$key]
-                ])->exists() or tbe('The selected ' . $key . ' is invalid', self::$code);
+                ])->exists() or
+            tbe(self::$messages[$key . '.exists'] ?? 'The selected ' . $key . ' is invalid', self::$code);
         }
     }
 }
