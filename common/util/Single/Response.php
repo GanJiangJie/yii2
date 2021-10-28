@@ -26,7 +26,7 @@ class Response
     }
 
     /**
-     * @param array $data
+     * @param array|null $data
      * @return Response
      */
     public function data(array $data = null): self
@@ -38,7 +38,7 @@ class Response
     /**
      * @param string $errMsg
      * @param int $errCode
-     * @return $this
+     * @return Response
      */
     public function error(string $errMsg = '', int $errCode = 0): self
     {
