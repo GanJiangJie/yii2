@@ -101,8 +101,10 @@ class Validator
      */
     private static function numeral($key)
     {
-        isset(self::$params[$key]) && !is_numeric(self::$params[$key]) and
-        tbe(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric', self::$code);
+        if (isset(self::$params[$key])) {
+            is_numeric(self::$params[$key]) or
+            tbe(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric', self::$code);
+        }
     }
 
     /**
@@ -163,8 +165,24 @@ class Validator
      */
     private static function regex($key, $value)
     {
-        preg_match($value, self::$params[$key]) or
-        tbe(self::$messages[$key . '.regex'] ?? 'Parameter ' . $key . ' is invalid', self::$code);
+        if (isset(self::$params[$key])) {
+            preg_match($value, self::$params[$key]) or
+            tbe(self::$messages[$key . '.regex'] ?? 'Parameter ' . $key . ' is invalid', self::$code);
+        }
+    }
+
+    /**
+     * 在指定值当中
+     * @param $key
+     * @param $value
+     * @throws Exception
+     */
+    private static function in($key, $value)
+    {
+        if (isset(self::$params[$key])) {
+            in_array(self::$params[$key], explode(',', $value)) or
+            tbe(self::$messages[$key . '.in'] ?? 'The value of parameter ' . $key . ' should be in ' . $value, self::$code);
+        }
     }
 
     /**
