@@ -12,27 +12,27 @@ class Route
     /**
      * @var array $route_paths
      */
-    private $filePaths = [];
+    private $filePaths;
 
     /**
      * @var array $methods
      */
-    private $methodRoutes = [];
+    private $methodRoutes;
 
     /**
      * @var array $routeBefore
      */
-    private $routeBefore = [];
+    private $routeBefore;
 
     /**
      * @var array $routeAfter
      */
-    private $routeAfter = [];
+    private $routeAfter;
 
     /**
      * @var string $route
      */
-    public $route = '';
+    public $route;
 
     /**
      * 路由文件路径归纳
