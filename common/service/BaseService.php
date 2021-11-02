@@ -32,7 +32,7 @@ class BaseService
      * @param ActiveQuery $model
      * @param string $count_column
      */
-    protected function queryPage(ActiveQuery &$model, string $count_column = 'id')
+    protected function queryPage(ActiveQuery &$model, string $count_column = '*')
     {
         $this->total = $model->count($count_column);
         if ($this->total > 0 && $this->limit > 0) {
