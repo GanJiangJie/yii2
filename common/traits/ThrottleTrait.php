@@ -12,13 +12,15 @@ trait ThrottleTrait
      * @param int $limit
      * @param int $second
      * @return bool
+     * @throws \yii\base\Exception
      */
     public static function throttle(string $key, int $limit, int $second): bool
     {
-        $count = RedisS::Get($key);
+        $redis = config('params.throttle.driver', 'redis');
+        $count = redis(RedisS::class, 'Get', [$key], $redis);
         if ($count >= $limit) return false;
-        RedisS::InCr($key);
-        if (!$count) RedisK::Expire($key, $second);
+        redis(RedisS::class, 'InCr', [$key], $redis);
+        if (!$count) redis(RedisK::class, 'Expire', [$key, $second], $redis);
         return true;
     }
 }

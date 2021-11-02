@@ -44,8 +44,8 @@ class Token
      */
     private function __construct()
     {
-        $this->driver = config('params.token.driver');
-        $this->name = config('params.token.name');
+        $this->driver = config('params.token.driver', 'redis');
+        $this->name = config('params.token.name', 'token');
         $this->token = requestParams($this->name);
     }
 
@@ -97,11 +97,11 @@ class Token
      */
     public function check()
     {
-        $this->state = true;
         empty($this->token) and tbe('', API_ERROR_CODE_LACK_TOKEN);
         $info = redis(RedisS::class, 'Get', [$this->token], $this->driver);
         empty($info) || !Validator::isJson($info) and tbe('', API_ERROR_CODE_INVALID_TOKEN);
         $this->data = $info;
+        $this->state = true;
     }
 
     /**
