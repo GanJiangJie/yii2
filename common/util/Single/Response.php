@@ -17,7 +17,7 @@ class Response
     /**
      * Response constructor.
      */
-    public function __construct()
+    private function __construct()
     {
         $this->response = [
             'errCode' => API_ERROR_CODE_SUCCESS,
