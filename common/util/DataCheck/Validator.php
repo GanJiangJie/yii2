@@ -62,7 +62,9 @@ class Validator
         self::$params = $params;
         self::$messages = $messages;
         foreach ($rules as $key => $rule) {
-            $rule_array = explode('|', $rule);
+            $rule_array = [];
+            is_string($rule) and $rule_array = explode('|', $rule);
+            is_array($rule) and $rule_array = $rule;
             foreach ($rule_array as $rule_item) {
                 @list($item, $value) = explode(':', $rule_item);
                 method_exists(self::class, $item) or tbe('Validator rule ' . $item . ' is undefined');
