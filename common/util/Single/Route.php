@@ -139,7 +139,7 @@ class Route
         if (!method_exists($class, 'handle')) {
             tbe('Undefined method \'handle\' of class \'' . $class . '\'');
         }
-        $class::handle($param ?: '');
+        $class::handle($param . '');
     }
 
     private function clear()
