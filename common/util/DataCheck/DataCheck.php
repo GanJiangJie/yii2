@@ -34,7 +34,7 @@ class DataCheck
      */
     public static function checkSign(array $params)
     {
-        $app_key = redis(RedisS::class, 'Get', [$params['app_id']]);
+        $app_key = redis(RedisS::class, 'Get', [$params['app_id']], config('params.token.driver', 'redis'));
         empty($app_key) and tbe('', API_ERROR_CODE_INVALID_APP_ID);
         $sign = $params['sign'];
         unset($params['sign']);
