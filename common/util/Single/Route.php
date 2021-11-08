@@ -30,6 +30,11 @@ class Route
     private $routeAfter;
 
     /**
+     * @var string $method
+     */
+    public $method;
+
+    /**
      * @var string $route
      */
     public $route;
@@ -41,6 +46,7 @@ class Route
     private function __construct()
     {
         $this->filePaths = getDirFile(BASE_PATH . '/routes', true);
+        $this->method = requestParams('method');
     }
 
     /**
@@ -48,7 +54,7 @@ class Route
      */
     public function handle()
     {
-        self::method(requestParams('method'));//method获取route
+        self::method();//method获取route
         self::beforeHandle();//front处理
         response()->data(app()->runAction($this->route));//响应结果
         self::afterHandle();//behind处理
@@ -83,10 +89,9 @@ class Route
     }
 
     /**
-     * @param string $method
      * @throws \yii\base\Exception
      */
-    private function method(string $method)
+    private function method()
     {
         //获取方法对应路由
         foreach ($this->filePaths as $filePath) {
@@ -94,8 +99,8 @@ class Route
             $methodRoutes = include($filePath . '');
             is_array($methodRoutes) or $methodRoutes = [];
             $this->methodRoutes = array_merge($this->methodRoutes, $methodRoutes);
-            if (isset($this->methodRoutes[$method])) {
-                $this->route = $this->methodRoutes[$method];
+            if (isset($this->methodRoutes[$this->method])) {
+                $this->route = $this->methodRoutes[$this->method];
                 return;
             }
         }
