@@ -95,7 +95,7 @@ class Route
     {
         //获取方法对应路由
         foreach ($this->filePaths as $filePath) {
-            self::clear();
+            self::reset();
             $methodRoutes = include($filePath . '');
             is_array($methodRoutes) or $methodRoutes = [];
             $this->methodRoutes = array_merge($this->methodRoutes, $methodRoutes);
@@ -147,7 +147,7 @@ class Route
         $class::handle($param . '');
     }
 
-    private function clear()
+    private function reset()
     {
         $this->methodRoutes = [];
         $this->routeBefore = [];
