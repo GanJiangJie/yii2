@@ -64,14 +64,14 @@ class DirFile
             $result = unlink($dir_name);
             return $result;
         }
-        is_dir($dir_name) and self::dealFileOne($dir_name);
+        is_dir($dir_name) and self::delFileOne($dir_name);
         return true;
     }
 
     /**
      * @param string $path
      */
-    private static function dealFileOne(string $path)
+    private static function delFileOne(string $path)
     {
         $content = scandir($path);
         foreach ($content as $v) {
@@ -80,7 +80,7 @@ class DirFile
                 unlink($path . '/' . $v);
                 continue;
             }
-            is_dir($path . '/' . $v) and self::DealFileTwo($path . '/' . $v);
+            is_dir($path . '/' . $v) and self::delFileTwo($path . '/' . $v);
 
         }
         rmdir($path);
@@ -89,7 +89,7 @@ class DirFile
     /**
      * @param string $path
      */
-    private static function DealFileTwo(string $path)
+    private static function delFileTwo(string $path)
     {
         $content = scandir($path);
         foreach ($content as $v) {
@@ -98,7 +98,7 @@ class DirFile
                 unlink($path . '/' . $v);
                 continue;
             }
-            is_dir($path . '/' . $v) and self::dealFileOne($path . '/' . $v);
+            is_dir($path . '/' . $v) and self::delFileOne($path . '/' . $v);
         }
         rmdir($path);
     }
