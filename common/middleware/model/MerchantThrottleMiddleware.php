@@ -24,7 +24,7 @@ class MerchantThrottleMiddleware extends Middleware
             )) return;
             tbe($message ?: '访问次数已达上限，请稍后再试');
         }
-        if (!token()->state) token()->check();
+        if (!token()->status) token()->check();
         if (self::throttle(
             md5(route()->route . 'throttle' . tokenGet('merchant_code')),
             (int)$limit,

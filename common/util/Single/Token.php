@@ -32,7 +32,7 @@ class Token
     /**
      * @var bool $state
      */
-    public $state = false;
+    public $status = false;
 
     /**
      * @var array $data
@@ -101,7 +101,7 @@ class Token
         $info = redis(RedisS::class, 'Get', [$this->token], $this->driver);
         empty($info) || !Validator::isJson($info) and tbe('', API_ERROR_CODE_INVALID_TOKEN);
         $this->data = $info;
-        $this->state = true;
+        $this->status = true;
     }
 
     /**
