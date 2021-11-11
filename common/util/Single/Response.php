@@ -27,20 +27,20 @@ class Response
 
     /**
      * @param array|null $data
-     * @return Response
+     * @return $this
      */
-    public function data(array $data = null): self
+    public function data(array $data = null)
     {
-        $data and $this->response['data'] = $data;
+        is_null($data) or $this->response['data'] = $data;
         return $this;
     }
 
     /**
      * @param string $errMsg
      * @param int $errCode
-     * @return Response
+     * @return $this
      */
-    public function error(string $errMsg = '', int $errCode = 0): self
+    public function error(string $errMsg = '', int $errCode = 0)
     {
         $this->response = [
             'errCode' => $errCode ?: API_ERROR_CODE_FAIL,
