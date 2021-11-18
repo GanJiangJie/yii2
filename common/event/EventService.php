@@ -2,17 +2,6 @@
 
 namespace app\common\event;
 
-use app\common\event\model\{
-    DefaultEvent,
-    MemberRegisterEvent
-};
-use app\common\listen\model\{
-    DefaultListen,
-    EmailListen,
-    MemberCouponListen,
-    RechargeOrderListen
-};
-
 class EventService
 {
     /**
@@ -20,16 +9,13 @@ class EventService
      * @var array $events
      */
     protected static $events = [
-        /*'app\common\event\model\DefaultEvent' => [
+        'app\common\event\model\DefaultEvent' => [
             'app\common\listen\model\DefaultListen',
-        ],*/
-        DefaultEvent::class => [
-            DefaultListen::class,
         ],
-        MemberRegisterEvent::class => [
-            EmailListen::class,
-            MemberCouponListen::class,
-            RechargeOrderListen::class,
+        'app\common\event\model\MemberRegisterEvent' => [
+            'app\common\listen\model\EmailListen',
+            'app\common\listen\model\MemberCouponListen',
+            'app\common\listen\model\RechargeOrderListen',
         ],
     ];
 }

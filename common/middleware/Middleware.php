@@ -2,19 +2,14 @@
 
 namespace app\common\middleware;
 
-use app\common\middleware\model\{
-    AuthMiddleware,
-    MemberThrottleMiddleware,
-    MerchantThrottleMiddleware
-};
 use yii\base\Exception;
 
 abstract class Middleware
 {
     static $middleware = [
-        'auth' => AuthMiddleware::class,
-        'mThrottle' => MerchantThrottleMiddleware::class,
-        'uThrottle' => MemberThrottleMiddleware::class,
+        'auth' => 'app\common\middleware\model\AuthMiddleware',
+        'mThrottle' => 'app\common\middleware\model\MerchantThrottleMiddleware',
+        'uThrottle' => 'app\common\middleware\model\MemberThrottleMiddleware',
     ];
 
     /**
