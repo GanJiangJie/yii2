@@ -30,7 +30,7 @@ class Token
     public $token;
 
     /**
-     * @var bool $state
+     * @var bool $status
      */
     public $status = false;
 
