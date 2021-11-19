@@ -37,8 +37,8 @@ class Request
      */
     private function __construct()
     {
-        $this->clientIp = self::getClientIp();
-        $this->header = getallheaders();
+        //$this->clientIp = self::getClientIp();
+        //$this->header = getallheaders();
         $this->params = self::getParams();
         $this->files = $_FILES;
     }
