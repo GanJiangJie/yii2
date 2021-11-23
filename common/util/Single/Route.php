@@ -4,6 +4,8 @@ namespace app\common\util\Single;
 
 use app\common\middleware\Middleware;
 use app\common\traits\InstanceTrait;
+use common\util\DataCheck\DataCheck;
+use common\util\DataCheck\Validator;
 
 class Route
 {
@@ -40,6 +42,11 @@ class Route
     public $route;
 
     /**
+     * @var float $runtime API耗时：/ms
+     */
+    public $runtime;
+
+    /**
      * 路由文件路径归纳
      * Route constructor.
      */
@@ -54,10 +61,13 @@ class Route
      */
     public function handle()
     {
+        $start = microtime(true);
+        self::paramsCheck();//参数校验
         self::method();//method获取route
-        self::beforeHandle();//front处理
+        self::beforeHandle();//before处理
         response()->data(app()->runAction($this->route));//响应结果
-        self::afterHandle();//behind处理
+        self::afterHandle();//after处理
+        $this->runtime = round((microtime(true) - $start) * 1000, 2);//API耗时：/ms
     }
 
     /**
@@ -86,6 +96,20 @@ class Route
             $this->routeAfter[$route] = $ms;
         }
         return $this;
+    }
+
+    /**
+     * @throws \yii\base\Exception
+     */
+    private function paramsCheck()
+    {
+        Validator::notEmpty(request()->params, ['app_id', 'method', 'sign_type', 'version', 'sign']);//验证必填参数
+
+        DataCheck::signType(requestParams('sign_type'));//验证签名类型
+
+        DataCheck::version(requestParams('version'));//验证版本
+
+        DataCheck::checkSign(request()->params);//验证签名
     }
 
     /**
