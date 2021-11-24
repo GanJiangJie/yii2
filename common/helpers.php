@@ -170,7 +170,7 @@ if (!function_exists('requestParams')) {
      * HTTPS请求参数
      * @param string $key
      * @param string|int $default
-     * @return array|null|string
+     * @return mixed
      */
     function requestParams(string $key = null, $default = null)
     {
@@ -193,7 +193,7 @@ if (!function_exists('tokenGet')) {
     /**
      * 令牌信息
      * @param string $key
-     * @return array|null|string
+     * @return mixed
      */
     function tokenGet(string $key = null)
     {

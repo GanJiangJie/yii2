@@ -107,7 +107,7 @@ class Token
     /**
      * 获取令牌信息
      * @param string $key
-     * @return null|string|array
+     * @return mixed
      */
     public function get(string $key = null)
     {

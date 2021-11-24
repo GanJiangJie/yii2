@@ -114,7 +114,7 @@ class Request
      * 获取请求参数
      * @param string $key
      * @param string|int $default
-     * @return null|string|array
+     * @return mixed
      */
     public function params(string $key = null, $default = null)
     {
