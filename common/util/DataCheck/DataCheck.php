@@ -45,11 +45,11 @@ class DataCheck
 
     /**
      * 签名
-     * @param array $params 业务参数
      * @param string $method 方法名称
+     * @param array $params 业务参数
      * @return array
      */
-    public static function sign(array $params, string $method): array
+    public static function sign(string $method, array $params): array
     {
         $params['app_id'] = config('params.open.app_id');
         $params['sign_type'] = config('params.open.sign_type');
