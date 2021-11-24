@@ -40,7 +40,7 @@ class Request
         //$this->clientIp = self::getClientIp();
         //$this->header = getallheaders();
         $this->params = self::getParams();
-        $this->files = $_FILES;
+        //$this->files = $_FILES;
     }
 
     /**
