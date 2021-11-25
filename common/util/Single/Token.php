@@ -44,8 +44,9 @@ class Token
      */
     private function __construct()
     {
-        $this->driver = config('params.token.driver', 'redis');
-        $this->name = config('params.token.name', 'token');
+        $config = config('params.token');
+        $this->driver = $config['driver'];
+        $this->name = $config['name'];
         $this->token = requestParams($this->name);
     }
 

@@ -66,16 +66,15 @@ if (!function_exists('config')) {
     /**
      * 获取config目录下的参数
      * @param string $key 例：'params.queue.listen'
-     * @param $default
      * @return mixed
      */
-    function config(string $key, $default = null)
+    function config(string $key)
     {
         /**
          * @var \app\common\util\Single\Config $config
          */
         $config = \app\common\util\Single\Config::instance();
-        return $config->get($key) ?: $default;
+        return $config->get($key);
     }
 }
 

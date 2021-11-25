@@ -34,7 +34,7 @@ class DataCheck
      */
     public static function checkSign(array $params)
     {
-        $app_key = redis(RedisS::class, 'Get', [$params['app_id']], config('params.token.driver', 'redis'));
+        $app_key = redis(RedisS::class, 'Get', [$params['app_id']], config('params.token.driver'));
         empty($app_key) and tbe('', API_ERROR_CODE_INVALID_APP_ID);
         $sign = $params['sign'];
         unset($params['sign']);
@@ -51,12 +51,13 @@ class DataCheck
      */
     public static function sign(string $method, array $params): array
     {
-        $params['app_id'] = config('params.open.app_id');
-        $params['sign_type'] = config('params.open.sign_type');
-        $params['version'] = config('params.open.version');
+        $config = config('params.open');
+        $params['app_id'] = $config['app_id'];
+        $params['sign_type'] = $config['sign_type'];
+        $params['version'] = $config['version'];
         $params['method'] = $method;
         ksort($params);
-        $string = urldecode(http_build_query($params)) . '&key=' . config('params.open.app_key');
+        $string = urldecode(http_build_query($params)) . '&key=' . $config['app_key'];
         $params['sign'] = md5($string);
         return $params;
     }

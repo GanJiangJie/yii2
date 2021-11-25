@@ -16,7 +16,7 @@ trait ThrottleTrait
      */
     public static function throttle(string $key, int $limit, int $second): bool
     {
-        $redis = config('params.throttle.driver', 'redis');
+        $redis = config('params.throttle.driver');
         $count = redis(RedisS::class, 'Get', [$key], $redis);
         if ($count >= $limit) return false;
         redis(RedisS::class, 'InCr', [$key], $redis);
