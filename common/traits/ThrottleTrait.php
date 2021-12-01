@@ -12,7 +12,7 @@ trait ThrottleTrait
      * @param int $limit
      * @param int $second
      * @return bool
-     * @throws \yii\base\Exception
+     * @throws \app\components\Exception
      */
     public static function throttle(string $key, int $limit, int $second): bool
     {

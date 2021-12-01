@@ -8,7 +8,7 @@ use app\common\util\Redis\{
     RedisK,
     RedisS
 };
-use yii\base\Exception;
+use app\components\Exception;
 
 class Token
 {
@@ -98,9 +98,13 @@ class Token
      */
     public function check()
     {
-        empty($this->token) and tbe('', API_ERROR_CODE_LACK_TOKEN);
+        if (empty($this->token)) {
+            throw new Exception('', API_ERROR_CODE_LACK_TOKEN);
+        }
         $info = redis(RedisS::class, 'Get', [$this->token], $this->driver);
-        empty($info) || !Validator::isJson($info) and tbe('', API_ERROR_CODE_INVALID_TOKEN);
+        if (empty($info) || !Validator::isJson($info)) {
+            throw new Exception('', API_ERROR_CODE_INVALID_TOKEN);
+        }
         $this->data = $info;
         $this->status = true;
     }

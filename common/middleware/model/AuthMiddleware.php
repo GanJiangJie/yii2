@@ -9,7 +9,7 @@ class AuthMiddleware extends Middleware
     /**
      * 验证登录
      * @param string $param
-     * @throws \yii\base\Exception
+     * @throws \app\components\Exception
      */
     public static function handle(string $param)
     {

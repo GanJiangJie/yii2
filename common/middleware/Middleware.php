@@ -2,7 +2,7 @@
 
 namespace app\common\middleware;
 
-use yii\base\Exception;
+use app\components\Exception;
 
 abstract class Middleware
 {

@@ -6,6 +6,7 @@ use app\common\middleware\Middleware;
 use app\common\traits\InstanceTrait;
 use common\util\DataCheck\DataCheck;
 use common\util\DataCheck\Validator;
+use app\components\Exception;
 
 class Route
 {
@@ -57,17 +58,23 @@ class Route
     }
 
     /**
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function handle()
     {
-        $start = microtime(true);
-        self::paramsCheck();//参数校验
-        self::method();//method获取route
-        self::beforeHandle();//before处理
-        response()->data(app()->runAction($this->route));//响应结果
-        self::afterHandle();//after处理
-        $this->runtime = round((microtime(true) - $start) * 1000, 2);//API耗时：/ms
+        try {
+            $start = microtime(true);
+            self::paramsCheck();//参数校验
+            self::method();//method获取route
+            self::beforeHandle();//before处理
+            response()->data(app()->runAction($this->route));//响应结果
+            self::afterHandle();//after处理
+            $this->runtime = round((microtime(true) - $start) * 1000, 2);//API耗时：/ms
+        } catch (\yii\base\InvalidRouteException $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        } catch (\yii\console\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
     }
 
     /**
@@ -99,7 +106,7 @@ class Route
     }
 
     /**
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     private function paramsCheck()
     {
@@ -113,7 +120,7 @@ class Route
     }
 
     /**
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     private function method()
     {
@@ -128,11 +135,11 @@ class Route
                 return;
             }
         }
-        tbe('', API_ERROR_CODE_INVALID_METHOD);
+        throw new Exception('', API_ERROR_CODE_INVALID_METHOD);
     }
 
     /**
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     private function beforeHandle()
     {
@@ -143,7 +150,7 @@ class Route
     }
 
     /**
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     private function afterHandle()
     {
@@ -155,18 +162,20 @@ class Route
 
     /**
      * @param string $middlewareParam
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     private function middleHandle(string $middlewareParam)
     {
         @list($alias, $param) = explode(':', $middlewareParam);
-        isset(Middleware::$middleware[$alias]) or tbe('Middleware \'' . $alias . '\' not register');
+        if (!isset(Middleware::$middleware[$alias])) {
+            throw new Exception('Middleware \'' . $alias . '\' not register');
+        }
         /**
          * @var Middleware $class
          */
         $class = Middleware::$middleware[$alias];
         if (!method_exists($class, 'handle')) {
-            tbe('Undefined method \'handle\' of class \'' . $class . '\'');
+            throw new Exception('Undefined method \'handle\' of class \'' . $class . '\'');
         }
         $class::handle($param . '');
     }

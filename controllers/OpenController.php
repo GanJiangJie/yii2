@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use yii\base\Exception;
+use app\components\Exception;
 use app\components\WebController;
 
 class OpenController extends WebController
@@ -15,7 +15,7 @@ class OpenController extends WebController
         } catch (Exception $e) {
             //异常处理
             response()->error($e->getMessage(), $e->getCode());
-            logPrint()->level(2)->backtrace(exception());
+            logPrint()->level(2)->backtrace($e->getFileLine());
         } finally {
             //打印日志
             logPrint()->writeLog([

@@ -5,7 +5,7 @@ namespace app\modules\crm\controllers;
 use app\common\service\MemberService;
 use common\util\DataCheck\Validator;
 use app\components\WebController;
-use yii\base\Exception;
+use app\components\Exception;
 
 class MemberController extends WebController
 {

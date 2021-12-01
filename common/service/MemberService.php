@@ -3,8 +3,8 @@
 namespace app\common\service;
 
 use app\common\event\model\MemberRegisterEvent;
+use app\components\Exception;
 use app\models\Member;
-use yii\base\Exception;
 
 class MemberService extends BaseService
 {
@@ -56,12 +56,14 @@ class MemberService extends BaseService
      */
     public function register()
     {
-        Member::find()
+        if (Member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
                 ':merchant_code' => requestParams('merchant_code'),
                 ':account' => requestParams('account')
             ])
-            ->exists() and tbe('会员已存在');
+            ->exists()) {
+            throw new Exception('会员已存在');
+        }
 
         $member = new Member();
         $member->member_code = createCode($member, 'member_code');
@@ -70,7 +72,9 @@ class MemberService extends BaseService
         $member->account = requestParams('account');
         $member->birthday = requestParams('birthday');
         if ($sex = requestParams('sex')) $member->sex = $sex;
-        $member->save() or tbe(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
+        if (!$member->save()) {
+            throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
+        }
 
         //会员注册事件
         event(new MemberRegisterEvent($member->toArray()));
@@ -87,11 +91,15 @@ class MemberService extends BaseService
         $member = Member::find()
             ->where('member_code = :member_code', [':member_code' => tokenGet('member_code')])
             ->one();
-        empty($member) and tbe('会员不存在', API_ERROR_CODE_NO_DATA);
+        if (empty($member)) {
+            throw new Exception('会员不存在', API_ERROR_CODE_NO_DATA);
+        }
 
         if ($member_name = requestParams('member_name')) $member->member_name = $member_name;
         if ($birthday = requestParams('birthday')) $member->birthday = $birthday;
 
-        $member->save() or tbe(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
+        if (!$member->save()) {
+            throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
+        }
     }
 }

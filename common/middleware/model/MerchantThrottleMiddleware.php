@@ -4,6 +4,7 @@ namespace app\common\middleware\model;
 
 use app\common\middleware\Middleware;
 use app\common\traits\ThrottleTrait;
+use app\components\Exception;
 
 class MerchantThrottleMiddleware extends Middleware
 {
@@ -11,7 +12,7 @@ class MerchantThrottleMiddleware extends Middleware
 
     /**
      * @param string $param
-     * @throws \yii\base\Exception
+     * @throws \app\components\Exception
      */
     public static function handle(string $param)
     {
@@ -22,7 +23,7 @@ class MerchantThrottleMiddleware extends Middleware
                 (int)$limit,
                 60 * $minute
             )) return;
-            tbe($message ?: '访问次数已达上限，请稍后再试');
+            throw new Exception($message ?: '访问次数已达上限，请稍后再试');
         }
         if (!token()->status) token()->check();
         if (self::throttle(
@@ -30,6 +31,6 @@ class MerchantThrottleMiddleware extends Middleware
             (int)$limit,
             60 * $minute
         )) return;
-        tbe($message ?: '访问次数已达上限，请稍后再试');
+        throw new Exception($message ?: '访问次数已达上限，请稍后再试');
     }
 }

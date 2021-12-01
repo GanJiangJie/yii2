@@ -2,7 +2,7 @@
 
 namespace common\util\DataCheck;
 
-use yii\base\Exception;
+use app\components\Exception;
 use yii\db\ActiveRecord;
 
 class Validator
@@ -46,8 +46,9 @@ class Validator
         foreach ($check_params as $v) {
             empty($params[$v]) and $result[] = $v;
         }
-        empty($result) or
-        tbe($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result), API_ERROR_CODE_LACK_PARAMS);
+        if (!empty($result)) {
+            throw new Exception($GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_LACK_PARAMS] . ':' . implode(',', $result), API_ERROR_CODE_LACK_PARAMS);
+        }
     }
 
     /**
@@ -67,7 +68,9 @@ class Validator
             is_array($rule) and $rule_array = $rule;
             foreach ($rule_array as $rule_item) {
                 @list($item, $value) = explode(':', $rule_item);
-                method_exists(self::class, $item) or tbe('Validator rule ' . $item . ' is undefined');
+                if (!method_exists(self::class, $item)) {
+                    throw new Exception('Validator rule ' . $item . ' is undefined');
+                }
                 if ($value) {
                     self::$item($key, $value);
                     continue;
@@ -84,8 +87,9 @@ class Validator
      */
     private static function required($key)
     {
-        empty(self::$params[$key]) and
-        tbe(self::$messages[$key . '.required'] ?? 'Parameter ' . $key . ' cannot be empty', self::$code);
+        if (empty(self::$params[$key])) {
+            throw new Exception(self::$messages[$key . '.required'] ?? 'Parameter ' . $key . ' cannot be empty', self::$code);
+        }
     }
 
     /**
@@ -103,9 +107,8 @@ class Validator
      */
     private static function numeral($key)
     {
-        if (isset(self::$params[$key])) {
-            is_numeric(self::$params[$key]) or
-            tbe(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric', self::$code);
+        if (isset(self::$params[$key]) && !is_numeric(self::$params[$key])) {
+            throw new Exception(self::$messages[$key . '.numeral'] ?? 'Parameter ' . $key . ' must be numeric', self::$code);
         }
     }
 
@@ -118,8 +121,9 @@ class Validator
     private static function min($key, $value)
     {
         self::numeral($key);
-        isset(self::$params[$key]) && self::$params[$key] < $value and
-        tbe(self::$messages[$key . '.min'] ?? 'The value of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
+        if (isset(self::$params[$key]) && self::$params[$key] < $value) {
+            throw new Exception(self::$messages[$key . '.min'] ?? 'The value of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
+        }
     }
 
     /**
@@ -131,8 +135,9 @@ class Validator
     private static function max($key, $value)
     {
         self::numeral($key);
-        isset(self::$params[$key]) && self::$params[$key] > $value and
-        tbe(self::$messages[$key . '.min'] ?? 'The value of parameter ' . $key . ' cannot be greater than ' . $value, self::$code);
+        if (isset(self::$params[$key]) && self::$params[$key] > $value) {
+            throw new Exception(self::$messages[$key . '.min'] ?? 'The value of parameter ' . $key . ' cannot be greater than ' . $value, self::$code);
+        }
     }
 
     /**
@@ -143,8 +148,9 @@ class Validator
      */
     private static function lenMin($key, $value)
     {
-        isset(self::$params[$key]) && mb_strlen(self::$params[$key], 'utf-8') < $value and
-        tbe(self::$messages[$key . '.lenMin'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
+        if (isset(self::$params[$key]) && mb_strlen(self::$params[$key], 'utf-8') < $value) {
+            throw new Exception(self::$messages[$key . '.lenMin'] ?? 'The length of parameter ' . $key . ' cannot be less than ' . $value, self::$code);
+        }
     }
 
     /**
@@ -155,8 +161,9 @@ class Validator
      */
     private static function lenMax($key, $value)
     {
-        isset(self::$params[$key]) && mb_strlen(self::$params[$key], 'utf-8') > $value and
-        tbe(self::$messages[$key . '.lenMax'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value, self::$code);
+        if (isset(self::$params[$key]) && mb_strlen(self::$params[$key], 'utf-8') > $value) {
+            throw new Exception(self::$messages[$key . '.lenMax'] ?? 'The length of parameter ' . $key . ' cannot be longer than ' . $value, self::$code);
+        }
     }
 
     /**
@@ -167,9 +174,8 @@ class Validator
      */
     private static function regex($key, $value)
     {
-        if (isset(self::$params[$key])) {
-            preg_match($value, self::$params[$key]) or
-            tbe(self::$messages[$key . '.regex'] ?? 'Parameter ' . $key . ' is invalid', self::$code);
+        if (isset(self::$params[$key]) && !preg_match($value, self::$params[$key])) {
+            throw new Exception(self::$messages[$key . '.regex'] ?? 'Parameter ' . $key . ' is invalid', self::$code);
         }
     }
 
@@ -181,9 +187,8 @@ class Validator
      */
     private static function in($key, $value)
     {
-        if (isset(self::$params[$key])) {
-            in_array(self::$params[$key], explode(',', $value)) or
-            tbe(self::$messages[$key . '.in'] ?? 'The value of parameter ' . $key . ' should be in ' . $value, self::$code);
+        if (isset(self::$params[$key]) && !in_array(self::$params[$key], explode(',', $value))) {
+            throw new Exception(self::$messages[$key . '.in'] ?? 'The value of parameter ' . $key . ' should be in ' . $value, self::$code);
         }
     }
 
@@ -200,11 +205,14 @@ class Validator
             /**
              * @var ActiveRecord $modelClass
              */
-            $modelClass::find()
+            $model = $modelClass;
+            $exists = $model::find()
                 ->where($column . ' = :' . $column, [
                     ':' . $column => self::$params[$key]
-                ])->exists() or
-            tbe(self::$messages[$key . '.exists'] ?? 'The selected ' . $key . ' is invalid', self::$code);
+                ])->exists();
+            if (!$exists) {
+                throw new Exception(self::$messages[$key . '.exists'] ?? 'The selected ' . $key . ' is invalid', self::$code);
+            }
         }
     }
 }

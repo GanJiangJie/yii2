@@ -14,33 +14,6 @@ if (!function_exists('dd')) {
     }
 }
 
-if (!function_exists('tbe')) {
-    /**
-     * @param string $message
-     * @param int $code
-     * @throws \yii\base\Exception
-     */
-    function tbe(string $message, int $code = API_ERROR_CODE_FAIL)
-    {
-        @list($back, $trace) = debug_backtrace();
-        exception()->backtrace($back ?? [], $trace ?? []);
-        $msg = $message ?: ($GLOBALS['__API_ERROR_CODE'][$code] ?? $GLOBALS['__API_ERROR_CODE'][API_ERROR_CODE_FAIL]);
-        exception()->message = $msg;
-        exception()->code = $code;
-        throw new \yii\base\Exception($msg, $code);
-    }
-}
-
-if (!function_exists('exception')) {
-    /**
-     * @return \app\common\util\Single\Exception
-     */
-    function exception(): \app\common\util\Single\Exception
-    {
-        return \app\common\util\Single\Exception::instance();
-    }
-}
-
 if (!function_exists('app')) {
     /**
      * @return \yii\console\Application|\yii\web\Application
@@ -103,11 +76,13 @@ if (!function_exists('redis')) {
      * @param array $params
      * @param string $redis
      * @return mixed
-     * @throws \yii\base\Exception
+     * @throws \app\components\Exception
      */
     function redis(string $class, string $method, array $params, string $redis = 'redis')
     {
-        method_exists($class, $method) or tbe('Undefined method \'' . $method . '\' of class \'' . $class . '\'');
+        if (!method_exists($class, $method)) {
+            throw new \app\components\Exception('Undefined method \'' . $method . '\' of class \'' . $class . '\'');
+        }
         \app\common\util\Redis\RedisBase::$redis = $redis;
         return call_user_func_array([$class, $method], $params);
     }
@@ -116,14 +91,16 @@ if (!function_exists('redis')) {
 if (!function_exists('event')) {
     /**
      * 事件挂起
-     * @param \app\common\event\BaseEvent $event_instance
+     * @param $event_instance
      * @return array
-     * @throws \yii\base\Exception
+     * @throws \app\components\Exception
      */
     function event($event_instance): array
     {
         $result = \app\common\util\Event::hangup($event_instance);
-        $result['status'] or tbe($result['msg']);
+        if (!$result['status']) {
+            throw new \app\components\Exception($result['msg']);
+        }
         return $result;
     }
 }
@@ -131,14 +108,16 @@ if (!function_exists('event')) {
 if (!function_exists('listenHandle')) {
     /**
      * 监听处理
-     * @param \app\common\listen\BaseListen $listen_instance
+     * @param $listen_instance
      * @return array
-     * @throws \yii\base\Exception
+     * @throws \app\components\Exception
      */
     function listenHandle($listen_instance): array
     {
         $result = \app\common\util\Event::handle($listen_instance);
-        $result['status'] or tbe($result['msg']);
+        if (!$result['status']) {
+            throw new \app\components\Exception($result['msg']);
+        }
         return $result;
     }
 }
