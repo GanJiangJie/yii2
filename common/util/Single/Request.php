@@ -27,20 +27,13 @@ class Request
     public $params;
 
     /**
-     * 上传文件
-     * @var array $files
-     */
-    public $files;
-
-    /**
      * Request constructor.
      */
     private function __construct()
     {
-        //$this->clientIp = self::getClientIp();
         //$this->header = getallheaders();
         $this->params = self::getParams();
-        //$this->files = $_FILES;
+        //$this->clientIp = self::getClientIp();
     }
 
     /**
@@ -119,15 +112,5 @@ class Request
     public function params(string $key = null, $default = null)
     {
         return is_null($key) ? $this->params : ($this->params[$key] ?? $default);
-    }
-
-    /**
-     * 获取上传文件
-     * @param string $key
-     * @return null|array
-     */
-    public function files(string $key = null)
-    {
-        return is_null($key) ? $this->files : ($this->files[$key] ?? null);
     }
 }
