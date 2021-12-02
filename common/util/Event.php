@@ -28,19 +28,19 @@ class Event extends EventService
         if (!class_exists($event_class)) {
             return [
                 'status' => false,
-                'msg' => '事件\'' . $event_class . '\'类不存在'
+                'msg' => '\'' . $event_class . '\'类不存在'
             ];
         }
         if (!isset($events[$event_class])) {
             return [
                 'status' => false,
-                'msg' => '事件\'' . $event_class . '\'没有进行注册'
+                'msg' => '\'' . $event_class . '\'没有注册'
             ];
         }
         if (!is_array($events[$event_class])) {
             return [
                 'status' => false,
-                'msg' => '事件\'' . $event_class . '\'监听注册错误'
+                'msg' => '\'' . $event_class . '\'注册错误'
             ];
         }
         //遍历事件全部监听
@@ -48,7 +48,7 @@ class Event extends EventService
             if (!class_exists($listen_class)) {
                 return [
                     'status' => false,
-                    'msg' => '监听\'' . $listen_class . '\'类不存在'
+                    'msg' => '\'' . $listen_class . '\'类不存在'
                 ];
             }
             /**
@@ -61,7 +61,9 @@ class Event extends EventService
              * @var array $result
              */
             $result = $listen_instance->handle();
-            if (isset($result['status']) && !$result['status']) return $result;
+            if (isset($result['status']) && !$result['status']) {
+                return $result;
+            }
         }
         return ['status' => true];
     }
@@ -77,7 +79,9 @@ class Event extends EventService
          * @var array $result
          */
         $result = $listen_instance->handle();
-        if (isset($result['status'])) return $result;
+        if (isset($result['status'])) {
+            return $result;
+        }
         return ['status' => true];
     }
 }
