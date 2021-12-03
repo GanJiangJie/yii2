@@ -63,9 +63,7 @@ class Validator
         self::$params = $params;
         self::$messages = $messages;
         foreach ($rules as $key => $rule) {
-            $rule_array = [];
-            is_string($rule) and $rule_array = explode('|', $rule);
-            is_array($rule) and $rule_array = $rule;
+            $rule_array = is_string($rule) ? explode('|', $rule) : $rule;
             foreach ($rule_array as $rule_item) {
                 @list($item, $value) = explode(':', $rule_item);
                 if (!method_exists(self::class, $item)) {
