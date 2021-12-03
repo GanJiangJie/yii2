@@ -3,7 +3,7 @@
 namespace common\util\DataCheck;
 
 use app\components\Exception;
-use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class Validator
 {
@@ -201,15 +201,10 @@ class Validator
     private static function exists($key, $value)
     {
         if (isset(self::$params[$key])) {
-            @list($modelClass, $column) = explode(',', $value);
-            /**
-             * @var ActiveRecord $modelClass
-             */
-            $model = $modelClass;
-            $exists = $model::find()
-                ->where($column . ' = :' . $column, [
-                    ':' . $column => self::$params[$key]
-                ])->exists();
+            @list($table, $column) = explode(',', $value);//table数据库表名称 column表字段名
+            $exists = (new Query())->from($table)->where($column . ' = :' . $column, [
+                ':' . $column => self::$params[$key]
+            ])->exists();
             if (!$exists) {
                 throw new Exception(self::$messages[$key . '.exists'] ?? 'The selected ' . $key . ' is invalid', self::$code);
             }
