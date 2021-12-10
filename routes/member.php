@@ -9,7 +9,7 @@ route()->before([
 ], [
     'crm.member.edit' => 'crm/member/edit',
 ])->before([
-    'uThrottle' . config('params.throttle.member_register'),
+    'uThrottle' . config('params.throttle.api.member_register'),
 ], [
     'crm.member.register' => 'crm/member/register',
 ]);
