@@ -16,8 +16,8 @@ class MemberController extends WebController
     public function actionList(): array
     {
         $model = new MemberService();
-        $model->page = requestParams('page', 1);
-        $model->limit = requestParams('limit', 0);
+        $model->page = params('page', 1);
+        $model->limit = params('limit', 0);
         return $model->getList();
     }
 

@@ -47,7 +47,7 @@ class Token
         $config = config('params.token');
         $this->driver = $config['driver'];
         $this->name = $config['name'];
-        $this->token = requestParams($this->name);
+        $this->token = params($this->name);
     }
 
     /**

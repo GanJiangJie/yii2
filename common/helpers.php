@@ -143,14 +143,14 @@ if (!function_exists('request')) {
     }
 }
 
-if (!function_exists('requestParams')) {
+if (!function_exists('params')) {
     /**
      * HTTPS请求参数
      * @param string $key
      * @param string|int $default
      * @return mixed
      */
-    function requestParams(string $key = null, $default = null)
+    function params(string $key = null, $default = null)
     {
         return request()->params($key, $default);
     }

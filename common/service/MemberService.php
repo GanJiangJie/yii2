@@ -24,11 +24,11 @@ class MemberService extends BaseService
             ])
             ->where('merchant_code = :merchant_code and type = :type', [
                 ':merchant_code' => tokenGet('merchant_code'),
-                ':type' => requestParams('type', MEMBER_TYPE_MEMBER)
+                ':type' => params('type', MEMBER_TYPE_MEMBER)
             ])
-            ->filterWhere(['account' => requestParams('account')]);
+            ->filterWhere(['account' => params('account')]);
 
-        if ($key_word = requestParams('key_word')) {
+        if ($key_word = params('key_word')) {
             $members->where('(member_name like :name or nick_name like :name)', [':' => "%$key_word%"]);
         }
 
@@ -58,8 +58,8 @@ class MemberService extends BaseService
     {
         if (Member::find()
             ->where('merchant_code = :merchant_code and account = :account', [
-                ':merchant_code' => requestParams('merchant_code'),
-                ':account' => requestParams('account')
+                ':merchant_code' => params('merchant_code'),
+                ':account' => params('account')
             ])
             ->exists()) {
             throw new Exception('会员已存在');
@@ -67,11 +67,11 @@ class MemberService extends BaseService
 
         $member = new Member();
         $member->member_code = createCode($member, 'member_code');
-        $member->merchant_code = requestParams('merchant_code');
-        $member->member_name = requestParams('name');
-        $member->account = requestParams('account');
-        $member->birthday = requestParams('birthday');
-        if ($sex = requestParams('sex')) $member->sex = $sex;
+        $member->merchant_code = params('merchant_code');
+        $member->member_name = params('name');
+        $member->account = params('account');
+        $member->birthday = params('birthday');
+        if ($sex = params('sex')) $member->sex = $sex;
         if (!$member->save()) {
             throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);
         }
@@ -95,8 +95,8 @@ class MemberService extends BaseService
             throw new Exception('会员不存在', API_ERROR_CODE_NO_DATA);
         }
 
-        if ($member_name = requestParams('member_name')) $member->member_name = $member_name;
-        if ($birthday = requestParams('birthday')) $member->birthday = $birthday;
+        if ($member_name = params('member_name')) $member->member_name = $member_name;
+        if ($birthday = params('birthday')) $member->birthday = $birthday;
 
         if (!$member->save()) {
             throw new Exception(json_encode($member->getErrors()), API_ERROR_CODE_SYSTEM_ERROR);

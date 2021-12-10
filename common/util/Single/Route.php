@@ -54,7 +54,7 @@ class Route
     private function __construct()
     {
         $this->filePaths = getDirFile(BASE_PATH . '/routes', true);
-        $this->method = requestParams('method');
+        $this->method = params('method');
     }
 
     /**
@@ -112,9 +112,9 @@ class Route
     {
         Validator::notEmpty(request()->params, ['app_id', 'method', 'sign_type', 'version', 'sign']);//验证必填参数
 
-        DataCheck::signType(requestParams('sign_type'));//验证签名类型
+        DataCheck::signType(params('sign_type'));//验证签名类型
 
-        DataCheck::version(requestParams('version'));//验证版本
+        DataCheck::version(params('version'));//验证版本
 
         DataCheck::checkSign(request()->params);//验证签名
     }
