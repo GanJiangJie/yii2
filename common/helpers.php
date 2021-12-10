@@ -83,8 +83,14 @@ if (!function_exists('redis')) {
         if (!method_exists($class, $method)) {
             throw new \app\components\Exception('Undefined method \'' . $method . '\' of class \'' . $class . '\'');
         }
-        \app\common\util\Redis\RedisBase::$redis = $redis;
-        return call_user_func_array([$class, $method], $params);
+        if (\app\common\util\Redis\RedisBase::$redis != $redis) {
+            \app\common\util\Redis\RedisBase::$redis = $redis;
+        }
+        $result = call_user_func_array([$class, $method], $params);
+        if (\app\common\util\Redis\RedisBase::$redis != 'redis') {
+            \app\common\util\Redis\RedisBase::$redis = 'redis';
+        }
+        return $result;
     }
 }
 
