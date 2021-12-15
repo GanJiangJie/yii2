@@ -24,6 +24,6 @@ namespace app\common\util\Redis;
  *
  * @package app\common\util\Redis
  */
-class Redis
+interface Redis
 {
 }

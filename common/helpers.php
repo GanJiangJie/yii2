@@ -41,7 +41,7 @@ if (!function_exists('redis')) {
      * @param string $redis
      * @return \app\common\util\Redis\Redis
      */
-    function redis($redis = 'redis'): \app\common\util\Redis\Redis
+    function redis($redis = 'redis')
     {
         return app()->$redis;
     }
