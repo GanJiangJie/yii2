@@ -7,10 +7,10 @@ trait ThrottleTrait
     /**
      * @param string $key
      * @param int $limit
-     * @param int $second
+     * @param int $seconds
      * @return bool
      */
-    public static function throttle(string $key, int $limit, int $second): bool
+    public static function throttle(string $key, int $limit, int $seconds): bool
     {
         $redis = redis(config('params.throttle.driver'));
         $count = $redis->get($key);
@@ -19,7 +19,7 @@ trait ThrottleTrait
         }
         $redis->incr($key);
         if (!$count) {
-            $redis->expire($key, $second);
+            $redis->expire($key, $seconds);
         }
         return true;
     }

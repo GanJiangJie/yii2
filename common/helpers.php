@@ -39,9 +39,9 @@ if (!function_exists('redis')) {
     /**
      * Redis辅助方法
      * @param string $redis
-     * @return mixed
+     * @return \app\common\util\Redis\Redis
      */
-    function redis($redis = 'redis')
+    function redis($redis = 'redis'): \app\common\util\Redis\Redis
     {
         return app()->$redis;
     }

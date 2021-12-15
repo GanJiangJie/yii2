@@ -10,9 +10,6 @@ class Token
 {
     use InstanceTrait;
 
-    /**
-     * @var mixed $redis
-     */
     private $redis;
 
     /**
