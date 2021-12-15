@@ -4,10 +4,6 @@ namespace app\common\util\Single;
 
 use app\common\traits\InstanceTrait;
 use common\util\DataCheck\Validator;
-use app\common\util\Redis\{
-    RedisK,
-    RedisS
-};
 use app\components\Exception;
 
 class Token
@@ -15,14 +11,9 @@ class Token
     use InstanceTrait;
 
     /**
-     * @var string $driver
+     * @var mixed $redis
      */
-    private $driver;
-
-    /**
-     * @var string $name
-     */
-    private $name;
+    private $redis;
 
     /**
      * @var string $token
@@ -45,16 +36,15 @@ class Token
     private function __construct()
     {
         $config = config('params.token');
-        $this->driver = $config['driver'];
-        $this->name = $config['name'];
-        $this->token = params($this->name);
+        $this->redis = redis($config['driver']);
+        $this->token = params($config['name']);
     }
 
     /**
      * 生成令牌
-     * @param string $prefix
+     * @param $prefix
      */
-    private function createToken(string $prefix)
+    private function createToken($prefix)
     {
         $this->token = md5('token' . $prefix . time() . mt_rand(100, 999));
     }
@@ -62,16 +52,15 @@ class Token
     /**
      * 设置令牌
      * @param array $data
-     * @param string $prefix
+     * @param $prefix
      * @return string
-     * @throws Exception
      */
-    public function set(array $data, string $prefix = ''): string
+    public function set(array $data, $prefix = ''): string
     {
         $this->data = $data;
-        $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $data_json = json_encode($this->data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         self::createToken($prefix ?: $data_json);
-        redis(RedisS::class, 'Set', [$this->token, $data_json], $this->driver);
+        $this->redis->set($this->token, $data_json);
         return $this->token;
     }
 
@@ -79,16 +68,15 @@ class Token
      * 设置令牌，设置期限
      * @param array $data
      * @param int $seconds
-     * @param string $prefix
+     * @param $prefix
      * @return string
-     * @throws Exception
      */
-    public function setEx(array $data, int $seconds, string $prefix = ''): string
+    public function setEx(array $data, int $seconds, $prefix = ''): string
     {
         $this->data = $data;
-        $data_json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $data_json = json_encode($this->data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         self::createToken($prefix ?: $data_json);
-        redis(RedisS::class, 'SetEx', [$this->token, $data_json, $seconds], $this->driver);
+        $this->redis->setex($this->token, $seconds, $data_json);
         return $this->token;
     }
 
@@ -101,7 +89,7 @@ class Token
         if (empty($this->token)) {
             throw new Exception('', API_ERROR_CODE_LACK_TOKEN);
         }
-        $info = redis(RedisS::class, 'Get', [$this->token], $this->driver);
+        $info = $this->redis->get($this->token);
         if (empty($info) || !Validator::isJson($info)) {
             throw new Exception('', API_ERROR_CODE_INVALID_TOKEN);
         }
@@ -111,26 +99,26 @@ class Token
 
     /**
      * 获取令牌信息
-     * @param string $key
+     * @param $key
      * @return mixed
      */
-    public function get(string $key = null)
+    public function get($key = null)
     {
         return is_null($key) ? $this->data : ($this->data[$key] ?? null);
     }
 
     /**
      * 删除令牌
-     * @param string $token
-     * @return bool|string
-     * @throws Exception
+     * @param null $token
+     * @return mixed
      */
-    public function del(string $token = null)
+    public function del($token = null)
     {
         if (!empty($token)) {
-            return redis(RedisK::class, 'Del', [$token], $this->driver);
+            return $this->redis->del($token);
         }
-        if (empty($this->token)) return false;
-        return redis(RedisK::class, 'Del', [$this->token], $this->driver);
+        if (!empty($this->token)) {
+            return $this->redis->del($this->token);
+        }
     }
 }

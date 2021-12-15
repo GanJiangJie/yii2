@@ -11,9 +11,8 @@ class RedisS extends RedisBase
      */
     public static function Get($key)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->get($key);
+        return app()->redis->get($key);
     }
 
     /**
@@ -24,9 +23,8 @@ class RedisS extends RedisBase
      */
     public static function Set($key, $value)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->set($key, $value);
+        return app()->redis->set($key, $value);
     }
 
     /**
@@ -36,11 +34,10 @@ class RedisS extends RedisBase
      */
     public static function MGet($keys = array())
     {
-        $redis = self::$redis;
         foreach ($keys as $k => &$v) {
             $v = parent::PREFIX . $v;
         }
-        $values = app()->$redis->executeCommand('MGet', $keys);
+        $values = app()->redis->executeCommand('MGet', $keys);
         $result = array();
         foreach ($values as $k => $v) {
             if (!empty($v)) {
@@ -59,9 +56,8 @@ class RedisS extends RedisBase
      */
     public static function MSet($params = array())
     {
-        $redis = self::$redis;
         $params = parent::format_array($params);
-        return app()->$redis->executeCommand('MSet', $params);
+        return app()->redis->executeCommand('MSet', $params);
     }
 
     /**
@@ -73,9 +69,8 @@ class RedisS extends RedisBase
      */
     public static function SetEx($key, $value, $time)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->setex($key, $time, $value);
+        return app()->redis->setex($key, $time, $value);
     }
 
     /**
@@ -88,9 +83,8 @@ class RedisS extends RedisBase
      */
     public static function InCr($key)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->incr($key);
+        return app()->redis->incr($key);
     }
 
     /**
@@ -104,9 +98,8 @@ class RedisS extends RedisBase
      */
     public static function InCrBy($key, $amount)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->incrby($key, $amount);
+        return app()->redis->incrby($key, $amount);
     }
 
     /**
@@ -119,9 +112,8 @@ class RedisS extends RedisBase
      */
     public static function DeCr($key)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->decr($key);
+        return app()->redis->decr($key);
     }
 
     /**
@@ -135,8 +127,7 @@ class RedisS extends RedisBase
      */
     public static function DeCrBy($key, $amount)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->decrby($key, $amount);
+        return app()->redis->decrby($key, $amount);
     }
 }

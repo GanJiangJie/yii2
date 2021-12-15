@@ -16,9 +16,8 @@ class RedisK extends RedisBase
      */
     public static function Del($key_name)
     {
-        $redis = self::$redis;
         $key_name = parent::PREFIX . $key_name;
-        return app()->$redis->del($key_name);
+        return app()->redis->del($key_name);
     }
 
     /**
@@ -28,9 +27,8 @@ class RedisK extends RedisBase
      */
     public static function Exists($key_name)
     {
-        $redis = self::$redis;
         $key_name = parent::PREFIX . $key_name;
-        if (app()->$redis->exists($key_name) == 1) {
+        if (app()->redis->exists($key_name) == 1) {
             return true;
         }
         return false;
@@ -44,9 +42,8 @@ class RedisK extends RedisBase
      */
     public static function Expire($key, $time)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->expire($key, $time);
+        return app()->redis->expire($key, $time);
     }
 
     /**
@@ -57,9 +54,8 @@ class RedisK extends RedisBase
      */
     public static function ExpireAt($key, $time_stamp)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->expireat($key, $time_stamp);
+        return app()->redis->expireat($key, $time_stamp);
     }
 
     /**
@@ -69,9 +65,8 @@ class RedisK extends RedisBase
      */
     public static function Keys($pattern)
     {
-        $redis = self::$redis;
         $pattern = parent::PREFIX . $pattern;
-        return app()->$redis->keys($pattern);
+        return app()->redis->keys($pattern);
     }
 
     /**
@@ -81,9 +76,8 @@ class RedisK extends RedisBase
      */
     public static function Persist($key_name)
     {
-        $redis = self::$redis;
         $key_name = parent::PREFIX . $key_name;
-        return app()->$redis->persist($key_name);
+        return app()->redis->persist($key_name);
     }
 
     /**
@@ -93,9 +87,8 @@ class RedisK extends RedisBase
      */
     public static function Ttl($key_name)
     {
-        $redis = self::$redis;
         $key_name = parent::PREFIX . $key_name;
-        return app()->$redis->ttl($key_name);
+        return app()->redis->ttl($key_name);
     }
 
     /**
@@ -106,8 +99,7 @@ class RedisK extends RedisBase
      */
     public static function Type($key)
     {
-        $redis = self::$redis;
         $key = parent::PREFIX . $key;
-        return app()->$redis->type($key);
+        return app()->redis->type($key);
     }
 }

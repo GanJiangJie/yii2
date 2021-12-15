@@ -6,13 +6,10 @@ class RedisBase
 {
     const PREFIX = '';
 
-    public static $redis = 'redis';
-
     public static function executeCommand($command, $params)
     {
-        $redis = self::$redis;
         $params = self::format_array($params);
-        return app()->$redis->executeCommand($command, $params);
+        return app()->redis->executeCommand($command, $params);
     }
 
     /**

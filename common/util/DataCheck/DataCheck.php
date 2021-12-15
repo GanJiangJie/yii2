@@ -2,7 +2,6 @@
 
 namespace common\util\DataCheck;
 
-use app\common\util\Redis\RedisS;
 use app\components\Exception;
 
 class DataCheck
@@ -38,7 +37,7 @@ class DataCheck
      */
     public static function checkSign(array $params)
     {
-        $app_key = redis(RedisS::class, 'Get', [$params['app_id']], config('params.token.driver'));
+        $app_key = redis(config('params.token.driver'))->get($params['app_id']);
         if (empty($app_key)) {
             throw new Exception('', API_ERROR_CODE_INVALID_APP_ID);
         }

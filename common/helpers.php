@@ -35,6 +35,18 @@ if (!function_exists('db')) {
     }
 }
 
+if (!function_exists('redis')) {
+    /**
+     * Redis辅助方法
+     * @param string $redis
+     * @return mixed
+     */
+    function redis($redis = 'redis')
+    {
+        return app()->$redis;
+    }
+}
+
 if (!function_exists('config')) {
     /**
      * 获取config目录下的参数
@@ -65,32 +77,6 @@ if (!function_exists('arraySeriesIndex')) {
             $array_subject = $array_subject[$item] ?? null;
         }
         return $array_subject;
-    }
-}
-
-if (!function_exists('redis')) {
-    /**
-     * Redis辅助方法
-     * @param string $class
-     * @param string $method
-     * @param array $params
-     * @param string $redis
-     * @return mixed
-     * @throws \app\components\Exception
-     */
-    function redis(string $class, string $method, array $params, string $redis = 'redis')
-    {
-        if (!method_exists($class, $method)) {
-            throw new \app\components\Exception('Undefined method \'' . $method . '\' of class \'' . $class . '\'');
-        }
-        if (\app\common\util\Redis\RedisBase::$redis != $redis) {
-            \app\common\util\Redis\RedisBase::$redis = $redis;
-        }
-        $result = call_user_func_array([$class, $method], $params);
-        if (\app\common\util\Redis\RedisBase::$redis != 'redis') {
-            \app\common\util\Redis\RedisBase::$redis = 'redis';
-        }
-        return $result;
     }
 }
 

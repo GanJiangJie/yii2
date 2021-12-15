@@ -19,13 +19,12 @@ class RedisL extends RedisBase
      */
     public static function LPush($list, $value)
     {
-        $redis = self::$redis;
         $list = parent::PREFIX . $list;
         if (is_array($value)) {
             array_unshift($value, $list);
-            return app()->$redis->executeCommand('Lpush', $value);
+            return app()->redis->executeCommand('Lpush', $value);
         }
-        return app()->$redis->lpush($list, $value);
+        return app()->redis->lpush($list, $value);
     }
 
     /**
@@ -38,13 +37,12 @@ class RedisL extends RedisBase
      */
     public static function RPush($list, $value)
     {
-        $redis = self::$redis;
         $list = parent::PREFIX . $list;
         if (is_array($value)) {
             array_unshift($value, $list);
-            return app()->$redis->executeCommand('Rpush', $value);
+            return app()->redis->executeCommand('Rpush', $value);
         }
-        return app()->$redis->rpush($list, $value);
+        return app()->redis->rpush($list, $value);
     }
 
     /**
@@ -54,9 +52,8 @@ class RedisL extends RedisBase
      */
     public static function LPop($list)
     {
-        $redis = self::$redis;
         $list = parent::PREFIX . $list;
-        return app()->$redis->lpop($list);
+        return app()->redis->lpop($list);
     }
 
     /**
@@ -66,9 +63,8 @@ class RedisL extends RedisBase
      */
     public static function RPop($list)
     {
-        $redis = self::$redis;
         $list = parent::PREFIX . $list;
-        return app()->$redis->rpop($list);
+        return app()->redis->rpop($list);
     }
 
     /**
@@ -79,10 +75,9 @@ class RedisL extends RedisBase
      */
     public static function RPopLPush($list, $to_list)
     {
-        $redis = self::$redis;
         $list = parent::PREFIX . $list;
         $to_list = parent::PREFIX . $to_list;
-        return app()->$redis->rpoplpush($list, $to_list);
+        return app()->redis->rpoplpush($list, $to_list);
     }
 
     /**
@@ -96,8 +91,7 @@ class RedisL extends RedisBase
      */
     public static function LRem($list, $value)
     {
-        $redis = self::$redis;
         $list = parent::PREFIX . $list;
-        return app()->$redis->lrem($list, 0, $value);
+        return app()->redis->lrem($list, 0, $value);
     }
 }

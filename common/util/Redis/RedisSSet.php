@@ -17,10 +17,9 @@ class RedisSSet extends RedisBase
      */
     public static function ZAdd($set, $params)
     {
-        $redis = self::$redis;
         $set = parent::PREFIX . $set;
         array_unshift($params, $set);
-        return app()->$redis->executeCommand('ZADD', $params);
+        return app()->redis->executeCommand('ZADD', $params);
     }
 
     /**
@@ -30,9 +29,8 @@ class RedisSSet extends RedisBase
      */
     public static function ZCard($set)
     {
-        $redis = self::$redis;
         $set = parent::PREFIX . $set;
-        return app()->$redis->zcard($set);
+        return app()->redis->zcard($set);
     }
 
     /**
@@ -44,9 +42,8 @@ class RedisSSet extends RedisBase
      */
     public static function ZCount($set, $min, $max)
     {
-        $redis = self::$redis;
         $set = parent::PREFIX . $set;
-        return app()->$redis->zcount($set, $min, $max);
+        return app()->redis->zcount($set, $min, $max);
     }
 
     /**
@@ -60,9 +57,8 @@ class RedisSSet extends RedisBase
      */
     public static function ZRangeByScore($set, $min, $max)
     {
-        $redis = self::$redis;
         $set = parent::PREFIX . $set;
-        return app()->$redis->zrangebyscore($set, $min, $max);
+        return app()->redis->zrangebyscore($set, $min, $max);
     }
 
     /**
@@ -74,8 +70,7 @@ class RedisSSet extends RedisBase
      */
     public static function ZRem($set, $member)
     {
-        $redis = self::$redis;
         $set = parent::PREFIX . $set;
-        return app()->$redis->zrem($set, $member);
+        return app()->redis->zrem($set, $member);
     }
 }
