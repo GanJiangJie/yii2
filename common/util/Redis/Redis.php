@@ -20,7 +20,7 @@ namespace app\common\util\Redis;
  * @method decrby(string $key, int $number)
  * @method eval(string $script, int $keyCount, ...$args)
  * @method evalsha(string $sha)
- * @method executeCommand(string $command, array $params)
+ * @method executeCommand(string $command, array $params = [])
  */
 interface Redis
 {
