@@ -18,7 +18,7 @@ namespace app\common\util\Redis;
  * @method incrby(string $key, int $number)
  * @method decr(string $key)
  * @method decrby(string $key, int $number)
- * @method eval(string $script, ...$args)
+ * @method eval(string $script, int $keysNum, ...$args)
  * @method evalsha(string $sha)
  * @method executeCommand(string $command, array $params)
  */
