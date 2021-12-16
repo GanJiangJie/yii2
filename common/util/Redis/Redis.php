@@ -3,8 +3,6 @@
 namespace app\common\util\Redis;
 
 /**
- * Class Redis
- *
  * @method set(string $key, string | int $value)
  * @method setex(string $key, int $seconds, string | int $value)
  * @method expire(string $key, int $seconds)
@@ -23,8 +21,6 @@ namespace app\common\util\Redis;
  * @method eval(string $script, ...$args)
  * @method evalsha(string $sha)
  * @method executeCommand(string $command, array $params)
- *
- * @package app\common\util\Redis
  */
 interface Redis
 {
