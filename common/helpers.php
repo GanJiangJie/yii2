@@ -39,7 +39,7 @@ if (!function_exists('redis')) {
     /**
      * Redis辅助方法
      * @param string $redis
-     * @return \app\common\util\Redis\Redis
+     * @return \app\common\util\Redis\RedisInterface
      */
     function redis($redis = 'redis')
     {

@@ -17,7 +17,7 @@ class RedisBase
     }
 
     /**
-     * @return Redis
+     * @return RedisInterface
      */
     protected static function redis()
     {
