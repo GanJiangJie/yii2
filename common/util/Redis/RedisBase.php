@@ -6,24 +6,40 @@ class RedisBase
 {
     const PREFIX = '';
 
-    public static function executeCommand($command, $params)
+    /**
+     * @param string $command
+     * @param array $params
+     * @return mixed
+     */
+    public static function executeCommand(string $command, array $params)
     {
-        $params = self::format_array($params);
-        return app()->redis->executeCommand($command, $params);
+        return self::redis()->executeCommand($command, self::formatArray($params));
     }
 
     /**
-     * 格式化数组
-     * @param $arr
+     * @return Redis
+     */
+    protected static function redis()
+    {
+        return redis();
+    }
+
+    /**
+     * 格式化数组 ['a'=>1,'b'=>2] 转化 ['a',1,'b',2]
+     * @param array $params
      * @return array
      */
-    public static function format_array($arr)
+    protected static function formatArray(array $params)
     {
-        $value = [];
-        foreach ($arr as $k => $v) {
-            $value[] = self::PREFIX . $k;
-            $value[] = $v;
+        if (count(array_filter(array_keys($params), 'is_string')) > 0) {
+            //关联数组
+            $value = [];
+            foreach ($params as $k => $v) {
+                $value[] = self::PREFIX . $k;
+                $value[] = $v;
+            }
+            return $value;
         }
-        return $value;
+        return $params;
     }
 }

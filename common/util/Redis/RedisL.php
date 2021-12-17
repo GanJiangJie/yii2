@@ -22,9 +22,9 @@ class RedisL extends RedisBase
         $list = parent::PREFIX . $list;
         if (is_array($value)) {
             array_unshift($value, $list);
-            return app()->redis->executeCommand('Lpush', $value);
+            return self::redis()->executeCommand('Lpush', $value);
         }
-        return app()->redis->lpush($list, $value);
+        return self::redis()->lpush($list, $value);
     }
 
     /**
@@ -40,9 +40,9 @@ class RedisL extends RedisBase
         $list = parent::PREFIX . $list;
         if (is_array($value)) {
             array_unshift($value, $list);
-            return app()->redis->executeCommand('Rpush', $value);
+            return self::redis()->executeCommand('Rpush', $value);
         }
-        return app()->redis->rpush($list, $value);
+        return self::redis()->rpush($list, $value);
     }
 
     /**
@@ -52,8 +52,7 @@ class RedisL extends RedisBase
      */
     public static function LPop($list)
     {
-        $list = parent::PREFIX . $list;
-        return app()->redis->lpop($list);
+        return self::redis()->lpop(parent::PREFIX . $list);
     }
 
     /**
@@ -63,8 +62,7 @@ class RedisL extends RedisBase
      */
     public static function RPop($list)
     {
-        $list = parent::PREFIX . $list;
-        return app()->redis->rpop($list);
+        return self::redis()->rpop(parent::PREFIX . $list);
     }
 
     /**
@@ -75,9 +73,7 @@ class RedisL extends RedisBase
      */
     public static function RPopLPush($list, $to_list)
     {
-        $list = parent::PREFIX . $list;
-        $to_list = parent::PREFIX . $to_list;
-        return app()->redis->rpoplpush($list, $to_list);
+        return self::redis()->rpoplpush(parent::PREFIX . $list, parent::PREFIX . $to_list);
     }
 
     /**
@@ -91,7 +87,6 @@ class RedisL extends RedisBase
      */
     public static function LRem($list, $value)
     {
-        $list = parent::PREFIX . $list;
-        return app()->redis->lrem($list, 0, $value);
+        return self::redis()->lrem(parent::PREFIX . $list, 0, $value);
     }
 }

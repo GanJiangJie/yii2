@@ -11,8 +11,7 @@ class RedisS extends RedisBase
      */
     public static function Get($key)
     {
-        $key = parent::PREFIX . $key;
-        return app()->redis->get($key);
+        return self::redis()->get(parent::PREFIX . $key);
     }
 
     /**
@@ -23,8 +22,7 @@ class RedisS extends RedisBase
      */
     public static function Set($key, $value)
     {
-        $key = parent::PREFIX . $key;
-        return app()->redis->set($key, $value);
+        return self::redis()->set(parent::PREFIX . $key, $value);
     }
 
     /**
@@ -34,19 +32,13 @@ class RedisS extends RedisBase
      */
     public static function MGet($keys = array())
     {
-        foreach ($keys as $k => &$v) {
-            $v = parent::PREFIX . $v;
+        if (!empty(parent::PREFIX)) {
+            $keys = array_map(function ($key) {
+                return parent::PREFIX . $key;
+            }, $keys);
         }
-        $values = app()->redis->executeCommand('MGet', $keys);
-        $result = array();
-        foreach ($values as $k => $v) {
-            if (!empty($v)) {
-                $result[$keys[$k]] = $v;
-            } else {
-                $result[$keys[$k]] = '';
-            }
-        }
-        return $result;
+        $values = self::redis()->executeCommand('MGet', $keys);
+        return array_combine($keys, $values);
     }
 
     /**
@@ -56,21 +48,19 @@ class RedisS extends RedisBase
      */
     public static function MSet($params = array())
     {
-        $params = parent::format_array($params);
-        return app()->redis->executeCommand('MSet', $params);
+        return self::redis()->executeCommand('MSet', parent::formatArray($params));
     }
 
     /**
      * 设置key的值，并设置过期时间 以秒为单位
      * @param $key
      * @param $value
-     * @param $time
+     * @param $seconds
      * @return mixed
      */
-    public static function SetEx($key, $value, $time)
+    public static function SetEx($key, $value, $seconds)
     {
-        $key = parent::PREFIX . $key;
-        return app()->redis->setex($key, $time, $value);
+        return self::redis()->setex(parent::PREFIX . $key, $seconds, $value);
     }
 
     /**
@@ -83,8 +73,7 @@ class RedisS extends RedisBase
      */
     public static function InCr($key)
     {
-        $key = parent::PREFIX . $key;
-        return app()->redis->incr($key);
+        return self::redis()->incr(parent::PREFIX . $key);
     }
 
     /**
@@ -98,8 +87,7 @@ class RedisS extends RedisBase
      */
     public static function InCrBy($key, $amount)
     {
-        $key = parent::PREFIX . $key;
-        return app()->redis->incrby($key, $amount);
+        return self::redis()->incrby(parent::PREFIX . $key, $amount);
     }
 
     /**
@@ -112,8 +100,7 @@ class RedisS extends RedisBase
      */
     public static function DeCr($key)
     {
-        $key = parent::PREFIX . $key;
-        return app()->redis->decr($key);
+        return self::redis()->decr(parent::PREFIX . $key);
     }
 
     /**
@@ -127,7 +114,6 @@ class RedisS extends RedisBase
      */
     public static function DeCrBy($key, $amount)
     {
-        $key = parent::PREFIX . $key;
-        return app()->redis->decrby($key, $amount);
+        return self::redis()->decrby(parent::PREFIX . $key, $amount);
     }
 }

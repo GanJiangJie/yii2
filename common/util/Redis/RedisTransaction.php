@@ -15,7 +15,7 @@ class RedisTransaction extends RedisBase
      */
     public static function Multi()
     {
-        return app()->redis->multi();
+        return self::redis()->multi();
     }
 
     /**
@@ -24,7 +24,7 @@ class RedisTransaction extends RedisBase
      */
     public static function Exec()
     {
-        return app()->redis->exec();
+        return self::redis()->exec();
     }
 
     /**
@@ -33,7 +33,7 @@ class RedisTransaction extends RedisBase
      */
     public static function Discard()
     {
-        return app()->redis->discard();
+        return self::redis()->discard();
     }
 
     /**
@@ -42,7 +42,7 @@ class RedisTransaction extends RedisBase
      */
     public static function Unwatch()
     {
-        return app()->redis->unwatch();
+        return self::redis()->unwatch();
     }
 
     /**
@@ -52,7 +52,6 @@ class RedisTransaction extends RedisBase
      */
     public static function Watch($key)
     {
-        $key = parent::PREFIX . $key;
-        return app()->redis->watch($key);
+        return self::redis()->watch(parent::PREFIX . $key);
     }
 }
