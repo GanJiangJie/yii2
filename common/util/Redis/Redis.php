@@ -62,6 +62,11 @@ return 0
 end
 EOT;
 
+    private static function redis($redis = 'redis')
+    {
+        return redis($redis);
+    }
+
     /**
      * Redis事务
      * @param Closure $closure
@@ -69,7 +74,7 @@ EOT;
      */
     public static function transaction(Closure $closure, $redisDB = 'redis')
     {
-        $redis = redis($redisDB);
+        $redis = self::redis($redisDB);
         $redis->multi();//开启事务
         $result = call_user_func($closure, $redis);//执行命令
         if ($result === false) {
@@ -88,7 +93,7 @@ EOT;
      */
     public static function lock($key, $value, $seconds, $redisDB = 'redis')
     {
-        return (bool)redis($redisDB)->executeCommand('set', [$key, $value, 'ex', $seconds, 'nx']);
+        return (bool)self::redis($redisDB)->executeCommand('set', [$key, $value, 'ex', $seconds, 'nx']);
     }
 
     /**
@@ -100,12 +105,12 @@ EOT;
      */
     public static function unlock($key, $value, $redisDB = 'redis')
     {
-        return (bool)redis($redisDB)->eval(self::SCRIPT_UNLOCK, 1, $key, $value);
+        return (bool)self::redis($redisDB)->eval(self::SCRIPT_UNLOCK, 1, $key, $value);
     }
 
     //LUA脚本
     private static function scriptLoad($script, $redisDB = 'redis')
     {
-        return redis($redisDB)->executeCommand('script', ['load', $script]);
+        return self::redis($redisDB)->executeCommand('script', ['load', $script]);
     }
 }
