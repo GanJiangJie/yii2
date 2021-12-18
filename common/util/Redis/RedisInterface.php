@@ -35,6 +35,7 @@ namespace app\common\util\Redis;
  * @method srem(string $set, ...$value)
  * @method scard(string $set)
  * @method zcard(string $set)
+ * @method zadd(string $set, int $score, $value)
  * @method zcount(string $set, $min, $max)
  * @method zrangebyscore(string $set, $min, $max)
  * @method zrem(string $set, ...$value)
