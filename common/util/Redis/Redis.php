@@ -75,7 +75,7 @@ EOT;
     }
 
     /**
-     * LUA监本存在
+     * LUA脚本存在
      * @param $sha
      * @param string $redisDB
      * @return bool
