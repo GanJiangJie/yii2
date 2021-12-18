@@ -44,7 +44,7 @@ namespace app\common\util\Redis;
  * @method watch(...$key)
  * @method unwatch()
  * @method eval(string $script, int $keyCount, ...$args)
- * @method evalsha(string $sha)
+ * @method evalsha(string $sha, int $keyCount, ...$args)
  *
  * @method executeCommand(string $command, array $params = [])
  */
