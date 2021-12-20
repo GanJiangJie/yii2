@@ -45,7 +45,7 @@ EOT;
      * @param string $redisDB
      * @return bool
      */
-    public static function lock($key, $value, $seconds, $redisDB = 'redis')
+    public static function locked($key, $value, $seconds, $redisDB = 'redis')
     {
         return (bool)self::redis($redisDB)->executeCommand('set', [$key, $value, 'ex', $seconds, 'nx']);
     }
