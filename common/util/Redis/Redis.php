@@ -5,14 +5,14 @@ namespace app\common\util\Redis;
 class Redis
 {
     //释放锁的LUA脚本
-    const SCRIPT_UNLOCK = <<<EOT
+    const SCRIPT_UNLOCK = <<<EOD
 if ARGV[1] == redis.call('get', KEYS[1])
 then
 return redis.call('del', KEYS[1])
 else
 return 0
 end
-EOT;
+EOD;
     //释放锁的LUA脚本的SHA1校验码
     const SCRIPT_UNLOCK_SHA = '3f47d27464a4bb5de6ff2e9f6cf589ea4a306d80';
 
