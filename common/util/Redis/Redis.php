@@ -51,7 +51,7 @@ EOT;
      * @param $seconds
      * @return bool
      */
-    public static function locked($key, $value, $seconds)
+    public static function lock($key, $value, $seconds)
     {
         return (bool)self::$redis->executeCommand('set', [$key, $value, 'ex', $seconds, 'nx']);
     }
@@ -69,7 +69,7 @@ EOT;
     public static function spinLock($key, $value, $seconds, $num = 2, $time = 1, $type = false)
     {
         do {
-            $lock = self::locked($key, $value, $seconds);
+            $lock = self::lock($key, $value, $seconds);
             if ($lock || $num == 1) {
                 return $lock;
             }
