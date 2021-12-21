@@ -16,25 +16,32 @@ EOT;
     //释放锁的LUA脚本的SHA1校验码
     const SCRIPT_UNLOCK_SHA = '3f47d27464a4bb5de6ff2e9f6cf589ea4a306d80';
 
-    private static function redis($redis)
+    /**
+     * @var RedisInterface
+     */
+    private static $redis;
+
+    /**
+     * Redis配置
+     * @param string $redis
+     */
+    public static function config($redis)
     {
-        return redis($redis);
+        self::$redis = redis($redis);
     }
 
     /**
      * Redis事务
      * @param \Closure $closure
-     * @param string $redisDB
      */
-    public static function transaction(\Closure $closure, $redisDB = 'redis')
+    public static function transaction(\Closure $closure)
     {
-        $redis = self::redis($redisDB);
-        $redis->multi();//开启事务
-        $result = call_user_func($closure, $redis);//执行命令
+        self::$redis->multi();//开启事务
+        $result = call_user_func($closure, self::$redis);//执行命令
         if ($result === false) {
-            $redis->discard();//事务回滚
+            self::$redis->discard();//事务回滚
         }
-        $redis->exec();//事务提交
+        self::$redis->exec();//事务提交
     }
 
     /**
@@ -42,46 +49,71 @@ EOT;
      * @param $key
      * @param $value
      * @param $seconds
-     * @param string $redisDB
      * @return bool
      */
-    public static function locked($key, $value, $seconds, $redisDB = 'redis')
+    public static function locked($key, $value, $seconds)
     {
-        return (bool)self::redis($redisDB)->executeCommand('set', [$key, $value, 'ex', $seconds, 'nx']);
+        return (bool)self::$redis->executeCommand('set', [$key, $value, 'ex', $seconds, 'nx']);
+    }
+
+    /**
+     * 自旋锁
+     * @param $key
+     * @param $value
+     * @param $seconds
+     * @param int $num
+     * @param int $time
+     * @param bool $type
+     * @return bool
+     */
+    public static function spinLock($key, $value, $seconds, $num = 2, $time = 1, $type = false)
+    {
+        do {
+            $lock = self::locked($key, $value, $seconds);
+            if ($lock || $num == 1) {
+                return $lock;
+            }
+            $num--;
+            if ($type) {
+                //微秒
+                usleep($time);
+            } else {
+                //秒
+                sleep($time);
+            }
+        } while ($num > 0);
+        return false;
     }
 
     /**
      * 释放锁
      * @param $key
      * @param $value
-     * @param string $redisDB
      * @return bool
      */
-    public static function unlock($key, $value, $redisDB = 'redis')
+    public static function unlock($key, $value)
     {
-        //return (bool)self::redis($redisDB)->evalsha(self::SCRIPT_UNLOCK_SHA, 1, $key, $value);
-        return (bool)self::redis($redisDB)->eval(self::SCRIPT_UNLOCK, 1, $key, $value);
+        //return (bool)self::$redis->evalsha(self::SCRIPT_UNLOCK_SHA, 1, $key, $value);
+        return (bool)self::$redis->eval(self::SCRIPT_UNLOCK, 1, $key, $value);
     }
 
     /**
      * LUA脚本装载
      * @param $script
-     * @param string $redisDB
      * @return mixed SHA1校验码
      */
-    public static function scriptLoad($script, $redisDB = 'redis')
+    private static function scriptLoad($script)
     {
-        return self::redis($redisDB)->executeCommand('script', ['load', $script]);
+        return self::$redis->executeCommand('script', ['load', $script]);
     }
 
     /**
      * LUA脚本存在
      * @param $sha
-     * @param string $redisDB
      * @return bool
      */
-    public static function scriptExists($sha, $redisDB = 'redis')
+    private static function scriptExists($sha)
     {
-        return (bool)self::redis($redisDB)->executeCommand('script', ['exists', $sha]);
+        return (bool)self::$redis->executeCommand('script', ['exists', $sha]);
     }
 }
