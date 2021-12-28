@@ -5,7 +5,7 @@ namespace app\common\util\Redis;
 class Redis
 {
     //释放锁的LUA脚本
-    const SCRIPT_UNLOCK = <<<EOD
+    private static $scriptUnlock = <<<EOD
 if ARGV[1] == redis.call('get', KEYS[1])
 then
 return redis.call('del', KEYS[1])
@@ -14,7 +14,7 @@ return 0
 end
 EOD;
     //释放锁的LUA脚本的SHA1校验码
-    const SCRIPT_UNLOCK_SHA = '3f47d27464a4bb5de6ff2e9f6cf589ea4a306d80';
+    private static $scriptUnlockSha = '3f47d27464a4bb5de6ff2e9f6cf589ea4a306d80';
 
     /**
      * @var RedisInterface
@@ -92,8 +92,8 @@ EOD;
      */
     public static function unlock($key, $value)
     {
-        //return (bool)self::$redis->evalsha(self::SCRIPT_UNLOCK_SHA, 1, $key, $value);
-        return (bool)self::$redis->eval(self::SCRIPT_UNLOCK, 1, $key, $value);
+        //return (bool)self::$redis->evalsha(self::$scriptUnlockSha, 1, $key, $value);
+        return (bool)self::$redis->eval(self::$scriptUnlock, 1, $key, $value);
     }
 
     /**
