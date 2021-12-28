@@ -25,7 +25,7 @@ EOD;
      * Redis配置
      * @param string $redis
      */
-    public static function config($redis)
+    public static function config($redis = 'redis')
     {
         self::$redis = redis($redis);
     }
@@ -68,12 +68,11 @@ EOD;
      */
     public static function spinLock($key, $value, $seconds, $num = 2, $time = 1, $type = false)
     {
-        do {
+        for ($i = 1; $i <= $num; $i++) {
             $lock = self::lock($key, $value, $seconds);
-            if ($lock || $num == 1) {
+            if ($lock || $i == $num) {
                 return $lock;
             }
-            $num--;
             if ($type) {
                 //微秒
                 usleep($time);
@@ -81,7 +80,7 @@ EOD;
                 //秒
                 sleep($time);
             }
-        } while ($num > 0);
+        }
         return false;
     }
 
