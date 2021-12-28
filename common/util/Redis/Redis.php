@@ -13,6 +13,7 @@ else
 return 0
 end
 EOD;
+    
     //释放锁的LUA脚本的SHA1校验码
     private static $scriptUnlockSha = '3f47d27464a4bb5de6ff2e9f6cf589ea4a306d80';
 
